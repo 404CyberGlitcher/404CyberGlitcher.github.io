@@ -169,29 +169,33 @@ function renderProductDetail(product) {
                 </div>
                 
                 <div class="detail-actions">
-                    <!-- Quantity Selector -->
-                    <div class="quantity-selector-new">
-                        <label>Quantity <span style="color: #DC2626; font-size: 0.8rem;">(Min: 100)</span></label>
-                        <div class="quantity-controls-new">
-                            <button class="qty-btn-new qty-minus" onclick="decreaseQuantity()" aria-label="Decrease quantity">
-                                <i class="fas fa-minus"></i>
-                            </button>
-                            <input type="number" id="quantity" value="100" min="100" max="10000" step="100" 
-                                   onchange="validateQuantity()" oninput="validateQuantityInput()">
-                            <button class="qty-btn-new qty-plus" onclick="increaseQuantity()" aria-label="Increase quantity">
-                                <i class="fas fa-plus"></i>
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <!-- Quick Quantity Buttons -->
-                    <div class="quick-quantity">
-                        <span>Quick:</span>
-                        <button class="quick-qty-btn" onclick="setQuantity(100)">100</button>
-                        <button class="quick-qty-btn" onclick="setQuantity(500)">500</button>
-                        <button class="quick-qty-btn" onclick="setQuantity(1000)">1,000</button>
-                        <button class="quick-qty-btn" onclick="setQuantity(5000)">5,000</button>
-                    </div>
+// In renderProductDetail function, replace the quantity-selector-new div with:
+
+<!-- Quantity Selector -->
+<div class="quantity-selector-new">
+    <label>Quantity <span style="color: #DC2626; font-size: 0.8rem;">(Min: 100)</span></label>
+    <div class="quantity-controls-new">
+        <button class="qty-btn-new qty-minus" onclick="decreaseQuantity()" aria-label="Decrease by 100">
+            <i class="fas fa-minus"></i>
+        </button>
+        <input type="number" id="quantity" value="100" min="100" max="50000" step="100" 
+               onchange="validateCustomQuantity()" oninput="handleQuantityInput()"
+               aria-label="Quantity (minimum 100)">
+        <button class="qty-btn-new qty-plus" onclick="increaseQuantity()" aria-label="Increase by 100">
+            <i class="fas fa-plus"></i>
+        </button>
+    </div>
+</div>
+
+<!-- Quick Quantity Buttons -->
+<div class="quick-quantity">
+    <span>Quick:</span>
+    <button class="quick-qty-btn active" onclick="setQuantity(100)">100</button>
+    <button class="quick-qty-btn" onclick="setQuantity(500)">500</button>
+    <button class="quick-qty-btn" onclick="setQuantity(1000)">1,000</button>
+    <button class="quick-qty-btn" onclick="setQuantity(5000)">5,000</button>
+    <button class="quick-qty-btn" onclick="setQuantity(10000)">10,000</button>
+</div>
                     
                     <!-- Action Buttons -->
                     <div class="action-buttons">
@@ -409,7 +413,7 @@ document.addEventListener('wheel', function(e) {
 }, { passive: false });
 
 // ============================================
-// Quantity Functions
+// Quantity Functions - Min 100
 // ============================================
 function increaseQuantity() {
     const qtyInput = document.getElementById('quantity');
@@ -427,6 +431,8 @@ function decreaseQuantity() {
         if (currentQty > 100) {
             qtyInput.value = currentQty - 100;
             animateQuantityChange('down');
+        } else {
+            showMinQuantityAlert();
         }
     }
 }
@@ -434,35 +440,58 @@ function decreaseQuantity() {
 function setQuantity(qty) {
     const qtyInput = document.getElementById('quantity');
     if (qtyInput) {
-        qtyInput.value = qty;
+        if (qty < 100) qty = 100;
+        qtyInput.value = Math.round(qty / 100) * 100;
         animateQuantityChange('set');
-        // Highlight the clicked quick button
+        
+        // Highlight active quick button
         document.querySelectorAll('.quick-qty-btn').forEach(btn => btn.classList.remove('active'));
         const clickedBtn = document.querySelector(`.quick-qty-btn[onclick="setQuantity(${qty})"]`);
         if (clickedBtn) clickedBtn.classList.add('active');
     }
 }
 
-function validateQuantity() {
+function validateCustomQuantity() {
     const qtyInput = document.getElementById('quantity');
     if (qtyInput) {
         let qty = parseInt(qtyInput.value);
+        
         if (isNaN(qty) || qty < 100) {
             qtyInput.value = 100;
-        } else if (qty > 10000) {
-            qtyInput.value = 10000;
+            showMinQuantityAlert();
+        } else if (qty > 50000) {
+            qtyInput.value = 50000;
+        } else {
+            // Round to nearest 100
+            qtyInput.value = Math.round(qty / 100) * 100;
         }
-        // Round to nearest 100
-        qtyInput.value = Math.round(qtyInput.value / 100) * 100;
     }
 }
 
-function validateQuantityInput() {
+function handleQuantityInput() {
     const qtyInput = document.getElementById('quantity');
     if (qtyInput) {
         // Remove non-numeric characters
         qtyInput.value = qtyInput.value.replace(/[^0-9]/g, '');
     }
+}
+
+function showMinQuantityAlert() {
+    const notification = document.createElement('div');
+    notification.className = 'cart-notification';
+    notification.style.background = '#F59E0B';
+    notification.innerHTML = `
+        <i class="fas fa-exclamation-triangle"></i>
+        <span>Minimum order quantity is 100 units</span>
+    `;
+    
+    document.body.appendChild(notification);
+    requestAnimationFrame(() => notification.classList.add('show'));
+    
+    setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => notification.remove(), 300);
+    }, 2500);
 }
 
 function animateQuantityChange(direction) {
@@ -473,6 +502,43 @@ function animateQuantityChange(direction) {
             qtyInput.classList.remove('qty-increase', 'qty-decrease', 'qty-set');
         }, 300);
     }
+}
+
+function addToCartWithQuantity(productId) {
+    const quantity = parseInt(document.getElementById('quantity')?.value) || 100;
+    const product = products.find(p => p.id === productId);
+    
+    if (!product) {
+        console.error('Product not found:', productId);
+        return;
+    }
+
+    if (quantity < 100) {
+        showMinQuantityAlert();
+        document.getElementById('quantity').value = 100;
+        return;
+    }
+
+    let cart = JSON.parse(localStorage.getItem('anasPlasticCart')) || [];
+    
+    const existingItem = cart.find(item => item.id === productId);
+    
+    if (existingItem) {
+        existingItem.quantity += quantity;
+    } else {
+        cart.push({
+            id: product.id,
+            name: product.name,
+            image: product.images[0],
+            category: product.category,
+            quantity: quantity
+        });
+    }
+    
+    localStorage.setItem('anasPlasticCart', JSON.stringify(cart));
+    updateCartCountDisplay();
+    animateAddToCartButton();
+    showAddToCartNotification(product, quantity);
 }
 
 // ============================================
