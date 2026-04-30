@@ -1,0 +1,348 @@
+/* ============================================
+   About Us Page Styles
+   ============================================ */
+
+/* Story Section */
+.story-section {
+  padding-top: 40px;
+}
+
+.story-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.story-content .section-label {
+  display: inline-block;
+  padding: 6px 16px;
+  background: var(--light-gray);
+  color: var(--primary-blue);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  border-radius: 50px;
+  margin-bottom: 16px;
+}
+
+.story-content h2 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 20px;
+  line-height: 1.3;
+}
+
+.story-content p {
+  color: var(--medium-gray);
+  margin-bottom: 16px;
+  line-height: 1.7;
+}
+
+/* Story Visual */
+.story-visual {
+  position: relative;
+}
+
+.story-image-wrapper {
+  position: relative;
+}
+
+.story-accent {
+  position: absolute;
+  border-radius: var(--border-radius-lg);
+}
+
+.story-accent.accent-1 {
+  width: 200px;
+  height: 200px;
+  background: linear-gradient(135deg, var(--primary-blue), var(--accent-blue));
+  opacity: 0.15;
+  top: -30px;
+  right: -30px;
+  z-index: 0;
+}
+
+.story-accent.accent-2 {
+  width: 150px;
+  height: 150px;
+  background: linear-gradient(135deg, var(--primary-red), var(--accent-red));
+  opacity: 0.15;
+  bottom: -20px;
+  left: -20px;
+  z-index: 0;
+}
+
+.story-placeholder {
+  position: relative;
+  z-index: 1;
+  border-radius: var(--border-radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+
+.story-placeholder svg {
+  width: 100%;
+  height: auto;
+}
+
+/* Values Section */
+.values-section {
+  background: var(--off-white);
+}
+
+.values-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.value-card {
+  background: var(--white);
+  padding: 40px 24px;
+  border-radius: var(--border-radius-lg);
+  text-align: center;
+  transition: all 0.4s ease;
+  border: 1px solid var(--light-gray);
+}
+
+.value-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary-blue);
+}
+
+.value-icon {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary-blue), var(--accent-blue));
+  color: var(--white);
+}
+
+.value-icon svg {
+  width: 28px;
+  height: 28px;
+}
+
+.value-card h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: var(--text-dark);
+}
+
+.value-card p {
+  font-size: 0.9rem;
+  color: var(--medium-gray);
+  line-height: 1.6;
+}
+
+/* Founder Section */
+.founder-section {
+  background: linear-gradient(135deg, var(--primary-blue) 0%, #1a3a52 100%);
+  color: var(--white);
+}
+
+.founder-card {
+  max-width: 700px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 40px;
+}
+
+.founder-avatar {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 24px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--white);
+  padding: 4px;
+}
+
+.founder-avatar svg {
+  width: 100%;
+  height: 100%;
+}
+
+.founder-card h3 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.founder-title {
+  display: inline-block;
+  padding: 6px 20px;
+  background: var(--accent-red);
+  border-radius: 50px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.founder-card p {
+  font-size: 1.05rem;
+  opacity: 0.9;
+  line-height: 1.7;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Location Section */
+.location-section {
+  background: var(--white);
+}
+
+.location-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.location-content .section-label {
+  display: inline-block;
+  padding: 6px 16px;
+  background: var(--light-gray);
+  color: var(--primary-blue);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  border-radius: 50px;
+  margin-bottom: 16px;
+}
+
+.location-content h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 16px;
+}
+
+.location-content > p {
+  color: var(--medium-gray);
+  margin-bottom: 32px;
+  line-height: 1.7;
+}
+
+.location-details {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.location-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 20px;
+  background: var(--off-white);
+  border-radius: var(--border-radius-md);
+  transition: all 0.3s ease;
+}
+
+.location-item:hover {
+  background: var(--light-gray);
+}
+
+.location-item svg {
+  width: 24px;
+  height: 24px;
+  color: var(--primary-blue);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.location-item div strong {
+  display: block;
+  color: var(--text-dark);
+  margin-bottom: 4px;
+}
+
+.location-item div p {
+  color: var(--medium-gray);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.location-map {
+  background: var(--off-white);
+  border-radius: var(--border-radius-xl);
+  overflow: hidden;
+  height: 100%;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.map-placeholder {
+  text-align: center;
+  padding: 40px;
+}
+
+.map-placeholder svg {
+  width: 80px;
+  height: 80px;
+  color: var(--primary-blue);
+  opacity: 0.5;
+  margin-bottom: 16px;
+}
+
+.map-placeholder h4 {
+  color: var(--dark-gray);
+  margin-bottom: 8px;
+}
+
+.map-placeholder p {
+  color: var(--medium-gray);
+  font-size: 0.9rem;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .story-grid {
+    grid-template-columns: 1fr;
+    gap: 50px;
+  }
+  
+  .values-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .location-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .location-map {
+    min-height: 300px;
+  }
+}
+
+@media (max-width: 640px) {
+  .values-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .founder-card {
+    padding: 30px 20px;
+  }
+  
+  .founder-card h3 {
+    font-size: 1.4rem;
+  }
+  
+  .story-content h2 {
+    font-size: 1.7rem;
+  }
+}
