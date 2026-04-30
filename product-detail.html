@@ -7,6 +7,9 @@
     <!-- SEO Meta Tags - Dynamic -->
     <title id="pageTitle">Product Details - Anas Plastic Enterprises</title>
     <meta name="description" id="pageDescription" content="View product details and specifications. High-quality cosmetic packaging from Anas Plastic Enterprises.">
+    <meta name="keywords" content="Anas Plastic, cosmetic packaging, plastic bottles, jars, beauty packaging">
+    
+    <link rel="canonical" href="https://www.anasplastic.com/product-detail">
     
     <!-- Stylesheets -->
     <link rel="stylesheet" href="css/style.css">
@@ -61,8 +64,19 @@
 
     <!-- Product Detail Section -->
     <section class="product-detail-section">
-        <div class="container" id="productDetailContainer">
-            <!-- Product detail will be loaded dynamically -->
+        <div class="container">
+            <div class="back-to-products" data-aos="fade-up">
+                <a href="products.html"><i class="fas fa-arrow-left"></i> Back to Products</a>
+            </div>
+            <div id="productDetailContainer">
+                <!-- Product detail will be loaded dynamically -->
+            </div>
+            <div id="productNotFound" style="display: none; text-align: center; padding: 60px 0;">
+                <i class="fas fa-box-open" style="font-size: 5rem; color: #E5E7EB; margin-bottom: 20px;"></i>
+                <h2>Product Not Found</h2>
+                <p>The product you're looking for doesn't exist or has been removed.</p>
+                <a href="products.html" class="btn-primary" style="margin-top: 20px;">Browse Products</a>
+            </div>
         </div>
     </section>
 
@@ -105,6 +119,7 @@
     <!-- Scripts -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/products.js"></script>
     <script src="js/galaxy-button.js"></script>
     <script src="js/product-detail.js"></script>
 </body>

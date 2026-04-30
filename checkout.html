@@ -6,6 +6,9 @@
     
     <title>Checkout - Anas Plastic Enterprises</title>
     <meta name="description" content="Complete your order with Anas Plastic Enterprises. Your order will be sent via WhatsApp.">
+    <meta name="keywords" content="Anas Plastic checkout, cosmetic packaging order, WhatsApp order">
+    
+    <link rel="canonical" href="https://www.anasplastic.com/checkout">
     
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/checkout.css">
@@ -57,92 +60,8 @@
         <div class="container">
             <h1 class="page-title" data-aos="fade-up">Checkout</h1>
             
-            <div class="checkout-container" data-aos="fade-up">
-                <form id="checkoutForm" class="checkout-form">
-                    <div class="form-section">
-                        <h3>Contact Information</h3>
-                        <div class="form-group">
-                            <label for="fullName">Full Name *</label>
-                            <input type="text" id="fullName" name="fullName" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="phone">Phone Number *</label>
-                            <input type="tel" id="phone" name="phone" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" id="email" name="email">
-                        </div>
-                    </div>
-                    
-                    <div class="form-section">
-                        <h3>Shipping Address</h3>
-                        <div class="form-group">
-                            <label for="address">Address *</label>
-                            <textarea id="address" name="address" rows="3" required></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="city">City *</label>
-                            <input type="text" id="city" name="city" required>
-                        </div>
-                    </div>
-                    
-                    <div class="form-section">
-                        <h3>Order Summary</h3>
-                        <div id="orderSummary">
-                            <!-- Order summary will be loaded dynamically -->
-                        </div>
-                    </div>
-                    
-                    <div class="form-section">
-                        <h3>Additional Notes</h3>
-                        <div class="form-group">
-                            <label for="notes">Order Notes (Optional)</label>
-                            <textarea id="notes" name="notes" rows="3" placeholder="Any special requirements or notes for your order"></textarea>
-                        </div>
-                    </div>
-                    
-                    <div class="galaxy-button-wrapper">
-                        <div class="galaxy-button">
-                            <button type="submit">
-                                <span class="spark"></span>
-                                <span class="backdrop"></span>
-                                <span class="galaxy__container">
-                                    <span class="star star--static"></span>
-                                    <span class="star star--static"></span>
-                                    <span class="star star--static"></span>
-                                    <span class="star star--static"></span>
-                                </span>
-                                <span class="galaxy">
-                                    <span class="galaxy__ring">
-                                        <span class="star"></span>
-                                        <span class="star"></span>
-                                        <span class="star"></span>
-                                        <span class="star"></span>
-                                        <span class="star"></span>
-                                        <span class="star"></span>
-                                        <span class="star"></span>
-                                        <span class="star"></span>
-                                        <span class="star"></span>
-                                        <span class="star"></span>
-                                        <span class="star"></span>
-                                        <span class="star"></span>
-                                        <span class="star"></span>
-                                        <span class="star"></span>
-                                        <span class="star"></span>
-                                        <span class="star"></span>
-                                        <span class="star"></span>
-                                        <span class="star"></span>
-                                        <span class="star"></span>
-                                        <span class="star"></span>
-                                    </span>
-                                </span>
-                                <span class="text">Send Order via WhatsApp</span>
-                            </button>
-                            <div class="bodydrop"></div>
-                        </div>
-                    </div>
-                </form>
+            <div id="checkoutContent">
+                <!-- Checkout content will be loaded dynamically -->
             </div>
         </div>
     </section>
@@ -182,8 +101,10 @@
         </div>
     </footer>
 
+    <!-- Scripts -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/products.js"></script>
     <script src="js/galaxy-button.js"></script>
     <script src="js/checkout.js"></script>
 </body>

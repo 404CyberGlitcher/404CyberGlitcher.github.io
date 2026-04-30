@@ -6,6 +6,9 @@
     
     <title>Shopping Cart - Anas Plastic Enterprises</title>
     <meta name="description" content="Review your selected cosmetic packaging products before checkout.">
+    <meta name="keywords" content="Anas Plastic cart, cosmetic packaging order, plastic bottles order">
+    
+    <link rel="canonical" href="https://www.anasplastic.com/cart">
     
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/cart.css">
@@ -57,20 +60,23 @@
         <div class="container">
             <h1 class="page-title" data-aos="fade-up">Shopping Cart</h1>
             
-            <div class="cart-container" id="cartContainer">
-                <div class="cart-items" id="cartItems">
-                    <!-- Cart items will be loaded dynamically -->
-                </div>
-                
-                <div class="cart-summary" id="cartSummary">
-                    <!-- Cart summary will be loaded dynamically -->
-                </div>
-                
+            <div class="cart-container">
+                <!-- Empty Cart State -->
                 <div class="empty-cart" id="emptyCart" style="display: none;">
                     <i class="fas fa-shopping-cart"></i>
                     <h2>Your cart is empty</h2>
                     <p>Browse our products and add items to your cart</p>
                     <a href="products.html" class="btn-primary">Browse Products</a>
+                </div>
+                
+                <!-- Cart Items -->
+                <div class="cart-items" id="cartItems">
+                    <!-- Cart items will be loaded dynamically -->
+                </div>
+                
+                <!-- Cart Summary -->
+                <div class="cart-summary" id="cartSummary" style="display: none;">
+                    <!-- Cart summary will be loaded dynamically -->
                 </div>
             </div>
         </div>
@@ -111,8 +117,10 @@
         </div>
     </footer>
 
+    <!-- Scripts -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/products.js"></script>
     <script src="js/cart.js"></script>
 </body>
 </html>

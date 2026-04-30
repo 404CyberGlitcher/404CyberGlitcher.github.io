@@ -4,37 +4,87 @@ document.addEventListener('DOMContentLoaded', function() {
     if (window.location.pathname.includes('product-detail.html')) {
         loadProductDetail();
     }
+    
+    // Initialize AOS
+    if (typeof AOS !== 'undefined') {
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: true,
+            mirror: false
+        });
+    }
+    
+    // Initialize Galaxy buttons
+    if (typeof initializeGalaxyButtons === 'function') {
+        initializeGalaxyButtons();
+    }
+    
+    updateCartCountDisplay();
 });
 
 function loadProductDetail() {
     const urlParams = new URLSearchParams(window.location.search);
     const productId = parseInt(urlParams.get('id'));
     
-    if (!productId) {
-        window.location.href = 'products.html';
+    if (!productId || isNaN(productId)) {
+        showProductNotFound();
         return;
     }
     
-    // Find product from the products array (defined in products.js)
+    // Check if products array exists
+    if (typeof products === 'undefined') {
+        console.error('Products data not loaded');
+        showProductNotFound();
+        return;
+    }
+    
+    // Find product from the products array
     const product = products.find(p => p.id === productId);
     
     if (!product) {
-        window.location.href = 'products.html';
+        showProductNotFound();
         return;
     }
     
     // Update page title and meta
     document.title = `${product.name} - Anas Plastic Enterprises`;
-    document.getElementById('pageTitle').textContent = `${product.name} - Anas Plastic Enterprises`;
-    document.getElementById('pageDescription').setAttribute('content', product.description);
+    const pageTitle = document.getElementById('pageTitle');
+    const pageDescription = document.getElementById('pageDescription');
+    
+    if (pageTitle) {
+        pageTitle.textContent = `${product.name} - Anas Plastic Enterprises`;
+    }
+    if (pageDescription) {
+        pageDescription.setAttribute('content', product.description.substring(0, 160));
+    }
+    
+    // Update canonical URL
+    const canonicalLink = document.querySelector('link[rel="canonical"]');
+    if (canonicalLink) {
+        canonicalLink.href = `https://www.anasplastic.com/product-detail?id=${product.id}`;
+    }
     
     renderProductDetail(product);
 }
 
+function showProductNotFound() {
+    const container = document.getElementById('productDetailContainer');
+    const notFound = document.getElementById('productNotFound');
+    
+    if (container) container.style.display = 'none';
+    if (notFound) notFound.style.display = 'block';
+}
+
 function renderProductDetail(product) {
     const container = document.getElementById('productDetailContainer');
+    const notFound = document.getElementById('productNotFound');
+    
     if (!container) return;
-
+    
+    container.style.display = 'block';
+    if (notFound) notFound.style.display = 'none';
+    
     const productUrl = window.location.href;
 
     container.innerHTML = `
@@ -42,14 +92,14 @@ function renderProductDetail(product) {
             <!-- Product Images -->
             <div class="product-gallery">
                 <div class="main-image">
-                    <img src="${product.images[0]}" alt="${product.name}" id="mainImage" onerror="this.src='assets/img/placeholder.png'">
+                    <img src="${product.images[0]}" alt="${product.name}" id="mainImage" onerror="this.src='https://via.placeholder.com/600x600?text=Product+Image'">
                     ${product.badge ? `<span class="detail-badge">${product.badge}</span>` : ''}
                 </div>
                 ${product.images.length > 1 ? `
                 <div class="thumbnail-gallery">
                     ${product.images.map((img, index) => `
                         <div class="thumbnail ${index === 0 ? 'active' : ''}" onclick="changeMainImage('${img}', this)">
-                            <img src="${img}" alt="${product.name} - Image ${index + 1}" onerror="this.src='assets/img/placeholder.png'">
+                            <img src="${img}" alt="${product.name} - View ${index + 1}" onerror="this.src='https://via.placeholder.com/100x100?text=Image'">
                         </div>
                     `).join('')}
                 </div>
@@ -85,14 +135,15 @@ function renderProductDetail(product) {
                 
                 <div class="detail-actions">
                     <div class="quantity-selector">
-                        <button class="qty-btn" onclick="decreaseQuantity()">-</button>
+                        <label>Quantity:</label>
+                        <button class="qty-btn" onclick="decreaseQuantity()">−</button>
                         <input type="number" id="quantity" value="1" min="1" max="100" readonly>
                         <button class="qty-btn" onclick="increaseQuantity()">+</button>
                     </div>
                     
                     <div class="galaxy-button-wrapper">
                         <div class="galaxy-button">
-                            <button onclick="addToCartWithQuantity(${product.id})">
+                            <button onclick="addToCartWithQuantity(${product.id})" type="button">
                                 <span class="spark"></span>
                                 <span class="backdrop"></span>
                                 <span class="galaxy__container">
@@ -103,26 +154,7 @@ function renderProductDetail(product) {
                                 </span>
                                 <span class="galaxy">
                                     <span class="galaxy__ring">
-                                        <span class="star"></span>
-                                        <span class="star"></span>
-                                        <span class="star"></span>
-                                        <span class="star"></span>
-                                        <span class="star"></span>
-                                        <span class="star"></span>
-                                        <span class="star"></span>
-                                        <span class="star"></span>
-                                        <span class="star"></span>
-                                        <span class="star"></span>
-                                        <span class="star"></span>
-                                        <span class="star"></span>
-                                        <span class="star"></span>
-                                        <span class="star"></span>
-                                        <span class="star"></span>
-                                        <span class="star"></span>
-                                        <span class="star"></span>
-                                        <span class="star"></span>
-                                        <span class="star"></span>
-                                        <span class="star"></span>
+                                        ${Array(20).fill('<span class="star"></span>').join('')}
                                     </span>
                                 </span>
                                 <span class="text">Add to Cart</span>
@@ -131,48 +163,73 @@ function renderProductDetail(product) {
                         </div>
                     </div>
                     
-                    <button class="share-detail-btn" onclick="shareProduct(${JSON.stringify(product).replace(/"/g, '&quot;')}, '${productUrl}')">
+                    <button class="share-detail-btn" onclick="shareProductDetail(${product.id})" type="button">
                         <i class="fas fa-share-alt"></i> Share Product
                     </button>
                     
-                    <a href="https://wa.me/923000841330?text=${encodeURIComponent(`Hi, I'm interested in: ${product.name}\nProduct: ${productUrl}`)}" target="_blank" class="whatsapp-inquiry-btn">
+                    <a href="https://wa.me/923000841330?text=${encodeURIComponent(`Hi, I'm interested in: ${product.name}\n\nProduct: ${productUrl}`)}" target="_blank" class="whatsapp-inquiry-btn">
                         <i class="fab fa-whatsapp"></i> Inquire via WhatsApp
                     </a>
                 </div>
             </div>
         </div>
     `;
+    
+    // Re-initialize galaxy buttons for new elements
+    if (typeof initializeGalaxyButtons === 'function') {
+        setTimeout(() => initializeGalaxyButtons(), 200);
+    }
+    
+    // Re-initialize AOS
+    if (typeof AOS !== 'undefined') {
+        setTimeout(() => AOS.refresh(), 200);
+    }
 }
 
 // Change Main Image
 function changeMainImage(imageSrc, thumbnailElement) {
-    document.getElementById('mainImage').src = imageSrc;
+    const mainImage = document.getElementById('mainImage');
+    if (mainImage) {
+        mainImage.src = imageSrc;
+        mainImage.style.opacity = '0';
+        setTimeout(() => {
+            mainImage.style.opacity = '1';
+        }, 50);
+    }
     
     // Update active thumbnail
     document.querySelectorAll('.thumbnail').forEach(thumb => {
         thumb.classList.remove('active');
     });
-    thumbnailElement.classList.add('active');
+    if (thumbnailElement) {
+        thumbnailElement.classList.add('active');
+    }
 }
 
 // Quantity Controls
 function increaseQuantity() {
     const qtyInput = document.getElementById('quantity');
-    qtyInput.value = parseInt(qtyInput.value) + 1;
+    if (qtyInput) {
+        qtyInput.value = parseInt(qtyInput.value) + 1;
+    }
 }
 
 function decreaseQuantity() {
     const qtyInput = document.getElementById('quantity');
-    if (parseInt(qtyInput.value) > 1) {
+    if (qtyInput && parseInt(qtyInput.value) > 1) {
         qtyInput.value = parseInt(qtyInput.value) - 1;
     }
 }
 
 // Add to Cart with Quantity
 function addToCartWithQuantity(productId) {
-    const quantity = parseInt(document.getElementById('quantity').value) || 1;
+    const quantity = parseInt(document.getElementById('quantity')?.value) || 1;
     const product = products.find(p => p.id === productId);
-    if (!product) return;
+    
+    if (!product) {
+        console.error('Product not found:', productId);
+        return;
+    }
 
     let cart = JSON.parse(localStorage.getItem('anasPlasticCart')) || [];
     
@@ -191,9 +248,36 @@ function addToCartWithQuantity(productId) {
     }
     
     localStorage.setItem('anasPlasticCart', JSON.stringify(cart));
-    updateCartCount();
+    updateCartCountDisplay();
     
     // Show success notification
+    showAddToCartNotification(product, quantity);
+}
+
+// Share Product Detail
+function shareProductDetail(productId) {
+    const product = products.find(p => p.id === productId);
+    if (!product) return;
+    
+    const productUrl = window.location.href;
+    
+    if (navigator.share) {
+        navigator.share({
+            title: product.name,
+            text: `Check out ${product.name} from Anas Plastic Enterprises`,
+            url: productUrl
+        }).catch(err => console.log('Error sharing:', err));
+    } else {
+        navigator.clipboard.writeText(productUrl).then(() => {
+            showNotification('Product link copied to clipboard!');
+        }).catch(() => {
+            prompt('Copy this link:', productUrl);
+        });
+    }
+}
+
+// Show Notification
+function showAddToCartNotification(product, quantity) {
     const notification = document.createElement('div');
     notification.className = 'cart-notification';
     notification.innerHTML = `
@@ -208,4 +292,33 @@ function addToCartWithQuantity(productId) {
         notification.classList.remove('show');
         setTimeout(() => notification.remove(), 300);
     }, 3000);
+}
+
+function showNotification(message) {
+    const notification = document.createElement('div');
+    notification.className = 'cart-notification';
+    notification.innerHTML = `
+        <i class="fas fa-info-circle"></i>
+        <span>${message}</span>
+    `;
+    
+    document.body.appendChild(notification);
+    setTimeout(() => notification.classList.add('show'), 100);
+    setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => notification.remove(), 300);
+    }, 2000);
+}
+
+// Update Cart Count
+function updateCartCountDisplay() {
+    const cart = JSON.parse(localStorage.getItem('anasPlasticCart')) || [];
+    const cartCountElements = document.querySelectorAll('.cart-count');
+    const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 0), 0);
+    
+    cartCountElements.forEach(element => {
+        if (element) {
+            element.textContent = totalItems;
+        }
+    });
 }
