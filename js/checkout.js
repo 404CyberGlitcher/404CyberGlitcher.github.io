@@ -1,6 +1,6 @@
 // ============================================
 // Checkout Functionality - Anas Plastic Enterprises
-// Complete Version with Professional Country Selector
+// Complete Version with Date-Based Order IDs
 // ============================================
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -481,10 +481,49 @@ function clearFieldError(fieldId) {
     }
 }
 
+// ============================================
+// DATE-BASED ORDER ID GENERATOR
+// Format: ANAS-YYYYMMDD-XXXX
+// Where XXXX resets to 0001 each day
+// ============================================
 function generateOrderId() {
-    const timestamp = Date.now().toString(36).toUpperCase();
-    const random = Math.random().toString(36).substring(2, 6).toUpperCase();
-    return `ANAS-${timestamp}-${random}`;
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const dateString = `${year}${month}${day}`;
+    
+    // Get today's orders to determine the next sequence number
+    const sequenceNumber = getNextSequenceNumber(dateString);
+    
+    return `ANAS-${dateString}-${sequenceNumber}`;
+}
+
+function getNextSequenceNumber(dateString) {
+    // Get all orders from localStorage
+    const orders = JSON.parse(localStorage.getItem('anasPlasticOrders')) || [];
+    
+    // Filter orders from today only
+    const todayOrders = orders.filter(order => {
+        if (!order.orderId) return false;
+        // Extract date part from order ID (ANAS-YYYYMMDD-XXXX)
+        const orderDatePart = order.orderId.substring(5, 13); // Gets YYYYMMDD
+        return orderDatePart === dateString;
+    });
+    
+    // Find the highest sequence number for today
+    let maxSequence = 0;
+    todayOrders.forEach(order => {
+        const sequencePart = order.orderId.substring(14); // Gets XXXX
+        const sequenceNum = parseInt(sequencePart, 10);
+        if (!isNaN(sequenceNum) && sequenceNum > maxSequence) {
+            maxSequence = sequenceNum;
+        }
+    });
+    
+    // Increment and format as 4-digit number
+    const nextSequence = maxSequence + 1;
+    return String(nextSequence).padStart(4, '0');
 }
 
 function formatPhoneForDisplay(phone) {
@@ -500,6 +539,7 @@ async function sendOrderViaWhatsApp(cart) {
     const country = document.getElementById('country')?.value || '';
     const notes = document.getElementById('notes')?.value?.trim();
     
+    // Generate unique order ID based on date
     const orderId = generateOrderId();
     
     const baseUrl = window.location.origin;
@@ -515,10 +555,16 @@ async function sendOrderViaWhatsApp(cart) {
         hour12: true
     });
     
+    // Calculate today's order count
+    const todayDateString = `${orderDate.getFullYear()}${String(orderDate.getMonth() + 1).padStart(2, '0')}${String(orderDate.getDate()).padStart(2, '0')}`;
+    const sequenceNum = orderId.substring(14);
+    const todaysOrderNumber = parseInt(sequenceNum, 10);
+    
     // Build WhatsApp message
     let message = `🛍️ *NEW ORDER - ANAS PLASTIC ENTERPRISES*\n\n`;
     
     message += `📋 *ORDER ID: ${orderId}*\n`;
+    message += `📅 Order #${todaysOrderNumber} of Today\n`;
     message += `━━━━━━━━━━━━━━━━━━━━━━\n\n`;
     
     message += `👤 *CUSTOMER DETAILS*\n`;
@@ -565,7 +611,7 @@ async function sendOrderViaWhatsApp(cart) {
     message += `🙏 Thank you!\n`;
     message += `_This order was placed via Anas Plastic Enterprises Website_`;
     
-    // Save order
+    // Save order to localStorage
     const order = {
         orderId: orderId,
         customer: { 
@@ -593,13 +639,16 @@ async function sendOrderViaWhatsApp(cart) {
     orders.push(order);
     localStorage.setItem('anasPlasticOrders', JSON.stringify(orders));
     
+    // Clear cart
     localStorage.removeItem('anasPlasticCart');
     updateCartCountDisplay();
     
+    // Open WhatsApp
     const whatsappNumber = '923000841330';
     const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
     window.open(whatsappURL, '_blank');
     
+    // Show success page
     showOrderSuccess(order);
 }
 
@@ -617,6 +666,10 @@ function showOrderSuccess(order) {
         hour12: true
     });
     
+    // Extract sequence number for display
+    const sequenceNum = order.orderId.substring(14);
+    const todaysOrderNumber = parseInt(sequenceNum, 10);
+    
     checkoutContent.innerHTML = `
         <div class="order-success" data-aos="fade-up" style="text-align: center; padding: 60px 30px; background: white; border-radius: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); max-width: 600px; margin: 0 auto;">
             <div style="font-size: 5rem; color: #10B981; margin-bottom: 20px; animation: scaleIn 0.5s ease;">
@@ -627,37 +680,45 @@ function showOrderSuccess(order) {
                 Your order has been sent to our WhatsApp. We will get back to you shortly.
             </p>
             
-            <div style="background: linear-gradient(135deg, #1E3A8A, #3B5CB8); color: white; padding: 25px; border-radius: 12px; margin-bottom: 25px;">
-                <p style="font-size: 0.85rem; opacity: 0.9; margin-bottom: 5px;">YOUR ORDER ID</p>
-                <h3 style="font-size: 1.8rem; font-weight: 800; letter-spacing: 2px; margin-bottom: 10px;">${order.orderId}</h3>
-                <p style="font-size: 0.85rem; opacity: 0.9;">
+            <!-- Order ID Card -->
+            <div style="background: linear-gradient(135deg, #1E3A8A, #3B5CB8); color: white; padding: 30px; border-radius: 16px; margin-bottom: 25px; position: relative; overflow: hidden;">
+                <div style="position: absolute; top: -20px; right: -20px; width: 100px; height: 100px; background: rgba(255,255,255,0.1); border-radius: 50%;"></div>
+                <div style="position: absolute; bottom: -30px; left: -30px; width: 120px; height: 120px; background: rgba(255,255,255,0.05); border-radius: 50%;"></div>
+                <p style="font-size: 0.8rem; opacity: 0.9; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 2px; position: relative;">Your Order ID</p>
+                <h3 style="font-size: 2rem; font-weight: 800; letter-spacing: 2px; margin-bottom: 8px; position: relative;">${order.orderId}</h3>
+                <p style="font-size: 0.9rem; opacity: 0.95; position: relative; background: rgba(255,255,255,0.2); display: inline-block; padding: 5px 15px; border-radius: 20px;">
+                    Order #${todaysOrderNumber} of Today
+                </p>
+                <p style="font-size: 0.85rem; opacity: 0.9; margin-top: 10px; position: relative;">
                     <i class="far fa-clock"></i> ${formattedDate}
                 </p>
             </div>
             
-            <div style="background: #F9FAFB; border-radius: 12px; padding: 20px; margin-bottom: 25px; text-align: left;">
-                <h4 style="color: #1F2937; margin-bottom: 15px; font-size: 1.1rem;">
-                    <i class="fas fa-box"></i> Order Summary
+            <!-- Order Summary -->
+            <div style="background: #F9FAFB; border-radius: 12px; padding: 25px; margin-bottom: 25px; text-align: left;">
+                <h4 style="color: #1F2937; margin-bottom: 20px; font-size: 1.15rem; display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-box" style="color: #1E3A8A;"></i> Order Summary
                 </h4>
-                <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #E5E7EB;">
+                <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #E5E7EB;">
                     <span style="color: #6B7280;">Total Products</span>
                     <strong style="color: #1F2937;">${order.totalProducts}</strong>
                 </div>
-                <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #E5E7EB;">
+                <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #E5E7EB;">
                     <span style="color: #6B7280;">Total Items</span>
                     <strong style="color: #1F2937;">${order.totalItems.toLocaleString()} units</strong>
                 </div>
-                <div style="display: flex; justify-content: space-between; padding: 8px 0;">
+                <div style="display: flex; justify-content: space-between; padding: 10px 0;">
                     <span style="color: #6B7280;">Customer</span>
                     <strong style="color: #1F2937;">${order.customer.fullName}</strong>
                 </div>
             </div>
             
+            <!-- Action Buttons -->
             <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
-                <a href="products.html" style="display: inline-flex; align-items: center; gap: 8px; padding: 14px 28px; background: #1E3A8A; color: white; border-radius: 50px; text-decoration: none; font-weight: 600; transition: all 0.3s ease;">
+                <a href="products.html" style="display: inline-flex; align-items: center; gap: 10px; padding: 15px 30px; background: #1E3A8A; color: white; border-radius: 50px; text-decoration: none; font-weight: 600; transition: all 0.3s ease; font-size: 1rem;">
                     <i class="fas fa-shopping-bag"></i> Continue Shopping
                 </a>
-                <a href="https://wa.me/923000841330" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; padding: 14px 28px; background: #25D366; color: white; border-radius: 50px; text-decoration: none; font-weight: 600; transition: all 0.3s ease;">
+                <a href="https://wa.me/923000841330" target="_blank" style="display: inline-flex; align-items: center; gap: 10px; padding: 15px 30px; background: #25D366; color: white; border-radius: 50px; text-decoration: none; font-weight: 600; transition: all 0.3s ease; font-size: 1rem;">
                     <i class="fab fa-whatsapp"></i> Open WhatsApp
                 </a>
             </div>
