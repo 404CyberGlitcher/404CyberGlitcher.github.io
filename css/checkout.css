@@ -1,8 +1,144 @@
 /* ============================================
-   Professional Custom Select Styles
+   Checkout Page Styles - Anas Plastic Enterprises
+   Complete Professional Version
    ============================================ */
 
-/* Custom Select Wrapper */
+.checkout-section {
+    padding: 60px 0;
+    min-height: 60vh;
+    background: #F8FAFC;
+}
+
+.checkout-container {
+    max-width: 850px;
+    margin: 0 auto;
+}
+
+.checkout-form {
+    background: white;
+    padding: 45px;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid #E5E7EB;
+}
+
+/* ============================================
+   Form Sections
+   ============================================ */
+.form-section {
+    margin-bottom: 35px;
+}
+
+.form-section:last-of-type {
+    margin-bottom: 10px;
+}
+
+.form-section h3 {
+    font-size: 1.25rem;
+    color: #1E3A8A;
+    margin-bottom: 22px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #E5E7EB;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+}
+
+.form-section h3 i {
+    color: #DC2626;
+    font-size: 1.1rem;
+    width: 24px;
+    text-align: center;
+}
+
+/* ============================================
+   Form Groups
+   ============================================ */
+.form-group {
+    margin-bottom: 22px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    color: #1F2937;
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+    letter-spacing: 0.2px;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid #E5E7EB;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    transition: all 0.3s ease;
+    outline: none;
+    color: #1F2937;
+    background: white;
+}
+
+.form-group input:hover,
+.form-group textarea:hover {
+    border-color: #CBD5E1;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: #1E3A8A;
+    box-shadow: 0 0 0 4px rgba(30, 58, 138, 0.08);
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: #9CA3AF;
+    font-size: 0.95rem;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+    line-height: 1.6;
+}
+
+.form-group small {
+    display: block;
+    margin-top: 6px;
+    font-size: 0.8rem;
+    line-height: 1.4;
+}
+
+.form-group small i {
+    margin-right: 4px;
+}
+
+/* ============================================
+   Required Field Indicator
+   ============================================ */
+.required {
+    color: #DC2626;
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-left: 2px;
+}
+
+/* ============================================
+   Form Row (Two Columns)
+   ============================================ */
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    align-items: start;
+}
+
+/* ============================================
+   Custom Select Styles
+   ============================================ */
 .custom-select-wrapper {
     position: relative;
     width: 100%;
@@ -10,7 +146,7 @@
 
 .custom-select {
     width: 100%;
-    padding: 14px 40px 14px 16px;
+    padding: 14px 45px 14px 16px;
     border: 2px solid #E5E7EB;
     border-radius: 12px;
     font-size: 1rem;
@@ -26,24 +162,26 @@
 }
 
 .custom-select:hover {
-    border-color: #1E3A8A;
+    border-color: #CBD5E1;
 }
 
 .custom-select:focus {
     outline: none;
     border-color: #1E3A8A;
-    box-shadow: 0 0 0 4px rgba(30, 58, 138, 0.1);
+    box-shadow: 0 0 0 4px rgba(30, 58, 138, 0.08);
 }
 
 .custom-select option {
-    padding: 12px 16px;
+    padding: 14px 16px;
     font-size: 1rem;
     color: #1F2937;
     background: white;
 }
 
-.custom-select option:hover {
+.custom-select option:hover,
+.custom-select option:checked {
     background: #EFF6FF;
+    color: #1E3A8A;
 }
 
 .custom-select-arrow {
@@ -57,108 +195,108 @@
     transition: all 0.3s ease;
 }
 
-.custom-select:focus + .custom-select-arrow,
-.custom-select:hover + .custom-select-arrow {
+.custom-select:focus ~ .custom-select-arrow,
+.custom-select-wrapper:hover .custom-select-arrow {
     color: #1E3A8A;
 }
 
-/* Required field indicator */
-.required {
-    color: #DC2626;
-    font-weight: bold;
-}
-
-/* Form row layout */
-.form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-}
-
-/* Error message styling */
+/* ============================================
+   Error Messages
+   ============================================ */
 .error-message {
     color: #DC2626;
-    font-size: 0.8rem;
+    font-size: 0.82rem;
     font-weight: 500;
-    margin-top: 5px;
+    margin-top: 6px;
     display: none;
+    line-height: 1.4;
 }
 
-/* Invalid input styling */
+.error-message::before {
+    content: '⚠ ';
+}
+
+/* Invalid Input States */
 input.invalid,
 textarea.invalid,
 select.invalid {
     border-color: #DC2626 !important;
     box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1) !important;
+    background: #FFF5F5 !important;
 }
 
 input:focus.invalid,
 textarea:focus.invalid,
 select:focus.invalid {
     border-color: #DC2626 !important;
-    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.2) !important;
+    box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.15) !important;
 }
 
-/* Form submit area */
-.form-submit {
-    text-align: center;
-    margin-top: 30px;
-}
-
-/* Order Summary */
+/* ============================================
+   Order Summary Section
+   ============================================ */
 .order-summary-checkout {
     background: #F9FAFB;
-    border-radius: 12px;
-    padding: 20px;
+    border-radius: 14px;
+    padding: 22px;
+    border: 1px solid #E5E7EB;
 }
 
 .order-items-checkout {
     display: flex;
     flex-direction: column;
     gap: 12px;
-    max-height: 300px;
+    max-height: 320px;
     overflow-y: auto;
     margin-bottom: 20px;
-    padding-right: 5px;
+    padding-right: 8px;
 }
 
+/* Custom Scrollbar */
 .order-items-checkout::-webkit-scrollbar {
-    width: 5px;
+    width: 6px;
 }
 
 .order-items-checkout::-webkit-scrollbar-track {
-    background: #E5E7EB;
+    background: #F3F4F6;
     border-radius: 10px;
 }
 
 .order-items-checkout::-webkit-scrollbar-thumb {
-    background: #9CA3AF;
+    background: #CBD5E1;
     border-radius: 10px;
+    transition: background 0.3s ease;
+}
+
+.order-items-checkout::-webkit-scrollbar-thumb:hover {
+    background: #94A3B8;
 }
 
 .order-item-checkout {
     display: flex;
     align-items: center;
-    gap: 15px;
-    padding: 12px;
+    gap: 16px;
+    padding: 14px;
     background: white;
-    border-radius: 10px;
+    border-radius: 12px;
     border: 1px solid #E5E7EB;
     transition: all 0.3s ease;
 }
 
 .order-item-checkout:hover {
     border-color: #1E3A8A;
-    box-shadow: 0 2px 8px rgba(30, 58, 138, 0.1);
+    box-shadow: 0 3px 12px rgba(30, 58, 138, 0.1);
+    transform: translateY(-1px);
 }
 
 .order-item-image-checkout {
-    width: 55px;
-    height: 55px;
-    border-radius: 8px;
+    width: 58px;
+    height: 58px;
+    border-radius: 10px;
     overflow: hidden;
     background: #F3F4F6;
     flex-shrink: 0;
+    border: 1px solid #E5E7EB;
 }
 
 .order-item-image-checkout img {
@@ -176,10 +314,11 @@ select:focus.invalid {
     font-weight: 600;
     color: #1F2937;
     display: block;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    margin-bottom: 4px;
 }
 
 .order-item-qty-checkout {
@@ -190,31 +329,118 @@ select:focus.invalid {
 
 .order-totals {
     border-top: 2px solid #E5E7EB;
-    padding-top: 15px;
+    padding-top: 18px;
 }
 
 .total-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 8px 0;
-    font-size: 0.95rem;
+    padding: 10px 0;
+    font-size: 1rem;
     color: #374151;
+}
+
+.total-row:last-child {
+    padding-bottom: 0;
+}
+
+.total-row span {
+    color: #6B7280;
 }
 
 .total-row strong {
     color: #1F2937;
-    font-size: 1.1rem;
+    font-size: 1.15rem;
+    font-weight: 700;
 }
 
-/* Success Animation */
+/* ============================================
+   Order Note
+   ============================================ */
+.order-note {
+    text-align: center;
+    color: #92400E;
+    font-weight: 500;
+    padding: 16px 20px;
+    background: #FFFBEB;
+    border-radius: 12px;
+    margin: 22px 0 0 0;
+    font-size: 0.9rem;
+    border: 2px solid #FDE68A;
+    line-height: 1.5;
+}
+
+.order-note i {
+    margin-right: 8px;
+    color: #F59E0B;
+    font-size: 1rem;
+}
+
+/* ============================================
+   Form Submit Area
+   ============================================ */
+.form-submit {
+    text-align: center;
+    margin-top: 35px;
+    padding-top: 25px;
+    border-top: 2px solid #F3F4F6;
+}
+
+.form-submit .galaxy-button-wrapper {
+    display: inline-block;
+}
+
+/* ============================================
+   Empty Cart State
+   ============================================ */
+.empty-cart-state {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.empty-cart-state i {
+    animation: bounce 2s ease-in-out infinite;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-15px);
+    }
+}
+
+/* ============================================
+   Order Success Page
+   ============================================ */
+.order-success {
+    animation: slideUp 0.5s ease;
+}
+
+.order-success > div:first-of-type {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.order-success > div:first-of-type:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(30, 58, 138, 0.3);
+}
+
+/* ============================================
+   Animations
+   ============================================ */
 @keyframes scaleIn {
     0% {
         opacity: 0;
         transform: scale(0.5);
     }
     50% {
-        transform: scale(1.1);
+        transform: scale(1.08);
     }
     100% {
         opacity: 1;
@@ -222,45 +448,335 @@ select:focus.invalid {
     }
 }
 
-/* Responsive */
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* ============================================
+   Galaxy Button Overrides for Checkout
+   ============================================ */
+.checkout-form .galaxy-button button {
+    min-width: 280px;
+    font-size: 1.1rem;
+    padding: 16px 40px;
+}
+
+/* ============================================
+   Responsive Design
+   ============================================ */
+@media screen and (max-width: 1024px) {
+    .checkout-form {
+        padding: 35px;
+    }
+}
+
 @media screen and (max-width: 768px) {
+    .checkout-section {
+        padding: 40px 0;
+    }
+
+    .checkout-form {
+        padding: 30px 25px;
+        border-radius: 16px;
+    }
+
     .form-row {
         grid-template-columns: 1fr;
-        gap: 15px;
+        gap: 0;
     }
-    
+
+    .form-section h3 {
+        font-size: 1.15rem;
+    }
+
+    .form-group label {
+        font-size: 0.9rem;
+    }
+
+    .form-group input,
+    .form-group textarea,
     .custom-select {
-        padding: 12px 35px 12px 14px;
+        padding: 12px 14px;
         font-size: 0.95rem;
     }
-    
+
+    .custom-select {
+        padding-right: 40px;
+    }
+
     .order-item-checkout {
         flex-direction: column;
         text-align: center;
-        gap: 10px;
+        gap: 12px;
+        padding: 16px;
     }
-    
+
     .order-item-image-checkout {
-        width: 70px;
-        height: 70px;
+        width: 75px;
+        height: 75px;
         margin: 0 auto;
+    }
+
+    .order-item-name-checkout {
+        white-space: normal;
+        font-size: 0.9rem;
+    }
+
+    .order-items-checkout {
+        max-height: 280px;
+    }
+
+    .order-note {
+        padding: 14px 16px;
+        font-size: 0.85rem;
+    }
+
+    .form-submit .galaxy-button button {
+        min-width: 240px;
+        font-size: 1rem;
+        padding: 14px 32px;
+    }
+
+    .empty-cart-state {
+        padding: 50px 20px;
+    }
+
+    .empty-cart-state i {
+        font-size: 4rem;
+    }
+
+    .empty-cart-state h2 {
+        font-size: 1.6rem;
     }
 }
 
 @media screen and (max-width: 480px) {
-    .checkout-form {
-        padding: 15px;
+    .checkout-section {
+        padding: 25px 0;
     }
-    
+
+    .checkout-form {
+        padding: 20px 15px;
+        border-radius: 12px;
+    }
+
+    .form-section {
+        margin-bottom: 25px;
+    }
+
     .form-section h3 {
+        font-size: 1.05rem;
+        margin-bottom: 18px;
+        padding-bottom: 10px;
+    }
+
+    .form-group {
+        margin-bottom: 16px;
+    }
+
+    .form-group label {
+        font-size: 0.85rem;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .custom-select {
+        padding: 11px 12px;
+        font-size: 0.9rem;
+        border-radius: 10px;
+    }
+
+    .custom-select {
+        padding-right: 35px;
+    }
+
+    .custom-select-arrow {
+        right: 12px;
+        font-size: 0.75rem;
+    }
+
+    .form-group small {
+        font-size: 0.75rem;
+    }
+
+    .order-summary-checkout {
+        padding: 16px;
+    }
+
+    .order-items-checkout {
+        max-height: 240px;
+        gap: 10px;
+    }
+
+    .order-item-checkout {
+        padding: 12px;
+        gap: 10px;
+    }
+
+    .order-item-image-checkout {
+        width: 60px;
+        height: 60px;
+    }
+
+    .order-item-name-checkout {
+        font-size: 0.85rem;
+    }
+
+    .order-item-qty-checkout {
+        font-size: 0.8rem;
+    }
+
+    .total-row {
+        font-size: 0.9rem;
+        padding: 8px 0;
+    }
+
+    .total-row strong {
         font-size: 1rem;
     }
-    
-    .order-items-checkout {
-        max-height: 250px;
+
+    .order-note {
+        padding: 12px 14px;
+        font-size: 0.8rem;
+        border-radius: 10px;
     }
-    
-    .custom-select {
+
+    .form-submit {
+        margin-top: 25px;
+        padding-top: 20px;
+    }
+
+    .form-submit .galaxy-button button {
+        min-width: 200px;
         font-size: 0.9rem;
+        padding: 12px 24px;
+    }
+
+    .error-message {
+        font-size: 0.78rem;
+    }
+
+    /* Success page */
+    .order-success h2 {
+        font-size: 1.5rem;
+    }
+
+    .order-success h3 {
+        font-size: 1.3rem;
+    }
+
+    .order-success .btn-primary,
+    .order-success .btn-secondary {
+        width: 100%;
+        justify-content: center;
+        padding: 12px 20px;
+        font-size: 0.9rem;
+    }
+}
+
+@media screen and (max-width: 360px) {
+    .checkout-form {
+        padding: 15px 12px;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .custom-select {
+        padding: 10px 11px;
+        font-size: 0.85rem;
+    }
+
+    .order-item-checkout {
+        padding: 10px;
+    }
+
+    .order-item-image-checkout {
+        width: 50px;
+        height: 50px;
+    }
+}
+
+/* ============================================
+   Print Styles (for order confirmation)
+   ============================================ */
+@media print {
+    .header,
+    .footer,
+    .galaxy-button-wrapper,
+    .form-submit {
+        display: none !important;
+    }
+
+    .checkout-section {
+        padding: 0;
+        background: white;
+    }
+
+    .checkout-form {
+        box-shadow: none;
+        border: none;
+        padding: 20px;
+    }
+
+    .order-summary-checkout {
+        border: 1px solid #000;
+    }
+}
+
+/* ============================================
+   Accessibility
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+    .order-item-checkout,
+    .custom-select,
+    .form-group input,
+    .form-group textarea {
+        transition: none;
+    }
+
+    .empty-cart-state i {
+        animation: none;
+    }
+
+    .order-success {
+        animation: none;
+    }
+}
+
+/* ============================================
+   High Contrast Mode Support
+   ============================================ */
+@media (prefers-contrast: high) {
+    .form-group input,
+    .form-group textarea,
+    .custom-select {
+        border-width: 3px;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .custom-select:focus {
+        outline: 3px solid #1E3A8A;
+        outline-offset: 2px;
+    }
+
+    .error-message {
+        font-weight: 700;
     }
 }
