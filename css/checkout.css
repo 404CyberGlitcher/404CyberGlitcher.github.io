@@ -356,3 +356,44 @@
         max-height: 250px;
     }
 }
+/* Success Animation */
+@keyframes scaleIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Order ID Card hover effect */
+.order-success > div:first-of-type {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.order-success > div:first-of-type:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(30, 58, 138, 0.3);
+}
+
+/* Responsive success page */
+@media screen and (max-width: 480px) {
+    .order-success h2 {
+        font-size: 1.5rem;
+    }
+    
+    .order-success h3 {
+        font-size: 1.4rem;
+    }
+    
+    .order-success .btn-primary,
+    .order-success .btn-secondary {
+        width: 100%;
+        justify-content: center;
+    }
+}
