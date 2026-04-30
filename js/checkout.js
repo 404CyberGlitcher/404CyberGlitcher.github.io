@@ -1,6 +1,6 @@
 // ============================================
 // Checkout Functionality - Anas Plastic Enterprises
-// Complete Version with Order ID & Global Phone Support
+// Complete Version with Professional Country Selector
 // ============================================
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -19,7 +19,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     updateCartCountDisplay();
     
-    // Initialize galaxy buttons
     setTimeout(() => {
         initializeAllGalaxyButtons();
     }, 500);
@@ -95,11 +94,11 @@ function renderCheckoutForm(cart) {
                         <div class="form-group">
                             <label for="phone">Phone Number <span class="required">*</span></label>
                             <input type="tel" id="phone" name="phone" required 
-                                   placeholder="+92 300 0841330 or 0300 0841330" autocomplete="tel">
+                                   placeholder="e.g., +92 300 0841330 or 03000841330" autocomplete="tel">
                             <span class="error-message" id="phoneError"></span>
-                            <small style="color: #6B7280; font-size: 0.8rem;">
+                            <small style="color: #6B7280; font-size: 0.8rem; display: block; margin-top: 5px;">
                                 <i class="fas fa-info-circle"></i> 
-                                Enter with or without country code (e.g., +923000841330, 03000841330, +1 555 123 4567)
+                                Enter with or without country code
                             </small>
                         </div>
                         <div class="form-group">
@@ -129,19 +128,34 @@ function renderCheckoutForm(cart) {
                         </div>
                         <div class="form-group">
                             <label for="country">Country <span class="required">*</span></label>
-                            <select id="country" name="country" required autocomplete="country">
-                                <option value="">Select Country</option>
-                                <option value="Pakistan" selected>Pakistan</option>
-                                <option value="India">India</option>
-                                <option value="Bangladesh">Bangladesh</option>
-                                <option value="UAE">UAE</option>
-                                <option value="Saudi Arabia">Saudi Arabia</option>
-                                <option value="UK">United Kingdom</option>
-                                <option value="USA">United States</option>
-                                <option value="Canada">Canada</option>
-                                <option value="Australia">Australia</option>
-                                <option value="Other">Other</option>
-                            </select>
+                            <div class="custom-select-wrapper">
+                                <select id="country" name="country" required autocomplete="country" class="custom-select">
+                                    <option value="">Select your country</option>
+                                    <option value="Pakistan">🇵🇰 Pakistan</option>
+                                    <option value="India">🇮🇳 India</option>
+                                    <option value="Bangladesh">🇧🇩 Bangladesh</option>
+                                    <option value="United Arab Emirates">🇦🇪 United Arab Emirates</option>
+                                    <option value="Saudi Arabia">🇸🇦 Saudi Arabia</option>
+                                    <option value="Qatar">🇶🇦 Qatar</option>
+                                    <option value="Kuwait">🇰🇼 Kuwait</option>
+                                    <option value="Oman">🇴🇲 Oman</option>
+                                    <option value="Bahrain">🇧🇭 Bahrain</option>
+                                    <option value="United Kingdom">🇬🇧 United Kingdom</option>
+                                    <option value="United States">🇺🇸 United States</option>
+                                    <option value="Canada">🇨🇦 Canada</option>
+                                    <option value="Australia">🇦🇺 Australia</option>
+                                    <option value="Malaysia">🇲🇾 Malaysia</option>
+                                    <option value="Indonesia">🇮🇩 Indonesia</option>
+                                    <option value="Turkey">🇹🇷 Turkey</option>
+                                    <option value="Afghanistan">🇦🇫 Afghanistan</option>
+                                    <option value="Sri Lanka">🇱🇰 Sri Lanka</option>
+                                    <option value="Nepal">🇳🇵 Nepal</option>
+                                    <option value="Other">🌍 Other</option>
+                                </select>
+                                <div class="custom-select-arrow">
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                            </div>
                             <span class="error-message" id="countryError"></span>
                         </div>
                     </div>
@@ -161,7 +175,7 @@ function renderCheckoutForm(cart) {
                                     </div>
                                     <div class="order-item-details-checkout">
                                         <span class="order-item-name-checkout">${item.name}</span>
-                                        <span class="order-item-qty-checkout">Quantity: ${item.quantity.toLocaleString()}</span>
+                                        <span class="order-item-qty-checkout">Quantity: ${(item.quantity || 0).toLocaleString()} units</span>
                                     </div>
                                 </div>
                             `).join('')}
@@ -173,7 +187,7 @@ function renderCheckoutForm(cart) {
                             </div>
                             <div class="total-row">
                                 <span>Total Items:</span>
-                                <strong>${totalItems.toLocaleString()}</strong>
+                                <strong>${totalItems.toLocaleString()} units</strong>
                             </div>
                         </div>
                     </div>
@@ -220,13 +234,8 @@ function renderCheckoutForm(cart) {
         </div>
     `;
     
-    // Initialize galaxy buttons
     setTimeout(() => initializeAllGalaxyButtons(), 300);
-    
-    // Setup form validation and submission
     setupCheckoutForm(cart);
-    
-    // Add real-time validation
     setupRealTimeValidation();
 }
 
@@ -253,7 +262,6 @@ function setupRealTimeValidation() {
         country: document.getElementById('country')
     };
     
-    // Real-time validation on blur
     Object.entries(inputs).forEach(([field, input]) => {
         if (input) {
             input.addEventListener('blur', function() {
@@ -263,7 +271,6 @@ function setupRealTimeValidation() {
             });
             
             input.addEventListener('input', function() {
-                // Clear error when user starts typing
                 const errorElement = document.getElementById(`${field}Error`);
                 if (errorElement) {
                     errorElement.textContent = '';
@@ -309,7 +316,7 @@ function validateForm() {
     if (email) {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
-            showFieldError('email', 'Please enter a valid email address (e.g., example@email.com)');
+            showFieldError('email', 'Please enter a valid email address');
             isValid = false;
         } else {
             clearFieldError('email');
@@ -343,7 +350,6 @@ function validateForm() {
         clearFieldError('country');
     }
     
-    // Scroll to first error
     if (!isValid) {
         const firstError = document.querySelector('.invalid');
         if (firstError) {
@@ -356,12 +362,9 @@ function validateForm() {
 }
 
 function validateGlobalPhone(phone) {
-    // Remove all whitespace and special characters except +
     let cleaned = phone.replace(/[\s\-\(\)\.]/g, '');
     
-    // Check if it starts with +
     if (cleaned.startsWith('+')) {
-        // International format: +[country code][number]
         const intlRegex = /^\+[1-9]\d{1,3}\d{6,14}$/;
         if (intlRegex.test(cleaned)) {
             return { isValid: true, cleaned: cleaned, message: '' };
@@ -369,13 +372,11 @@ function validateGlobalPhone(phone) {
         return { 
             isValid: false, 
             cleaned: cleaned, 
-            message: 'International format should be like: +923000841330 or +15551234567' 
+            message: 'Please enter a valid international number (e.g., +923000841330)' 
         };
     }
     
-    // Without country code - just digits
     if (/^\d+$/.test(cleaned)) {
-        // Must be at least 7 digits and max 15 digits
         if (cleaned.length >= 7 && cleaned.length <= 15) {
             return { isValid: true, cleaned: cleaned, message: '' };
         }
@@ -389,7 +390,7 @@ function validateGlobalPhone(phone) {
     return { 
         isValid: false, 
         cleaned: cleaned, 
-        message: 'Enter a valid phone number (e.g., +923000841330 or 03000841330)' 
+        message: 'Please enter a valid phone number' 
     };
 }
 
@@ -487,7 +488,6 @@ function generateOrderId() {
 }
 
 function formatPhoneForDisplay(phone) {
-    // Just return the phone as entered by user
     return phone.trim();
 }
 
@@ -500,7 +500,6 @@ async function sendOrderViaWhatsApp(cart) {
     const country = document.getElementById('country')?.value || '';
     const notes = document.getElementById('notes')?.value?.trim();
     
-    // Generate unique order ID
     const orderId = generateOrderId();
     
     const baseUrl = window.location.origin;
@@ -516,14 +515,12 @@ async function sendOrderViaWhatsApp(cart) {
         hour12: true
     });
     
-    // Build WhatsApp message with Order ID prominently displayed
+    // Build WhatsApp message
     let message = `🛍️ *NEW ORDER - ANAS PLASTIC ENTERPRISES*\n\n`;
     
-    // Order ID Section (Highlighted)
     message += `📋 *ORDER ID: ${orderId}*\n`;
     message += `━━━━━━━━━━━━━━━━━━━━━━\n\n`;
     
-    // Customer Details
     message += `👤 *CUSTOMER DETAILS*\n`;
     message += `━━━━━━━━━━━━━━━━━━━━━━\n`;
     message += `📛 Name: ${fullName}\n`;
@@ -531,7 +528,6 @@ async function sendOrderViaWhatsApp(cart) {
     if (email) message += `📧 Email: ${email}\n`;
     message += `\n`;
     
-    // Shipping Address
     message += `📍 *SHIPPING ADDRESS*\n`;
     message += `━━━━━━━━━━━━━━━━━━━━━━\n`;
     message += `🏠 Address: ${address}\n`;
@@ -539,21 +535,19 @@ async function sendOrderViaWhatsApp(cart) {
     if (country) message += `🌍 Country: ${country}\n`;
     message += `\n`;
     
-    // Order Notes
     if (notes) {
         message += `📝 *ORDER NOTES*\n`;
         message += `━━━━━━━━━━━━━━━━━━━━━━\n`;
         message += `${notes}\n\n`;
     }
     
-    // Order Items
     message += `📦 *ORDER ITEMS*\n`;
     message += `━━━━━━━━━━━━━━━━━━━━━━\n`;
     
     for (let i = 0; i < cart.length; i++) {
         const item = cart[i];
         message += `\n${i + 1}. *${item.name}*\n`;
-        message += `   ├ 📦 Quantity: ${item.quantity.toLocaleString()} units\n`;
+        message += `   ├ 📦 Quantity: ${(item.quantity || 0).toLocaleString()} units\n`;
         message += `   ├ 🏷️ Category: ${formatCategoryName(item.category)}\n`;
         message += `   └ 🔗 Link: ${baseUrl}/product-detail.html?id=${item.id}\n`;
     }
@@ -571,7 +565,7 @@ async function sendOrderViaWhatsApp(cart) {
     message += `🙏 Thank you!\n`;
     message += `_This order was placed via Anas Plastic Enterprises Website_`;
     
-    // Save order to localStorage
+    // Save order
     const order = {
         orderId: orderId,
         customer: { 
@@ -599,16 +593,13 @@ async function sendOrderViaWhatsApp(cart) {
     orders.push(order);
     localStorage.setItem('anasPlasticOrders', JSON.stringify(orders));
     
-    // Clear cart
     localStorage.removeItem('anasPlasticCart');
     updateCartCountDisplay();
     
-    // Open WhatsApp
     const whatsappNumber = '923000841330';
     const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
     window.open(whatsappURL, '_blank');
     
-    // Show success page
     showOrderSuccess(order);
 }
 
@@ -633,10 +624,9 @@ function showOrderSuccess(order) {
             </div>
             <h2 style="font-size: 2rem; color: #1F2937; margin-bottom: 10px;">Order Sent Successfully!</h2>
             <p style="color: #6B7280; font-size: 1.1rem; margin-bottom: 25px;">
-                Your order has been sent to our WhatsApp. We will get back to you shortly with pricing details.
+                Your order has been sent to our WhatsApp. We will get back to you shortly.
             </p>
             
-            <!-- Order ID Card -->
             <div style="background: linear-gradient(135deg, #1E3A8A, #3B5CB8); color: white; padding: 25px; border-radius: 12px; margin-bottom: 25px;">
                 <p style="font-size: 0.85rem; opacity: 0.9; margin-bottom: 5px;">YOUR ORDER ID</p>
                 <h3 style="font-size: 1.8rem; font-weight: 800; letter-spacing: 2px; margin-bottom: 10px;">${order.orderId}</h3>
@@ -645,7 +635,6 @@ function showOrderSuccess(order) {
                 </p>
             </div>
             
-            <!-- Order Summary -->
             <div style="background: #F9FAFB; border-radius: 12px; padding: 20px; margin-bottom: 25px; text-align: left;">
                 <h4 style="color: #1F2937; margin-bottom: 15px; font-size: 1.1rem;">
                     <i class="fas fa-box"></i> Order Summary
@@ -664,19 +653,18 @@ function showOrderSuccess(order) {
                 </div>
             </div>
             
-            <!-- Action Buttons -->
             <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
-                <a href="products.html" class="btn-primary" style="display: inline-flex; align-items: center; gap: 8px; padding: 14px 28px; background: #1E3A8A; color: white; border-radius: 50px; text-decoration: none; font-weight: 600; transition: all 0.3s ease;">
+                <a href="products.html" style="display: inline-flex; align-items: center; gap: 8px; padding: 14px 28px; background: #1E3A8A; color: white; border-radius: 50px; text-decoration: none; font-weight: 600; transition: all 0.3s ease;">
                     <i class="fas fa-shopping-bag"></i> Continue Shopping
                 </a>
-                <a href="https://wa.me/923000841330" target="_blank" class="btn-secondary" style="display: inline-flex; align-items: center; gap: 8px; padding: 14px 28px; background: #25D366; color: white; border-radius: 50px; text-decoration: none; font-weight: 600; transition: all 0.3s ease;">
+                <a href="https://wa.me/923000841330" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; padding: 14px 28px; background: #25D366; color: white; border-radius: 50px; text-decoration: none; font-weight: 600; transition: all 0.3s ease;">
                     <i class="fab fa-whatsapp"></i> Open WhatsApp
                 </a>
             </div>
             
             <p style="color: #9CA3AF; font-size: 0.85rem; margin-top: 20px;">
                 <i class="fas fa-info-circle"></i> 
-                Please save your Order ID for future reference. You can also find it in your WhatsApp messages.
+                Please save your Order ID for future reference.
             </p>
         </div>
     `;
@@ -685,7 +673,6 @@ function showOrderSuccess(order) {
         setTimeout(() => AOS.refresh(), 100);
     }
     
-    // Scroll to top of success message
     setTimeout(() => {
         document.querySelector('.order-success')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }, 200);
