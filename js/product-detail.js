@@ -1,200 +1,211 @@
-/* ============================================
-   Product Detail Page JavaScript
-   ============================================ */
+// Product Detail Page - Anas Plastic Enterprises
 
-function initProductDetail() {
-  // Get product ID from URL
-  const urlParams = new URLSearchParams(window.location.search);
-  const productId = parseInt(urlParams.get('id'));
-  
-  if (!productId) {
-    showError('Product not found');
-    return;
-  }
-  
-  const product = getProductById(productId);
-  
-  if (!product) {
-    showError('Product not found');
-    return;
-  }
-  
-  // Update page title and meta
-  document.title = `${product.name} | Anas Plastic Enterprises`;
-  const metaDesc = document.querySelector('meta[name="description"]');
-  if (metaDesc) {
-    metaDesc.content = `${product.name} - ${product.description}`;
-  }
-  
-  // Render product detail
-  renderProductDetail(product);
-  
-  // Render related products
-  renderRelatedProducts(product);
-  
-  // Initialize galaxy buttons
-  initGalaxyButtons();
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.location.pathname.includes('product-detail.html')) {
+        loadProductDetail();
+    }
+});
+
+function loadProductDetail() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = parseInt(urlParams.get('id'));
+    
+    if (!productId) {
+        window.location.href = 'products.html';
+        return;
+    }
+    
+    // Find product from the products array (defined in products.js)
+    const product = products.find(p => p.id === productId);
+    
+    if (!product) {
+        window.location.href = 'products.html';
+        return;
+    }
+    
+    // Update page title and meta
+    document.title = `${product.name} - Anas Plastic Enterprises`;
+    document.getElementById('pageTitle').textContent = `${product.name} - Anas Plastic Enterprises`;
+    document.getElementById('pageDescription').setAttribute('content', product.description);
+    
+    renderProductDetail(product);
 }
 
 function renderProductDetail(product) {
-  const container = document.getElementById('product-detail-container');
-  
-  const mainImage = product.images[0] || 'assets/images/placeholder.jpg';
-  
-  let galleryHtml = '';
-  if (product.images.length > 1) {
-    product.images.forEach((img, index) => {
-      galleryHtml += `<img src="${img}" alt="${product.name} - View ${index + 1}" class="gallery-thumb ${index === 0 ? 'active' : ''}" data-index="${index}" onclick="changeMainImage('${img}', this)">`;
-    });
-  }
-  
-  const featuresHtml = product.features.map(f => `<li>${f}</li>`).join('');
-  
-  container.innerHTML = `
-    <div class="product-detail-box">
-      <div class="product-detail-img">
-        <img src="${mainImage}" alt="${product.name}" class="main-image" id="main-image">
-        ${product.images.length > 1 ? `<div class="product-gallery">${galleryHtml}</div>` : ''}
-      </div>
-      
-      <div class="product-detail-disc">
-        <span class="category">${product.categoryDisplay}</span>
-        <h1>${product.name}</h1>
-        <p class="description">${product.description}</p>
-        
-        <div class="product-detail-features">
-          <h3>Features</h3>
-          <ul>${featuresHtml}</ul>
-        </div>
-        
-        <div class="product-detail-actions">
-          <div class="galaxy-button galaxy-button--red" id="add-to-cart-btn">
-            <button type="button">
-              <span class="spark"></span>
-              <span class="backdrop"></span>
-              <span class="galaxy__container">
-                <span class="star star--static"></span>
-                <span class="star star--static"></span>
-                <span class="star star--static"></span>
-                <span class="star star--static"></span>
-              </span>
-              <span class="galaxy">
-                <span class="galaxy__ring">
-                  <span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span>
-                  <span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span>
-                  <span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span>
-                  <span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span>
-                  <span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span>
-                </span>
-              </span>
-              <span class="text">Add to Cart</span>
-            </button>
-          </div>
-          
-          <button class="btn-share" id="share-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
-              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
-            </svg>
-            <span>Share Product</span>
-          </button>
-        </div>
-      </div>
-    </div>
-  `;
-  
-  // Add to cart event
-  document.getElementById('add-to-cart-btn').addEventListener('click', () => {
-    addToCart(product);
-  });
-  
-  // Share event
-  document.getElementById('share-btn').addEventListener('click', () => {
-    shareProduct(product);
-  });
-}
+    const container = document.getElementById('productDetailContainer');
+    if (!container) return;
 
-function changeMainImage(src, thumb) {
-  const mainImage = document.getElementById('main-image');
-  mainImage.style.opacity = '0';
-  setTimeout(() => {
-    mainImage.src = src;
-    mainImage.style.opacity = '1';
-  }, 200);
-  
-  // Update active thumb
-  document.querySelectorAll('.gallery-thumb').forEach(t => t.classList.remove('active'));
-  thumb.classList.add('active');
-}
+    const productUrl = window.location.href;
 
-function renderRelatedProducts(currentProduct) {
-  const container = document.getElementById('related-products');
-  if (!container) return;
-  
-  // Get products from same category, excluding current
-  const related = products
-    .filter(p => p.category === currentProduct.category && p.id !== currentProduct.id)
-    .slice(0, 4);
-  
-  if (related.length === 0) {
-    // If no same category, get any other products
-    const other = products
-      .filter(p => p.id !== currentProduct.id)
-      .slice(0, 4);
-    if (other.length === 0) {
-      container.innerHTML = '<p class="text-center">No related products found.</p>';
-      return;
-    }
-    renderProductCards(other, container);
-    return;
-  }
-  
-  renderProductCards(related, container);
-}
-
-function renderProductCards(products, container) {
-  let html = '';
-  products.forEach(product => {
-    const imageUrl = product.images[0] || 'assets/images/placeholder.jpg';
-    html += `
-      <div class="product-card" data-aos="fade-up">
-        <div class="product-img">
-          <img src="${imageUrl}" alt="${product.name}" loading="lazy">
-          ${product.badge ? `<span class="badge product-badge">${product.badge}</span>` : ''}
-        </div>
-        <div class="product-info">
-          <span class="product-category">${product.categoryDisplay}</span>
-          <h3 class="product-name">${product.name}</h3>
-          <p class="product-desc">${product.description}</p>
-          <div class="product-card-footer">
-            <a href="product-detail.html?id=${product.id}" class="btn-secondary" style="padding: 10px 20px; font-size: 0.9rem;">View Details</a>
-          </div>
-        </div>
-      </div>
-    `;
-  });
-  
-  container.innerHTML = html;
-}
-
-function showError(message) {
-  const container = document.getElementById('product-detail-container');
-  if (container) {
     container.innerHTML = `
-      <div class="text-center" style="padding: 80px 20px;">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width: 60px; height: 60px; color: var(--medium-gray); margin-bottom: 20px;">
-          <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
-        </svg>
-        <h3>${message}</h3>
-        <a href="products.html" class="btn-primary mt-3">Browse Products</a>
-      </div>
+        <div class="product-detail-wrapper" data-aos="fade-up">
+            <!-- Product Images -->
+            <div class="product-gallery">
+                <div class="main-image">
+                    <img src="${product.images[0]}" alt="${product.name}" id="mainImage" onerror="this.src='assets/img/placeholder.png'">
+                    ${product.badge ? `<span class="detail-badge">${product.badge}</span>` : ''}
+                </div>
+                ${product.images.length > 1 ? `
+                <div class="thumbnail-gallery">
+                    ${product.images.map((img, index) => `
+                        <div class="thumbnail ${index === 0 ? 'active' : ''}" onclick="changeMainImage('${img}', this)">
+                            <img src="${img}" alt="${product.name} - Image ${index + 1}" onerror="this.src='assets/img/placeholder.png'">
+                        </div>
+                    `).join('')}
+                </div>
+                ` : ''}
+            </div>
+
+            <!-- Product Info -->
+            <div class="product-info-detail">
+                <span class="detail-category">${formatCategoryName(product.category)}</span>
+                <h1 class="detail-name">${product.name}</h1>
+                
+                <div class="detail-rating">
+                    ${generateStarRating(product.rating)}
+                    <span>${product.rating} / 5</span>
+                </div>
+                
+                <div class="detail-description">
+                    <h3>Description</h3>
+                    <p>${product.description}</p>
+                </div>
+                
+                <div class="detail-specifications">
+                    <h3>Specifications</h3>
+                    <table class="specs-table">
+                        ${Object.entries(product.specifications).map(([key, value]) => `
+                            <tr>
+                                <td>${key}</td>
+                                <td>${value}</td>
+                            </tr>
+                        `).join('')}
+                    </table>
+                </div>
+                
+                <div class="detail-actions">
+                    <div class="quantity-selector">
+                        <button class="qty-btn" onclick="decreaseQuantity()">-</button>
+                        <input type="number" id="quantity" value="1" min="1" max="100" readonly>
+                        <button class="qty-btn" onclick="increaseQuantity()">+</button>
+                    </div>
+                    
+                    <div class="galaxy-button-wrapper">
+                        <div class="galaxy-button">
+                            <button onclick="addToCartWithQuantity(${product.id})">
+                                <span class="spark"></span>
+                                <span class="backdrop"></span>
+                                <span class="galaxy__container">
+                                    <span class="star star--static"></span>
+                                    <span class="star star--static"></span>
+                                    <span class="star star--static"></span>
+                                    <span class="star star--static"></span>
+                                </span>
+                                <span class="galaxy">
+                                    <span class="galaxy__ring">
+                                        <span class="star"></span>
+                                        <span class="star"></span>
+                                        <span class="star"></span>
+                                        <span class="star"></span>
+                                        <span class="star"></span>
+                                        <span class="star"></span>
+                                        <span class="star"></span>
+                                        <span class="star"></span>
+                                        <span class="star"></span>
+                                        <span class="star"></span>
+                                        <span class="star"></span>
+                                        <span class="star"></span>
+                                        <span class="star"></span>
+                                        <span class="star"></span>
+                                        <span class="star"></span>
+                                        <span class="star"></span>
+                                        <span class="star"></span>
+                                        <span class="star"></span>
+                                        <span class="star"></span>
+                                        <span class="star"></span>
+                                    </span>
+                                </span>
+                                <span class="text">Add to Cart</span>
+                            </button>
+                            <div class="bodydrop"></div>
+                        </div>
+                    </div>
+                    
+                    <button class="share-detail-btn" onclick="shareProduct(${JSON.stringify(product).replace(/"/g, '&quot;')}, '${productUrl}')">
+                        <i class="fas fa-share-alt"></i> Share Product
+                    </button>
+                    
+                    <a href="https://wa.me/923000841330?text=${encodeURIComponent(`Hi, I'm interested in: ${product.name}\nProduct: ${productUrl}`)}" target="_blank" class="whatsapp-inquiry-btn">
+                        <i class="fab fa-whatsapp"></i> Inquire via WhatsApp
+                    </a>
+                </div>
+            </div>
+        </div>
     `;
-  }
 }
 
-// Initialize on DOM ready
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initProductDetail);
-} else {
-  initProductDetail();
+// Change Main Image
+function changeMainImage(imageSrc, thumbnailElement) {
+    document.getElementById('mainImage').src = imageSrc;
+    
+    // Update active thumbnail
+    document.querySelectorAll('.thumbnail').forEach(thumb => {
+        thumb.classList.remove('active');
+    });
+    thumbnailElement.classList.add('active');
+}
+
+// Quantity Controls
+function increaseQuantity() {
+    const qtyInput = document.getElementById('quantity');
+    qtyInput.value = parseInt(qtyInput.value) + 1;
+}
+
+function decreaseQuantity() {
+    const qtyInput = document.getElementById('quantity');
+    if (parseInt(qtyInput.value) > 1) {
+        qtyInput.value = parseInt(qtyInput.value) - 1;
+    }
+}
+
+// Add to Cart with Quantity
+function addToCartWithQuantity(productId) {
+    const quantity = parseInt(document.getElementById('quantity').value) || 1;
+    const product = products.find(p => p.id === productId);
+    if (!product) return;
+
+    let cart = JSON.parse(localStorage.getItem('anasPlasticCart')) || [];
+    
+    const existingItem = cart.find(item => item.id === productId);
+    
+    if (existingItem) {
+        existingItem.quantity += quantity;
+    } else {
+        cart.push({
+            id: product.id,
+            name: product.name,
+            image: product.images[0],
+            category: product.category,
+            quantity: quantity
+        });
+    }
+    
+    localStorage.setItem('anasPlasticCart', JSON.stringify(cart));
+    updateCartCount();
+    
+    // Show success notification
+    const notification = document.createElement('div');
+    notification.className = 'cart-notification';
+    notification.innerHTML = `
+        <i class="fas fa-check-circle"></i>
+        <span>${quantity} x ${product.name} added to cart!</span>
+        <a href="cart.html">View Cart</a>
+    `;
+    
+    document.body.appendChild(notification);
+    setTimeout(() => notification.classList.add('show'), 100);
+    setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => notification.remove(), 300);
+    }, 3000);
 }

@@ -1,56 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>Shopping Cart | Anas Plastic Enterprises</title>
-  <meta name="description" content="Review your selected cosmetic packaging items and place your order via WhatsApp at Anas Plastic Enterprises Lahore.">
-  <meta name="robots" content="index, follow">
-  
-  <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
-  
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
-  
-  <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/navbar.css">
-  <link rel="stylesheet" href="css/footer.css">
-  <link rel="stylesheet" href="css/animations.css">
-  <link rel="stylesheet" href="css/galaxy-button.css">
-  <link rel="stylesheet" href="css/ux-motion.css">
-  <link rel="stylesheet" href="css/cart.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Shopping Cart - Anas Plastic Enterprises</title>
+    <meta name="description" content="Review your selected cosmetic packaging products before checkout.">
+    
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/cart.css">
+    <link rel="stylesheet" href="css/galaxy-button.css">
+    
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
-  <!-- Page Header -->
-  <section class="page-header">
-    <div class="container">
-      <h1 data-aos="fade-up">Shopping Cart</h1>
-      <p data-aos="fade-up" data-aos-delay="100">Review your selected items before placing your order</p>
-    </div>
-  </section>
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-container">
+                <a href="index.html" class="logo">
+                    <h1>Anas Plastic</h1>
+                    <span>Enterprises</span>
+                </a>
+                
+                <ul class="nav-menu" id="navMenu">
+                    <li class="nav-item">
+                        <a href="index.html" class="nav-link">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="products.html" class="nav-link">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="aboutus.html" class="nav-link">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="contact.html" class="nav-link">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="cart.html" class="nav-link cart-link active">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="cart-count">0</span>
+                        </a>
+                    </li>
+                </ul>
+                
+                <div class="hamburger" id="hamburger">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </nav>
+    </header>
 
-  <main class="page-transition">
-    <section class="cart-section section">
-      <div class="container">
-        <div class="cart-container" id="cart-container">
-          <!-- Cart content injected by JS -->
-          <div class="loader">
-            <div class="loader-spinner"></div>
-          </div>
+    <section class="cart-section">
+        <div class="container">
+            <h1 class="page-title" data-aos="fade-up">Shopping Cart</h1>
+            
+            <div class="cart-container" id="cartContainer">
+                <div class="cart-items" id="cartItems">
+                    <!-- Cart items will be loaded dynamically -->
+                </div>
+                
+                <div class="cart-summary" id="cartSummary">
+                    <!-- Cart summary will be loaded dynamically -->
+                </div>
+                
+                <div class="empty-cart" id="emptyCart" style="display: none;">
+                    <i class="fas fa-shopping-cart"></i>
+                    <h2>Your cart is empty</h2>
+                    <p>Browse our products and add items to your cart</p>
+                    <a href="products.html" class="btn-primary">Browse Products</a>
+                </div>
+            </div>
         </div>
-      </div>
     </section>
-  </main>
 
-  <script src="js/config.js"></script>
-  <script src="js/products-data.js"></script>
-  <script src="js/utils.js"></script>
-  <script src="js/navbar.js"></script>
-  <script src="js/footer.js"></script>
-  <script src="js/galaxy-button.js"></script>
-  <script src="js/aos-init.js"></script>
-  <script src="js/cart.js"></script>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Anas Plastic Enterprises</h3>
+                    <p>Your Premier Source for Cosmetic Packaging Solutions</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="products.html">Products</a></li>
+                        <li><a href="aboutus.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact Info</h4>
+                    <p><i class="fas fa-phone"></i> <a href="tel:+923000841330">+92 300 0841330</a></p>
+                    <p><i class="fas fa-phone-alt"></i> <a href="tel:04237634122">042 37634122</a></p>
+                    <p><i class="fab fa-whatsapp"></i> <a href="https://wa.me/923000841330" target="_blank">WhatsApp Chat</a></p>
+                    <p><i class="fas fa-envelope"></i> <a href="mailto:alirafique326@gmail.com">alirafique326@gmail.com</a></p>
+                </div>
+                <div class="footer-section">
+                    <h4>Visit Us</h4>
+                    <p><i class="fas fa-map-marker-alt"></i> Shop #7, Madni Three Center, 786 Market, Paper Mandi, Shah Alam Market, Lahore</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Anas Plastic Enterprises. All rights reserved.</p>
+                <p>Developed by <a href="https://asiaxnetwork.vercel.app" target="_blank">Asia X Network (SMC-PVT) LTD</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/cart.js"></script>
 </body>
 </html>

@@ -1,18 +1,12 @@
-/* ============================================
-   About Us Page JavaScript
-   ============================================ */
+// About Us Page - Anas Plastic Enterprises
 
-function initAboutPage() {
-  // Initialize scroll animations
-  initScrollAnimations();
-  
-  // Initialize AOS
-  initAOS();
-}
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.location.pathname.includes('aboutus.html')) {
+        initializeAboutPage();
+    }
+});
 
-// Initialize on DOM ready
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initAboutPage);
-} else {
-  initAboutPage();
+function initializeAboutPage() {
+    // Add any specific about page functionality here
+    console.log('About Us page initialized');
 }

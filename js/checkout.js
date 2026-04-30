@@ -1,91 +1,134 @@
-/* ============================================
-   Checkout Page JavaScript
-   ============================================ */
+// Checkout Functionality - Anas Plastic Enterprises
 
-function initCheckout() {
-  const cart = getCart();
-  
-  if (cart.length === 0) {
-    window.location.href = 'cart.html';
-    return;
-  }
-  
-  renderOrderItems(cart);
-  setupPlaceOrderButton(cart);
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.location.pathname.includes('checkout.html')) {
+        initializeCheckout();
+    }
+});
+
+function initializeCheckout() {
+    const cart = JSON.parse(localStorage.getItem('anasPlasticCart')) || [];
+    
+    // Redirect if cart is empty
+    if (cart.length === 0) {
+        window.location.href = 'cart.html';
+        return;
+    }
+    
+    renderOrderSummary(cart);
+    setupCheckoutForm(cart);
 }
 
-function renderOrderItems(cart) {
-  const container = document.getElementById('order-items');
-  const totalEl = document.getElementById('total-items');
-  
-  if (!container) return;
-  
-  let html = '';
-  let totalItems = 0;
-  
-  cart.forEach(item => {
-    totalItems += item.quantity;
-    html += `
-      <div class="order-item" data-aos="fade-up">
-        <div class="order-item-image">
-          <img src="${item.image}" alt="${item.name}">
+function renderOrderSummary(cart) {
+    const orderSummary = document.getElementById('orderSummary');
+    if (!orderSummary) return;
+    
+    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+    
+    orderSummary.innerHTML = `
+        <div class="order-items">
+            ${cart.map(item => `
+                <div class="order-item">
+                    <div class="order-item-image">
+                        <img src="${item.image}" alt="${item.name}" onerror="this.src='assets/img/placeholder.png'">
+                    </div>
+                    <div class="order-item-details">
+                        <span class="order-item-name">${item.name}</span>
+                        <span class="order-item-qty">Qty: ${item.quantity}</span>
+                    </div>
+                </div>
+            `).join('')}
         </div>
-        <div class="order-item-details">
-          <h4>${item.name}</h4>
-          <span class="category">${item.category}</span>
+        <div class="order-total">
+            <span>Total Items:</span>
+            <strong>${totalItems}</strong>
         </div>
-        <span class="order-item-qty">x${item.quantity}</span>
-      </div>
+        <p class="order-note">
+            <i class="fas fa-info-circle"></i>
+            Prices and final quotation will be discussed via WhatsApp after order submission.
+        </p>
     `;
-  });
-  
-  container.innerHTML = html;
-  if (totalEl) totalEl.textContent = totalItems;
 }
 
-function setupPlaceOrderButton(cart) {
-  const btn = document.getElementById('place-order-btn');
-  
-  if (!btn) return;
-  
-  btn.addEventListener('click', () => {
-    // Build comprehensive WhatsApp message
-    let message = `*Order Inquiry - Anas Plastic Enterprises*\n\n`;
-    message += `Hello, I would like to inquire about the following products:\n\n`;
+function setupCheckoutForm(cart) {
+    const form = document.getElementById('checkoutForm');
+    if (!form) return;
+    
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        sendOrderViaWhatsApp(cart);
+    });
+}
+
+function sendOrderViaWhatsApp(cart) {
+    // Get form data
+    const fullName = document.getElementById('fullName').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const address = document.getElementById('address').value.trim();
+    const city = document.getElementById('city').value.trim();
+    const notes = document.getElementById('notes').value.trim();
+    
+    // Validate required fields
+    if (!fullName || !phone || !address || !city) {
+        alert('Please fill in all required fields.');
+        return;
+    }
+    
+    // Build WhatsApp message
+    let message = `*New Order - Anas Plastic Enterprises*\n\n`;
+    message += `*Customer Details*\n`;
+    message += `Name: ${fullName}\n`;
+    message += `Phone: ${phone}\n`;
+    if (email) message += `Email: ${email}\n`;
+    message += `Address: ${address}\n`;
+    message += `City: ${city}\n`;
+    
+    if (notes) {
+        message += `\n*Order Notes:*\n${notes}\n`;
+    }
+    
+    message += `\n*Order Items:*\n`;
     
     cart.forEach((item, index) => {
-      message += `*${index + 1}. ${item.name}*\n`;
-      message += `   Category: ${item.category}\n`;
-      message += `   Quantity: ${item.quantity}\n`;
-      message += `   Link: ${CONFIG.WEBSITE_URL}/product-detail.html?id=${item.id}\n\n`;
+        message += `\n${index + 1}. ${item.name}`;
+        message += `\n   Quantity: ${item.quantity}`;
+        message += `\n   Category: ${formatCategoryName(item.category)}`;
+        message += `\n   Image: ${item.image}\n`;
     });
     
-    message += `\nPlease provide:\n`;
-    message += `- Pricing details\n`;
-    message += `- Availability\n`;
-    message += `- Delivery options\n`;
-    message += `- Minimum order quantities\n\n`;
-    message += `Thank you!`;
+    message += `\n----------------------------------------\n`;
+    message += `Total Items: ${cart.reduce((sum, item) => sum + item.quantity, 0)}\n`;
+    message += `Total Products: ${cart.length}\n`;
+    message += `\n*Please send price quotation and confirm order.*`;
+    
+    // Get WhatsApp number from config
+    const whatsappNumber = '923000841330'; // From your business details
     
     // Open WhatsApp
-    const whatsappUrl = getWhatsAppLink(message);
-    window.open(whatsappUrl, '_blank');
+    const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappURL, '_blank');
     
-    // Show confirmation
-    showToast('Redirecting to WhatsApp with your order details...');
+    // Save order to localStorage for reference
+    const order = {
+        customer: { fullName, phone, email, address, city },
+        items: cart,
+        notes: notes,
+        orderDate: new Date().toISOString(),
+        orderId: 'ORD-' + Date.now()
+    };
     
-    // Optional: Clear cart after a delay
+    const orders = JSON.parse(localStorage.getItem('anasPlasticOrders')) || [];
+    orders.push(order);
+    localStorage.setItem('anasPlasticOrders', JSON.stringify(orders));
+    
+    // Clear cart
+    localStorage.removeItem('anasPlasticCart');
+    updateCartCount();
+    
+    // Show success message
     setTimeout(() => {
-      if (confirm('Would you like to clear your cart?')) {
-        clearCart();
-      }
-    }, 2000);
-  });
-}
-
-// Initialize on DOM ready
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initCheckout);
-} else {
-  initCheckout();
+        alert('Order sent successfully! You will be redirected to WhatsApp.');
+        window.location.href = 'products.html';
+    }, 1000);
 }
