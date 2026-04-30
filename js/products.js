@@ -1,4 +1,8 @@
-// Products Data and Functionality - Anas Plastic Enterprises
+// ============================================
+// Products Data and Functionality
+// Anas Plastic Enterprises
+// Complete Working Version with Image Sharing
+// ============================================
 
 // Product Database
 const products = [
@@ -6,8 +10,11 @@ const products = [
         id: 1,
         name: 'Crystal Clear Cream Jar 50ml',
         category: 'cream-containers',
-        description: 'Premium crystal-clear plastic jar perfect for facial creams, whitening creams, and moisturizers. Features a secure screw cap and elegant design. Ideal for both retail and wholesale packaging needs.',
-        images: ['https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=500', 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=500'],
+        description: 'Premium crystal-clear plastic jar perfect for facial creams, whitening creams, and moisturizers. Features a secure screw cap and elegant design. Ideal for both retail and wholesale packaging needs. Made from high-quality PET plastic for durability and clarity.',
+        images: [
+            'https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=500',
+            'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=500'
+        ],
         rating: 4.8,
         badge: 'Best Seller',
         specifications: {
@@ -24,8 +31,11 @@ const products = [
         id: 2,
         name: 'Luxury Gold Cap Jar 100ml',
         category: 'cream-containers',
-        description: 'Elegant 100ml jar with luxurious gold cap. Perfect for premium skincare products, night creams, and anti-aging formulations. The gold accent adds a touch of luxury to your brand.',
-        images: ['https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=500', 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=500'],
+        description: 'Elegant 100ml jar with luxurious gold cap. Perfect for premium skincare products, night creams, and anti-aging formulations. The gold accent adds a touch of luxury to your brand presentation.',
+        images: [
+            'https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=500',
+            'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=500'
+        ],
         rating: 4.9,
         badge: 'Premium',
         specifications: {
@@ -42,8 +52,11 @@ const products = [
         id: 3,
         name: 'Crystal Series Bottle 200ml',
         category: 'crystal-series',
-        description: 'Stunning crystal-clear bottle from our premium Crystal Series. Perfect for serums, toners, and liquid skincare products. Ultra-clear finish for maximum product visibility.',
-        images: ['https://images.unsplash.com/photo-1577174881658-0f30ed549adc?w=500', 'https://images.unsplash.com/photo-1585435557343-3b092031a831?w=500'],
+        description: 'Stunning crystal-clear bottle from our premium Crystal Series. Perfect for serums, toners, and liquid skincare products. Ultra-clear PET-G material for maximum product visibility and shelf appeal.',
+        images: [
+            'https://images.unsplash.com/photo-1577174881658-0f30ed549adc?w=500',
+            'https://images.unsplash.com/photo-1585435557343-3b092031a831?w=500'
+        ],
         rating: 4.7,
         badge: 'Crystal Series',
         specifications: {
@@ -60,8 +73,11 @@ const products = [
         id: 4,
         name: 'Serum Bottle with Dropper 30ml',
         category: 'facial-skincare',
-        description: 'Professional 30ml serum bottle with precision dropper. Perfect for facial serums, essential oils, and concentrated treatments. Available in amber and clear glass.',
-        images: ['https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=500', 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=500'],
+        description: 'Professional 30ml serum bottle with precision dropper. Perfect for facial serums, essential oils, and concentrated treatments. Available in amber and clear glass options.',
+        images: [
+            'https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=500',
+            'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=500'
+        ],
         rating: 4.6,
         badge: 'Popular',
         specifications: {
@@ -78,8 +94,11 @@ const products = [
         id: 5,
         name: 'Facial Kit Jar Set (5 Pieces)',
         category: 'facial-skincare',
-        description: 'Complete set of 5 jars for facial kits. Various sizes included (10ml to 100ml), perfect for facial treatments and spa products. Professional packaging solution.',
-        images: ['https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=500', 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=500'],
+        description: 'Complete set of 5 jars for facial kits. Various sizes included (10ml to 100ml), perfect for facial treatments and spa products. Professional packaging solution for beauty clinics.',
+        images: [
+            'https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=500',
+            'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=500'
+        ],
         rating: 4.5,
         badge: 'Kit',
         specifications: {
@@ -96,7 +115,10 @@ const products = [
         name: 'Shampoo Bottle 500ml',
         category: 'versatile-packaging',
         description: 'Versatile 500ml bottle suitable for shampoos, syrups, lotions, and other liquid products. Ergonomic design with convenient flip-top cap for easy dispensing.',
-        images: ['https://images.unsplash.com/photo-1577174881658-0f30ed549adc?w=500', 'https://images.unsplash.com/photo-1585435557343-3b092031a831?w=500'],
+        images: [
+            'https://images.unsplash.com/photo-1577174881658-0f30ed549adc?w=500',
+            'https://images.unsplash.com/photo-1585435557343-3b092031a831?w=500'
+        ],
         rating: 4.4,
         badge: 'Versatile',
         specifications: {
@@ -113,8 +135,11 @@ const products = [
         id: 7,
         name: 'Plastic Storage Box - Small',
         category: 'versatile-packaging',
-        description: 'Durable small plastic storage box with snap lock closure. Ideal for organizing small cosmetic items, samples, and accessories. Clear design for easy visibility.',
-        images: ['https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=500', 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=500'],
+        description: 'Durable small plastic storage box with snap lock closure. Ideal for organizing small cosmetic items, samples, and accessories. Clear design for easy content visibility.',
+        images: [
+            'https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=500',
+            'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=500'
+        ],
         rating: 4.3,
         badge: 'Storage',
         specifications: {
@@ -130,8 +155,11 @@ const products = [
         id: 8,
         name: 'Crystal Series Round Jar 150ml',
         category: 'crystal-series',
-        description: 'Premium round jar from the Crystal Series. Ultra-clear finish with elegant design, perfect for luxury skincare brands. Features a secure screw cap with inner liner.',
-        images: ['https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=500', 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=500'],
+        description: 'Premium round jar from the Crystal Series. Ultra-clear finish with elegant design, perfect for luxury skincare brands. Features a secure screw cap with inner liner for product protection.',
+        images: [
+            'https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=500',
+            'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=500'
+        ],
         rating: 4.8,
         badge: 'Crystal Series',
         specifications: {
@@ -148,8 +176,11 @@ const products = [
         id: 9,
         name: 'Whitening Cream Jar 30ml',
         category: 'cream-containers',
-        description: 'Specialized 30ml jar designed for whitening creams and concentrated skincare formulations. Compact size perfect for targeted treatments.',
-        images: ['https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=500', 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=500'],
+        description: 'Specialized 30ml jar designed for whitening creams and concentrated skincare formulations. Compact size perfect for targeted treatments and sample products.',
+        images: [
+            'https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=500',
+            'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=500'
+        ],
         rating: 4.6,
         badge: 'Specialized',
         specifications: {
@@ -166,8 +197,11 @@ const products = [
         id: 10,
         name: 'Dropper Bottle 50ml',
         category: 'facial-skincare',
-        description: 'High-quality 50ml dropper bottle for facial oils, serums, and premium liquid formulations. Precise dropper for controlled dispensing.',
-        images: ['https://images.unsplash.com/photo-1577174881658-0f30ed549adc?w=500', 'https://images.unsplash.com/photo-1585435557343-3b092031a831?w=500'],
+        description: 'High-quality 50ml dropper bottle for facial oils, serums, and premium liquid formulations. Precise dropper for controlled dispensing and minimal waste.',
+        images: [
+            'https://images.unsplash.com/photo-1577174881658-0f30ed549adc?w=500',
+            'https://images.unsplash.com/photo-1585435557343-3b092031a831?w=500'
+        ],
         rating: 4.5,
         badge: 'Premium',
         specifications: {
@@ -185,7 +219,10 @@ const products = [
         name: 'Plastic Storage Box - Medium',
         category: 'versatile-packaging',
         description: 'Medium-sized clear plastic storage box with hinged lid. Perfect for organizing cosmetic products, samples, and beauty accessories in your store or at home.',
-        images: ['https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=500', 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=500'],
+        images: [
+            'https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=500',
+            'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=500'
+        ],
         rating: 4.4,
         badge: 'Storage',
         specifications: {
@@ -202,7 +239,10 @@ const products = [
         name: 'Crystal Series Square Jar 200ml',
         category: 'crystal-series',
         description: 'Elegant square jar from our Crystal Series. Modern design with ultra-clear finish for a luxurious presentation. Available with gold or silver cap options.',
-        images: ['https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=500', 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=500'],
+        images: [
+            'https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=500',
+            'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=500'
+        ],
         rating: 4.9,
         badge: 'Crystal Series',
         specifications: {
@@ -219,8 +259,11 @@ const products = [
         id: 13,
         name: 'Cosmetic Jars Set 3-Piece',
         category: 'cream-containers',
-        description: 'Versatile set of 3 cosmetic jars in different sizes (15ml, 30ml, 50ml). Perfect for sample kits, travel sets, and multi-product packaging.',
-        images: ['https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=500', 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=500'],
+        description: 'Versatile set of 3 cosmetic jars in different sizes (15ml, 30ml, 50ml). Perfect for sample kits, travel sets, and multi-product packaging solutions.',
+        images: [
+            'https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=500',
+            'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=500'
+        ],
         rating: 4.4,
         badge: 'Value Set',
         specifications: {
@@ -237,7 +280,10 @@ const products = [
         name: 'Airless Pump Bottle 30ml',
         category: 'facial-skincare',
         description: 'Modern airless pump bottle that protects product integrity. Ideal for serums, foundations, and sensitive formulations that require protection from air exposure.',
-        images: ['https://images.unsplash.com/photo-1577174881658-0f30ed549adc?w=500', 'https://images.unsplash.com/photo-1585435557343-3b092031a831?w=500'],
+        images: [
+            'https://images.unsplash.com/photo-1577174881658-0f30ed549adc?w=500',
+            'https://images.unsplash.com/photo-1585435557343-3b092031a831?w=500'
+        ],
         rating: 4.7,
         badge: 'Innovative',
         specifications: {
@@ -254,8 +300,11 @@ const products = [
         id: 15,
         name: 'Spray Bottle 100ml',
         category: 'versatile-packaging',
-        description: 'Fine mist spray bottle perfect for toners, facial mists, and water-based products. Even spray distribution for optimal application.',
-        images: ['https://images.unsplash.com/photo-1577174881658-0f30ed549adc?w=500', 'https://images.unsplash.com/photo-1585435557343-3b092031a831?w=500'],
+        description: 'Fine mist spray bottle perfect for toners, facial mists, and water-based products. Even spray distribution for optimal application and customer satisfaction.',
+        images: [
+            'https://images.unsplash.com/photo-1577174881658-0f30ed549adc?w=500',
+            'https://images.unsplash.com/photo-1585435557343-3b092031a831?w=500'
+        ],
         rating: 4.3,
         badge: 'Popular',
         specifications: {
@@ -272,8 +321,11 @@ const products = [
         id: 16,
         name: 'Crystal Series Lotion Bottle 250ml',
         category: 'crystal-series',
-        description: 'Elegant lotion bottle from Crystal Series with pump dispenser. Perfect for body lotions, creams, and liquid soaps with a premium look.',
-        images: ['https://images.unsplash.com/photo-1577174881658-0f30ed549adc?w=500', 'https://images.unsplash.com/photo-1585435557343-3b092031a831?w=500'],
+        description: 'Elegant lotion bottle from Crystal Series with pump dispenser. Perfect for body lotions, liquid soaps, and cream products with a premium look.',
+        images: [
+            'https://images.unsplash.com/photo-1577174881658-0f30ed549adc?w=500',
+            'https://images.unsplash.com/photo-1585435557343-3b092031a831?w=500'
+        ],
         rating: 4.8,
         badge: 'Crystal Series',
         specifications: {
@@ -285,19 +337,191 @@ const products = [
             'Diameter': '55mm',
             'Usage': 'Lotions, Liquid Soaps'
         }
+    },
+    {
+        id: 17,
+        name: 'Jar with Inner Seal 60ml',
+        category: 'cream-containers',
+        description: 'Secure 60ml jar with inner seal for maximum product protection. Ideal for natural and organic products that require extra preservation.',
+        images: [
+            'https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=500',
+            'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=500'
+        ],
+        rating: 4.5,
+        badge: 'New',
+        specifications: {
+            'Capacity': '60ml',
+            'Material': 'PET + Aluminum Seal',
+            'Color': 'Clear/White',
+            'Cap Type': 'Screw Cap with Inner Seal',
+            'Height': '60mm',
+            'Diameter': '48mm',
+            'Usage': 'Organic Products, Sensitive Formulas'
+        }
+    },
+    {
+        id: 18,
+        name: 'Travel Kit Bottle Set 4-Piece',
+        category: 'versatile-packaging',
+        description: 'Convenient 4-piece travel kit with bottles and jars. Perfect for travel-sized products, hotel amenities, and sample distributions.',
+        images: [
+            'https://images.unsplash.com/photo-1577174881658-0f30ed549adc?w=500',
+            'https://images.unsplash.com/photo-1585435557343-3b092031a831?w=500'
+        ],
+        rating: 4.2,
+        badge: 'Travel',
+        specifications: {
+            'Set Includes': '2 Bottles (30ml) + 2 Jars (15ml)',
+            'Material': 'PET + PP',
+            'Color': 'Clear',
+            'Cap Type': 'Flip-Top + Screw Cap',
+            'Packaging': 'Zipper Pouch',
+            'Usage': 'Travel, Samples, Hotels'
+        }
+    },
+    {
+        id: 19,
+        name: 'Premium Serum Dropper 20ml',
+        category: 'facial-skincare',
+        description: 'Luxury 20ml serum dropper with gold accents. Perfect for high-end serums, face oils, and premium skincare treatments.',
+        images: [
+            'https://images.unsplash.com/photo-1577174881658-0f30ed549adc?w=500',
+            'https://images.unsplash.com/photo-1585435557343-3b092031a831?w=500'
+        ],
+        rating: 4.9,
+        badge: 'Luxury',
+        specifications: {
+            'Capacity': '20ml',
+            'Material': 'Glass + Gold-Plated Cap',
+            'Color': 'Clear with Gold',
+            'Cap Type': 'Gold Dropper',
+            'Height': '90mm',
+            'Diameter': '20mm',
+            'Usage': 'Premium Serums, Face Oils'
+        }
+    },
+    {
+        id: 20,
+        name: 'Crystal Series Display Jar 300ml',
+        category: 'crystal-series',
+        description: 'Large 300ml display jar from Crystal Series. Perfect for counter displays, bulk products, and professional spa use with maximum visual impact.',
+        images: [
+            'https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=500',
+            'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=500'
+        ],
+        rating: 4.7,
+        badge: 'Display',
+        specifications: {
+            'Capacity': '300ml',
+            'Material': 'PET-G',
+            'Color': 'Ultra Clear',
+            'Cap Type': 'Wide Screw Cap',
+            'Height': '100mm',
+            'Diameter': '85mm',
+            'Usage': 'Display, Bulk, Professional'
+        }
+    },
+    {
+        id: 21,
+        name: 'Roll-On Bottle 10ml',
+        category: 'facial-skincare',
+        description: 'Compact 10ml roll-on bottle for under-eye serums, essential oils, and targeted treatments. Smooth rolling ball for easy application.',
+        images: [
+            'https://images.unsplash.com/photo-1577174881658-0f30ed549adc?w=500',
+            'https://images.unsplash.com/photo-1585435557343-3b092031a831?w=500'
+        ],
+        rating: 4.4,
+        badge: 'Compact',
+        specifications: {
+            'Capacity': '10ml',
+            'Material': 'Glass + Steel Ball',
+            'Color': 'Clear/Amber',
+            'Cap Type': 'Roll-On with Cap',
+            'Height': '65mm',
+            'Diameter': '16mm',
+            'Usage': 'Under-Eye, Essential Oils'
+        }
+    },
+    {
+        id: 22,
+        name: 'Plastic Box with Dividers',
+        category: 'versatile-packaging',
+        description: 'Organized storage box with adjustable dividers. Perfect for organizing different cosmetic products, tools, and accessories in one place.',
+        images: [
+            'https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=500',
+            'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=500'
+        ],
+        rating: 4.5,
+        badge: 'Organizer',
+        specifications: {
+            'Size': 'Large with Dividers',
+            'Material': 'PP Plastic',
+            'Color': 'Clear',
+            'Dimensions': '250 x 180 x 100mm',
+            'Closure': 'Snap Lock',
+            'Usage': 'Organization, Professional Kits'
+        }
+    },
+    {
+        id: 23,
+        name: 'Crystal Series Mini Jar Set 5ml',
+        category: 'crystal-series',
+        description: 'Set of 10 mini crystal jars (5ml each). Perfect for samples, travel sizes, and promotional giveaways with premium Crystal Series quality.',
+        images: [
+            'https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=500',
+            'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=500'
+        ],
+        rating: 4.6,
+        badge: 'Mini Set',
+        specifications: {
+            'Set Includes': '10 Mini Jars (5ml each)',
+            'Material': 'PET-G',
+            'Color': 'Ultra Clear',
+            'Cap Type': 'Mini Screw Cap',
+            'Height': '20mm',
+            'Diameter': '15mm',
+            'Usage': 'Samples, Giveaways, Travel'
+        }
+    },
+    {
+        id: 24,
+        name: 'Double Wall Jar 50ml',
+        category: 'cream-containers',
+        description: 'Premium double-wall jar that creates an elegant floating effect for your product. Adds a luxurious touch to high-end skincare brands.',
+        images: [
+            'https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=500',
+            'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=500'
+        ],
+        rating: 4.8,
+        badge: 'Luxury',
+        specifications: {
+            'Capacity': '50ml',
+            'Material': 'Acrylic + PET',
+            'Color': 'Crystal Clear Double Wall',
+            'Cap Type': 'Metallic Screw Cap',
+            'Height': '60mm',
+            'Diameter': '50mm',
+            'Usage': 'Luxury Brands, Premium Products'
+        }
     }
 ];
 
-// Products per page
+// ============================================
+// Configuration
+// ============================================
 const PRODUCTS_PER_PAGE = 12;
 
-// Current state
+// ============================================
+// State Management
+// ============================================
 let currentPage = 1;
 let currentCategory = 'all';
 let searchQuery = '';
 let filteredProducts = [...products];
 
-// Initialize when document is ready
+// ============================================
+// Initialization
+// ============================================
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize AOS
     if (typeof AOS !== 'undefined') {
@@ -305,52 +529,50 @@ document.addEventListener('DOMContentLoaded', function() {
             duration: 800,
             easing: 'ease-in-out',
             once: true,
-            mirror: false
+            mirror: false,
+            offset: 50
         });
     }
     
+    // Check if we're on products page
     if (window.location.pathname.includes('products.html')) {
         initializeProducts();
+        
+        // Check for category parameter in URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const categoryParam = urlParams.get('category');
+        if (categoryParam) {
+            currentCategory = categoryParam;
+        }
     }
     
     // Update cart count on all pages
     updateCartCountDisplay();
 });
 
-// Initialize Products Page
+// ============================================
+// Products Page Initialization
+// ============================================
 function initializeProducts() {
     renderCategoryFilters();
     renderProducts();
     setupSearch();
     setupCategoryFilters();
+    
+    // Set initial active filter button
+    setTimeout(() => {
+        updateActiveFilterButton();
+    }, 100);
 }
 
-// Render Category Filters
-function renderCategoryFilters() {
-    const categoryFilters = document.getElementById('categoryFilters');
-    if (!categoryFilters) return;
-
-    const categories = getUniqueCategories();
-    
-    // Clear existing buttons except "All"
-    categoryFilters.innerHTML = '<button class="filter-btn active" data-category="all">All Products</button>';
-    
-    categories.forEach(category => {
-        const btn = document.createElement('button');
-        btn.className = 'filter-btn';
-        btn.dataset.category = category;
-        btn.textContent = formatCategoryName(category);
-        categoryFilters.appendChild(btn);
-    });
-}
-
-// Get Unique Categories
+// ============================================
+// Category Functions
+// ============================================
 function getUniqueCategories() {
     const categories = products.map(p => p.category);
     return [...new Set(categories)];
 }
 
-// Format Category Name
 function formatCategoryName(category) {
     return category
         .split('-')
@@ -358,7 +580,70 @@ function formatCategoryName(category) {
         .join(' ');
 }
 
-// Render Products
+function renderCategoryFilters() {
+    const categoryFilters = document.getElementById('categoryFilters');
+    if (!categoryFilters) return;
+
+    const categories = getUniqueCategories();
+    
+    let filterHTML = '<button class="filter-btn active" data-category="all">All Products</button>';
+    
+    categories.forEach(category => {
+        filterHTML += `
+            <button class="filter-btn" data-category="${category}">
+                ${formatCategoryName(category)}
+            </button>
+        `;
+    });
+    
+    categoryFilters.innerHTML = filterHTML;
+}
+
+function updateActiveFilterButton() {
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    filterBtns.forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.dataset.category === currentCategory) {
+            btn.classList.add('active');
+        }
+    });
+}
+
+function setupCategoryFilters() {
+    const categoryFilters = document.getElementById('categoryFilters');
+    if (!categoryFilters) return;
+
+    categoryFilters.addEventListener('click', function(e) {
+        if (e.target.classList.contains('filter-btn')) {
+            currentCategory = e.target.dataset.category;
+            currentPage = 1;
+            updateActiveFilterButton();
+            renderProducts();
+        }
+    });
+}
+
+// ============================================
+// Search Functions
+// ============================================
+function setupSearch() {
+    const searchInput = document.getElementById('searchInput');
+    if (!searchInput) return;
+
+    let debounceTimer;
+    searchInput.addEventListener('input', function() {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+            searchQuery = this.value.trim();
+            currentPage = 1;
+            renderProducts();
+        }, 300);
+    });
+}
+
+// ============================================
+// Product Rendering
+// ============================================
 function renderProducts() {
     const productsGrid = document.getElementById('productsGrid');
     if (!productsGrid) return;
@@ -366,30 +651,41 @@ function renderProducts() {
     // Apply filters
     filteredProducts = products.filter(product => {
         const matchesCategory = currentCategory === 'all' || product.category === currentCategory;
-        const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                            product.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                            product.category.toLowerCase().includes(searchQuery.toLowerCase());
+        const matchesSearch = !searchQuery || 
+            product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            product.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            product.category.toLowerCase().includes(searchQuery.toLowerCase());
         return matchesCategory && matchesSearch;
     });
 
     // Pagination
+    const totalPages = Math.ceil(filteredProducts.length / PRODUCTS_PER_PAGE);
     const startIndex = (currentPage - 1) * PRODUCTS_PER_PAGE;
     const endIndex = startIndex + PRODUCTS_PER_PAGE;
     const paginatedProducts = filteredProducts.slice(startIndex, endIndex);
 
+    // Handle empty results
     if (paginatedProducts.length === 0) {
         productsGrid.innerHTML = `
             <div class="no-products">
                 <i class="fas fa-box-open"></i>
                 <h3>No products found</h3>
-                <p>Try adjusting your search or filter criteria</p>
+                <p>${searchQuery ? 'Try adjusting your search terms.' : 'No products in this category yet.'}</p>
+                ${searchQuery || currentCategory !== 'all' ? `
+                    <button class="btn-primary" onclick="resetFilters()" style="margin-top: 15px;">
+                        Reset Filters
+                    </button>
+                ` : ''}
             </div>`;
         document.getElementById('pagination').innerHTML = '';
         return;
     }
 
+    // Render products
     productsGrid.innerHTML = paginatedProducts.map(product => createProductCard(product)).join('');
-    renderPagination();
+    
+    // Render pagination
+    renderPagination(totalPages);
     
     // Re-initialize AOS for new elements
     if (typeof AOS !== 'undefined') {
@@ -397,17 +693,21 @@ function renderProducts() {
     }
 }
 
-// Create Product Card
 function createProductCard(product) {
     const productUrl = `product-detail.html?id=${product.id}`;
     
     return `
         <div class="product-card" data-aos="fade-up" data-aos-duration="600">
             <div class="product-image">
-                <img src="${product.images[0]}" alt="${product.name}" loading="lazy" onerror="this.src='https://via.placeholder.com/400x400?text=Product+Image'">
+                <img src="${product.images[0]}" 
+                     alt="${product.name}" 
+                     loading="lazy" 
+                     onerror="this.src='https://via.placeholder.com/400x400?text=${encodeURIComponent(product.name)}'">
                 ${product.badge ? `<span class="product-badge">${product.badge}</span>` : ''}
                 <div class="product-actions">
-                    <button class="action-btn share-btn" onclick="event.stopPropagation(); shareCurrentProduct(${product.id}, '${productUrl}')" title="Share Product">
+                    <button class="action-btn share-btn" 
+                            onclick="event.stopPropagation(); shareProductWithImage(${product.id}, '${productUrl}')" 
+                            title="Share Product">
                         <i class="fas fa-share-alt"></i>
                     </button>
                     <a href="${productUrl}" class="action-btn quick-view" title="Quick View">
@@ -418,7 +718,9 @@ function createProductCard(product) {
             <div class="product-info">
                 <span class="product-category">${formatCategoryName(product.category)}</span>
                 <h3 class="product-name">
-                    <a href="${productUrl}" style="color: inherit; text-decoration: none;">${product.name}</a>
+                    <a href="${productUrl}" style="color: inherit; text-decoration: none;">
+                        ${product.name}
+                    </a>
                 </h3>
                 <p class="product-description">${product.description.substring(0, 80)}...</p>
                 <div class="product-rating">
@@ -426,7 +728,8 @@ function createProductCard(product) {
                     <span>${product.rating}</span>
                 </div>
                 <div class="product-card-actions">
-                    <button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCartFromProducts(${product.id})">
+                    <button class="add-to-cart-btn" 
+                            onclick="event.stopPropagation(); addToCartFromProducts(${product.id})">
                         <i class="fas fa-cart-plus"></i> Add to Cart
                     </button>
                     <a href="${productUrl}" class="view-details-btn">Details</a>
@@ -436,7 +739,9 @@ function createProductCard(product) {
     `;
 }
 
-// Generate Star Rating HTML
+// ============================================
+// Star Rating
+// ============================================
 function generateStarRating(rating) {
     const fullStars = Math.floor(rating);
     const halfStar = rating % 1 >= 0.5 ? 1 : 0;
@@ -455,47 +760,12 @@ function generateStarRating(rating) {
     return stars;
 }
 
-// Setup Search
-function setupSearch() {
-    const searchInput = document.getElementById('searchInput');
-    if (!searchInput) return;
-
-    let debounceTimer;
-    searchInput.addEventListener('input', function() {
-        clearTimeout(debounceTimer);
-        debounceTimer = setTimeout(() => {
-            searchQuery = this.value;
-            currentPage = 1;
-            renderProducts();
-        }, 300);
-    });
-}
-
-// Setup Category Filters
-function setupCategoryFilters() {
-    const categoryFilters = document.getElementById('categoryFilters');
-    if (!categoryFilters) return;
-
-    categoryFilters.addEventListener('click', function(e) {
-        if (e.target.classList.contains('filter-btn')) {
-            // Update active state
-            this.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-            e.target.classList.add('active');
-            
-            // Update category and render
-            currentCategory = e.target.dataset.category;
-            currentPage = 1;
-            renderProducts();
-        }
-    });
-}
-
-// Render Pagination
-function renderPagination() {
+// ============================================
+// Pagination
+// ============================================
+function renderPagination(totalPages) {
     const paginationContainer = document.getElementById('pagination');
     if (!paginationContainer) return;
-
-    const totalPages = Math.ceil(filteredProducts.length / PRODUCTS_PER_PAGE);
     
     if (totalPages <= 1) {
         paginationContainer.innerHTML = '';
@@ -538,17 +808,41 @@ function renderPagination() {
     paginationContainer.innerHTML = paginationHTML;
 }
 
-// Change Page
 function changePage(page) {
     const totalPages = Math.ceil(filteredProducts.length / PRODUCTS_PER_PAGE);
     if (page < 1 || page > totalPages) return;
     
     currentPage = page;
     renderProducts();
-    window.scrollTo({ top: document.getElementById('productsGrid').offsetTop - 100, behavior: 'smooth' });
+    
+    // Scroll to products grid
+    const productsGrid = document.getElementById('productsGrid');
+    if (productsGrid) {
+        const headerHeight = document.querySelector('.header')?.offsetHeight || 80;
+        const targetPosition = productsGrid.getBoundingClientRect().top + window.pageYOffset - headerHeight - 20;
+        window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+    }
 }
 
-// Add to Cart from Products Page
+function resetFilters() {
+    currentCategory = 'all';
+    searchQuery = '';
+    currentPage = 1;
+    
+    // Reset search input
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) searchInput.value = '';
+    
+    // Update filter buttons
+    updateActiveFilterButton();
+    
+    // Re-render
+    renderProducts();
+}
+
+// ============================================
+// Cart Functions
+// ============================================
 function addToCartFromProducts(productId) {
     const product = products.find(p => p.id === productId);
     if (!product) return;
@@ -574,42 +868,95 @@ function addToCartFromProducts(productId) {
     showAddToCartNotification(product);
 }
 
-// Share Current Product
-function shareCurrentProduct(productId, productUrl) {
+// ============================================
+// Share Functions
+// ============================================
+async function shareProductWithImage(productId, productUrl) {
     const product = products.find(p => p.id === productId);
     if (!product) return;
     
     const fullUrl = window.location.origin + '/' + productUrl;
+    const shareData = {
+        title: product.name,
+        text: `Check out ${product.name} from Anas Plastic Enterprises - Premium Cosmetic Packaging\n\n${product.description.substring(0, 100)}...`,
+        url: fullUrl
+    };
     
-    if (navigator.share) {
-        navigator.share({
-            title: product.name,
-            text: `Check out ${product.name} from Anas Plastic Enterprises - ${product.description.substring(0, 100)}`,
-            url: fullUrl
-        }).catch(err => console.log('Error sharing:', err));
+    if (navigator.share && navigator.canShare) {
+        try {
+            // Try to include image
+            try {
+                const response = await fetch(product.images[0]);
+                const blob = await response.blob();
+                const file = new File([blob], `${product.name.replace(/\s+/g, '-')}.jpg`, { type: 'image/jpeg' });
+                
+                const shareDataWithImage = {
+                    title: product.name,
+                    text: `Check out ${product.name} from Anas Plastic Enterprises\n${fullUrl}`,
+                    files: [file]
+                };
+                
+                if (navigator.canShare({ files: [file] })) {
+                    await navigator.share(shareDataWithImage);
+                    return;
+                }
+            } catch (imgErr) {
+                console.log('Image sharing not supported, sharing without image');
+            }
+            
+            // Share without image
+            await navigator.share(shareData);
+        } catch (err) {
+            if (err.name !== 'AbortError') {
+                copyProductLink(fullUrl);
+            }
+        }
     } else {
-        // Fallback: Copy link
-        navigator.clipboard.writeText(fullUrl).then(() => {
-            showNotification('Link copied to clipboard!');
-        }).catch(() => {
-            prompt('Copy this link:', fullUrl);
-        });
+        copyProductLink(fullUrl);
     }
 }
 
-// Show Add to Cart Notification
+function copyProductLink(url) {
+    navigator.clipboard.writeText(url).then(() => {
+        showShareNotification('Product link copied to clipboard! Share it with your contacts.');
+    }).catch(() => {
+        const tempInput = document.createElement('input');
+        tempInput.value = url;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        try {
+            document.execCommand('copy');
+            showShareNotification('Link copied! Share it with your contacts.');
+        } catch (err) {
+            prompt('Copy this link to share:', url);
+        }
+        document.body.removeChild(tempInput);
+    });
+}
+
+// ============================================
+// Notification Functions
+// ============================================
 function showAddToCartNotification(product) {
+    // Remove existing notifications
+    document.querySelectorAll('.cart-notification').forEach(n => n.remove());
+    
     const notification = document.createElement('div');
     notification.className = 'cart-notification';
     notification.innerHTML = `
         <i class="fas fa-check-circle"></i>
-        <span>${product.name} added to cart!</span>
-        <a href="cart.html" style="color: white; text-decoration: underline; margin-left: 10px;">View Cart</a>
+        <div>
+            <strong>${product.name}</strong>
+            <span style="display: block; font-size: 0.85rem;">Added to cart successfully!</span>
+        </div>
+        <a href="cart.html" style="color: white; text-decoration: underline; font-weight: 700;">View Cart</a>
     `;
     
     document.body.appendChild(notification);
     
-    setTimeout(() => notification.classList.add('show'), 100);
+    requestAnimationFrame(() => {
+        notification.classList.add('show');
+    });
     
     setTimeout(() => {
         notification.classList.remove('show');
@@ -617,26 +964,32 @@ function showAddToCartNotification(product) {
     }, 3000);
 }
 
-// Show General Notification
-function showNotification(message) {
+function showShareNotification(message) {
+    document.querySelectorAll('.cart-notification').forEach(n => n.remove());
+    
     const notification = document.createElement('div');
     notification.className = 'cart-notification';
+    notification.style.background = '#1E3A8A';
     notification.innerHTML = `
-        <i class="fas fa-info-circle"></i>
+        <i class="fas fa-share-alt"></i>
         <span>${message}</span>
     `;
     
     document.body.appendChild(notification);
     
-    setTimeout(() => notification.classList.add('show'), 100);
+    requestAnimationFrame(() => {
+        notification.classList.add('show');
+    });
     
     setTimeout(() => {
         notification.classList.remove('show');
         setTimeout(() => notification.remove(), 300);
-    }, 2000);
+    }, 2500);
 }
 
-// Update Cart Count Display
+// ============================================
+// Utility Functions
+// ============================================
 function updateCartCountDisplay() {
     const cart = JSON.parse(localStorage.getItem('anasPlasticCart')) || [];
     const cartCountElements = document.querySelectorAll('.cart-count');
@@ -645,32 +998,28 @@ function updateCartCountDisplay() {
     cartCountElements.forEach(element => {
         if (element) {
             element.textContent = totalItems;
+            if (totalItems > 0) {
+                element.style.display = 'flex';
+            } else {
+                element.style.display = 'none';
+            }
         }
     });
 }
 
-// Legacy support for main.js
+// ============================================
+// Global Exports
+// ============================================
+window.addToCartFromProducts = addToCartFromProducts;
+window.shareProductWithImage = shareProductWithImage;
+window.changePage = changePage;
+window.resetFilters = resetFilters;
+window.updateCartCount = updateCartCountDisplay;
+
+// ============================================
+// Legacy Support
+// ============================================
 function updateCartCount() {
     updateCartCountDisplay();
 }
-
-// Check URL for category parameter on load
-document.addEventListener('DOMContentLoaded', function() {
-    if (window.location.pathname.includes('products.html')) {
-        const urlParams = new URLSearchParams(window.location.search);
-        const categoryParam = urlParams.get('category');
-        if (categoryParam) {
-            currentCategory = categoryParam;
-            // Update filter buttons
-            setTimeout(() => {
-                const filterBtns = document.querySelectorAll('.filter-btn');
-                filterBtns.forEach(btn => {
-                    btn.classList.remove('active');
-                    if (btn.dataset.category === categoryParam) {
-                        btn.classList.add('active');
-                    }
-                });
-            }, 200);
-        }
-    }
-});
+window.updateCartCount = updateCartCount;

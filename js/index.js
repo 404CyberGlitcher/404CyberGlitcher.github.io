@@ -47,4 +47,4 @@ function loadHomeCategories() {
             <a href="${category.link}" class="category-link">View Products <i class="fas fa-arrow-right"></i></a>
         </div>
     `).join('');
-}aboutus.js
+}
