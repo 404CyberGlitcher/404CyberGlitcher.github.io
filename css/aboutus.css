@@ -1,0 +1,268 @@
+/* ============================================
+   About Us Page Styles - Anas Plastic Enterprises
+   ============================================ */
+
+.about-section {
+    padding: 60px 0;
+}
+
+/* Hero */
+.about-hero {
+    text-align: center;
+    padding: 60px 0;
+    background: linear-gradient(135deg, #1E3A8A15, #DC262615);
+    border-radius: var(--border-radius);
+    margin-bottom: 60px;
+}
+
+.about-hero h1 {
+    font-size: 3rem;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+
+.about-hero p {
+    font-size: 1.2rem;
+    color: var(--text-light);
+}
+
+/* CEO Section */
+.ceo-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+    align-items: center;
+    margin-bottom: 80px;
+    padding: 50px;
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-lg);
+    border: 2px solid var(--border-color);
+}
+
+.ceo-content h2 {
+    font-size: 1rem;
+    color: var(--secondary-color);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+}
+
+.ceo-content h3 {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 5px;
+}
+
+.ceo-title {
+    font-size: 1.1rem;
+    color: var(--text-light);
+    display: block;
+    margin-bottom: 25px;
+}
+
+.ceo-content p {
+    color: var(--text-dark);
+    line-height: 1.8;
+    margin-bottom: 15px;
+    font-size: 1.05rem;
+}
+
+/* Mission & Vision */
+.mission-vision {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-bottom: 80px;
+}
+
+.mission-card,
+.vision-card {
+    padding: 40px;
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
+    text-align: center;
+    transition: var(--transition);
+    border-top: 4px solid var(--primary-color);
+}
+
+.vision-card {
+    border-top-color: var(--secondary-color);
+}
+
+.mission-card:hover,
+.vision-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-xl);
+}
+
+.mission-card i,
+.vision-card i {
+    font-size: 3rem;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+}
+
+.vision-card i {
+    color: var(--secondary-color);
+}
+
+.mission-card h3,
+.vision-card h3 {
+    font-size: 1.5rem;
+    color: var(--text-dark);
+    margin-bottom: 15px;
+}
+
+.mission-card p,
+.vision-card p {
+    color: var(--text-light);
+    line-height: 1.8;
+}
+
+/* Offerings */
+.offerings {
+    margin-bottom: 80px;
+}
+
+.offerings h2 {
+    text-align: center;
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin-bottom: 40px;
+}
+
+.offerings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+}
+
+.offering-card {
+    padding: 30px;
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-color);
+    transition: var(--transition);
+    text-align: center;
+}
+
+.offering-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary-color);
+}
+
+.offering-card i {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+
+.offering-card h4 {
+    font-size: 1.1rem;
+    color: var(--text-dark);
+    margin-bottom: 10px;
+}
+
+.offering-card p {
+    color: var(--text-light);
+    line-height: 1.6;
+    font-size: 0.9rem;
+}
+
+/* Store Location */
+.store-location {
+    margin-bottom: 60px;
+}
+
+.store-location h2 {
+    text-align: center;
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin-bottom: 30px;
+}
+
+.location-card {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 40px;
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-lg);
+    text-align: center;
+    border: 2px solid var(--primary-color);
+}
+
+.location-card i {
+    font-size: 3rem;
+    color: var(--secondary-color);
+    margin-bottom: 20px;
+}
+
+.location-card h3 {
+    font-size: 1.5rem;
+    color: var(--text-dark);
+    margin-bottom: 15px;
+}
+
+.location-card p {
+    color: var(--text-light);
+    line-height: 1.6;
+    margin-bottom: 10px;
+}
+
+.location-note {
+    font-style: italic;
+    color: var(--primary-color) !important;
+    font-weight: 500;
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+    .about-hero h1 {
+        font-size: 2rem;
+    }
+
+    .ceo-section {
+        grid-template-columns: 1fr;
+        padding: 30px;
+        gap: 30px;
+    }
+
+    .ceo-content h3 {
+        font-size: 2rem;
+    }
+
+    .mission-vision {
+        grid-template-columns: 1fr;
+    }
+
+    .offerings-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .about-hero h1 {
+        font-size: 1.6rem;
+    }
+
+    .ceo-section {
+        padding: 20px;
+    }
+
+    .ceo-content h3 {
+        font-size: 1.6rem;
+    }
+
+    .offerings-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .location-card {
+        padding: 25px;
+    }
+}
