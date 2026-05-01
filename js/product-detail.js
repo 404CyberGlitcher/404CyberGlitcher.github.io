@@ -169,7 +169,6 @@ function renderProductDetail(product) {
                 </div>
                 
                 <div class="detail-actions">
-// In renderProductDetail function, replace the quantity-selector-new div with:
 
 <!-- Quantity Selector -->
 <div class="quantity-selector-new">
