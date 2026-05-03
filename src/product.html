@@ -1,115 +1,192 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Detailed product information for premium beauty and cosmetic products at ColorMart. Read reviews, check prices, and buy online."
-    />
-    <meta name="robots" content="index, follow" />
-    <link rel="canonical" href="https://colormart.store/src/product.html" />
-    <title>Product Details - ColorMart | Premium Beauty & Cosmetics</title>
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
-    <link rel="stylesheet" href="/src/css/style.css" />
-    <link rel="stylesheet" href="/src/css/product.css" />
-  </head>
-  <body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Product details at ColorMart." id="meta-description">
+    <meta name="keywords" content="ColorMart, beauty product, cosmetics, makeup, hair care" id="meta-keywords">
+    <meta name="robots" content="index, follow">
+    
+    <meta property="og:title" content="Product Details - ColorMart" id="og-title">
+    <meta property="og:description" content="View product details at ColorMart." id="og-description">
+    <meta property="og:image" content="" id="og-image">
+    <meta property="og:url" content="" id="og-url">
+    <meta property="og:type" content="product">
+    
+    <link rel="canonical" href="" id="canonical-url">
+    
+    <title id="page-title">Product Details - ColorMart</title>
+    
+    <link rel="icon" type="image/x-icon" href="../public/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/product.css">
+</head>
+<body>
+    <div class="announcement-bar">
+        <div class="container">
+            <p>🎁 Free Gift with every Order | Free Shipping on orders over Rs. 2,500</p>
+        </div>
+    </div>
+
     <div id="header-container"></div>
 
     <main>
-      <section class="product-detail">
-        <div class="container">
-          <div class="product-detail-layout" id="productDetailContainer">
-            <!-- Product Gallery -->
-            <div
-              class="product-gallery"
-              data-aos="fade-right"
-              id="productGallery"
-            >
-              <div class="skeleton-loader" style="height: 500px"></div>
-            </div>
+        <section class="product-detail-section">
+            <div class="container">
+                <div class="breadcrumb" data-aos="fade-down">
+                    <a href="../index.html">Home</a> / <a href="catalog.html">Catalog</a> / <span id="product-name-breadcrumb">Product</span>
+                </div>
 
-            <!-- Product Info -->
-            <div class="product-info" data-aos="fade-left" id="productInfo">
-              <div class="skeleton-loader" style="height: 600px"></div>
-            </div>
-          </div>
+                <div class="product-detail-layout">
+                    <!-- Product Images Gallery -->
+                    <div class="product-images" data-aos="fade-right">
+                        <div class="swiper product-gallery">
+                            <div class="swiper-wrapper" id="product-gallery-wrapper">
+                                <!-- Product images will be loaded -->
+                            </div>
+                            <div class="swiper-pagination"></div>
+                        </div>
+                        <div class="thumbnail-gallery" id="thumbnail-gallery">
+                            <!-- Thumbnails will be loaded -->
+                        </div>
+                    </div>
 
-          <!-- Product Tabs -->
-          <div
-            class="product-tabs"
-            data-aos="fade-up"
-            id="productTabs"
-            style="display: none"
-          >
-            <div class="tab-headers">
-              <button class="tab-btn active" data-tab="description">
-                Description
-              </button>
-              <button class="tab-btn" data-tab="specifications">
-                Specifications
-              </button>
-              <button class="tab-btn" data-tab="reviews">
-                Reviews (<span id="reviewCount">0</span>)
-              </button>
-              <button class="tab-btn" data-tab="shipping">
-                Shipping & Returns
-              </button>
-            </div>
-            <div class="tab-content">
-              <div class="tab-pane active" id="descriptionTab">
-                <div id="productDescription"></div>
-              </div>
-              <div class="tab-pane" id="specificationsTab">
-                <div id="productSpecifications"></div>
-              </div>
-              <div class="tab-pane" id="reviewsTab">
-                <div class="reviews-section" id="reviewsSection"></div>
-              </div>
-              <div class="tab-pane" id="shippingTab">
-                <h4>Shipping Information</h4>
-                <p>
-                  Free shipping on all orders over Rs. 2500. Standard delivery
-                  takes 3-5 business days.
-                </p>
-                <h4>Returns Policy</h4>
-                <p>
-                  30-day return policy. Products must be unused and in original
-                  packaging.
-                </p>
-                <h4>Exchange Policy</h4>
-                <p>
-                  Free exchange within 7 days of delivery for defective or wrong
-                  products.
-                </p>
-              </div>
-            </div>
-          </div>
+                    <!-- Product Info -->
+                    <div class="product-info" data-aos="fade-left">
+                        <div class="product-brand" id="product-brand">Brand</div>
+                        <h1 class="product-title" id="product-title">Product Name</h1>
+                        
+                        <div class="product-rating" id="product-rating">
+                            ⭐⭐⭐⭐⭐ <span>(0 reviews)</span>
+                        </div>
 
-          <!-- Related Products -->
-          <div
-            class="related-products"
-            data-aos="fade-up"
-            id="relatedProducts"
-            style="display: none"
-          >
-            <h3>You May Also Like</h3>
-            <div class="products-grid" id="relatedProductsGrid"></div>
-          </div>
-        </div>
-      </section>
+                        <div class="product-price" id="product-price">
+                            <span class="current-price">Rs. 0</span>
+                            <span class="original-price">Rs. 0</span>
+                            <span class="discount-badge">-0% OFF</span>
+                        </div>
+
+                        <div class="product-description" id="product-description">
+                            Product description will be loaded here.
+                        </div>
+
+                        <div class="quantity-selector">
+                            <label for="quantity">Quantity:</label>
+                            <div class="quantity-controls">
+                                <button id="decrease-qty">-</button>
+                                <input type="number" id="quantity" value="1" min="1" max="10">
+                                <button id="increase-qty">+</button>
+                            </div>
+                        </div>
+
+                        <div class="product-actions">
+                            <button class="add-to-cart-btn" id="add-to-cart-btn">
+                                <span class="cart-icon">🛒</span> Add to Cart
+                            </button>
+                            <button class="buy-now-btn" id="buy-now-btn">
+                                Buy it Now
+                            </button>
+                        </div>
+
+                        <div class="product-meta">
+                            <div class="meta-item">
+                                <span class="meta-label">Category:</span>
+                                <span id="product-category">Loading...</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Availability:</span>
+                                <span class="in-stock" id="product-availability">In Stock</span>
+                            </div>
+                        </div>
+
+                        <!-- Accordion Tabs -->
+                        <div class="product-tabs">
+                            <button class="tab-button active" data-tab="shipping">Shipping Information</button>
+                            <div class="tab-content active" id="shipping-tab">
+                                <p>Free shipping on all orders over Rs. 2,500. Standard delivery takes 3-5 business days.</p>
+                            </div>
+                            
+                            <button class="tab-button" data-tab="returns">Returns Policy</button>
+                            <div class="tab-content" id="returns-tab">
+                                <p>Easy 7-day returns on all products. Items must be unused and in original packaging.</p>
+                            </div>
+                            
+                            <button class="tab-button" data-tab="description">Full Description</button>
+                            <div class="tab-content" id="description-tab">
+                                <p id="full-description">Loading full description...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reviews Section -->
+                <section class="product-reviews-section" data-aos="fade-up">
+                    <h2>Customer Reviews</h2>
+                    <div class="reviews-container">
+                        <div class="review-form-container">
+                            <h3>Write a Review</h3>
+                            <form id="review-form">
+                                <div class="form-group">
+                                    <label for="reviewer-name">Your Name *</label>
+                                    <input type="text" id="reviewer-name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="reviewer-email">Your Email *</label>
+                                    <input type="email" id="reviewer-email" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Rating *</label>
+                                    <div class="star-rating-input">
+                                        <input type="radio" name="rating" value="5" id="star5"><label for="star5">⭐</label>
+                                        <input type="radio" name="rating" value="4" id="star4"><label for="star4">⭐</label>
+                                        <input type="radio" name="rating" value="3" id="star3"><label for="star3">⭐</label>
+                                        <input type="radio" name="rating" value="2" id="star2"><label for="star2">⭐</label>
+                                        <input type="radio" name="rating" value="1" id="star1"><label for="star1">⭐</label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="review-text">Your Review *</label>
+                                    <textarea id="review-text" rows="4" required></textarea>
+                                </div>
+                                <button type="submit" class="submit-review-btn">Submit Review</button>
+                            </form>
+                        </div>
+                        
+                        <div class="existing-reviews" id="existing-reviews">
+                            <h3>Reviews</h3>
+                            <div class="reviews-list" id="reviews-list">
+                                <!-- Reviews will be loaded dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Related Products -->
+                <section class="related-products-section" data-aos="fade-up">
+                    <h2>You May Also Like</h2>
+                    <div class="product-grid skeleton-grid" id="related-products-grid">
+                        <!-- Related products will be loaded -->
+                    </div>
+                </section>
+            </div>
+        </section>
     </main>
 
     <div id="footer-container"></div>
 
-    <!-- Image Modal -->
-    <div class="modal" id="imageModal">
-      <span class="close-modal">&times;</span>
-      <img id="modalImage" alt="Product image zoom" />
-    </div>
-
+    <script type="module" src="js/config/env.js"></script>
+    <script type="module" src="js/config/firebase.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script type="module" src="/src/js/product.js"></script>
-  </body>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script type="module" src="js/components/header.js"></script>
+    <script type="module" src="js/components/footer.js"></script>
+    <script type="module" src="js/components/cart.js"></script>
+    <script type="module" src="js/components/reviewSystem.js"></script>
+    <script type="module" src="js/utils/skeletonLoader.js"></script>
+    <script type="module" src="js/product.js"></script>
+</body>
 </html>

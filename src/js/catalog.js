@@ -1,411 +1,373 @@
-// Catalog page functionality
-import { loadHeader } from "./components/header.js";
-import { loadFooter } from "./components/footer.js";
-import { initCart, addToCart, showToast } from "./components/cart.js";
-import { updateMetaTags, addBreadcrumbStructuredData } from "./utils/seo.js";
-import { initializeApp } from "firebase/app";
-import {
-  getFirestore,
-  collection,
-  query,
-  where,
-  getDocs,
-  orderBy,
-  limit as firestoreLimit,
-  startAfter,
-} from "firebase/firestore";
-import { PRODUCTS_CONFIG } from "./config/firebase.js";
+// ============================================
+// COLORMART - CATALOG PAGE SCRIPT
+// ============================================
 
-// Initialize Firebase
-const productsApp = initializeApp(PRODUCTS_CONFIG, "products");
-const productsDb = getFirestore(productsApp);
+import firebaseService from './config/firebase.js';
+import skeletonLoader from './utils/skeletonLoader.js';
+import discountCalculator from './utils/discountCalculator.js';
+import seoManager from './utils/seo.js';
 
-// State variables
-let allProducts = [];
-let filteredProducts = [];
-let currentPage = 1;
-let itemsPerPage = 12;
-let currentFilters = {
-  categories: [],
-  brands: [],
-  ratings: [],
-  minPrice: null,
-  maxPrice: null,
-  sortBy: "default",
-};
-let lastDoc = null;
-let isLoading = false;
+class CatalogPage {
+    constructor() {
+        this.currentPage = 1;
+        this.productsPerPage = 12;
+        this.filters = {
+            categories: [],
+            brands: [],
+            maxPrice: null,
+            search: ''
+        };
+        this.sortBy = 'featured';
+        this.allProducts = [];
+        
+        this.init();
+    }
 
-// Initialize page
-document.addEventListener("DOMContentLoaded", async () => {
-  loadHeader();
-  loadFooter();
-  initCart();
+    async init() {
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: true
+        });
 
-  // Update SEO
-  updateMetaTags({
-    title: "Shop All Products - ColorMart | Premium Beauty & Cosmetics",
-    description:
-      "Browse our complete collection of premium makeup, hair care, skincare, and beauty products. Shop online with free shipping over Rs.2500.",
-  });
+        this.parseURLParams();
+        this.setupEventListeners();
+        await this.loadProducts();
+        this.setupSEO();
+    }
 
-  addBreadcrumbStructuredData([
-    { name: "Home", url: "https://colormart.store/" },
-    { name: "Catalog", url: "https://colormart.store/src/catalog.html" },
-  ]);
+    parseURLParams() {
+        const params = new URLSearchParams(window.location.search);
+        
+        if (params.has('category')) {
+            this.filters.categories = [params.get('category')];
+        }
+        
+        if (params.has('brand')) {
+            this.filters.brands = [params.get('brand')];
+        }
+        
+        if (params.has('search')) {
+            this.filters.search = params.get('search');
+        }
+        
+        if (params.has('sort')) {
+            this.sortBy = params.get('sort');
+        }
+    }
 
-  AOS.init({ duration: 800, once: true });
+    setupEventListeners() {
+        // Category filters
+        document.querySelectorAll('#category-filters input').forEach(checkbox => {
+            checkbox.addEventListener('change', () => {
+                this.updateCategoryFilters();
+                this.applyFilters();
+            });
+        });
 
-  await loadProducts();
-  initFilters();
-  initEventListeners();
-});
+        // Price range
+        const priceRange = document.getElementById('price-range');
+        const maxPriceDisplay = document.getElementById('max-price-display');
+        
+        priceRange?.addEventListener('input', (e) => {
+            const value = parseInt(e.target.value);
+            maxPriceDisplay.textContent = `${ENV.SITE.currencySymbol} ${value.toLocaleString()}`;
+        });
 
-// Load products from Firebase
-async function loadProducts() {
-  const grid = document.getElementById("catalogGrid");
-  if (!grid) return;
+        priceRange?.addEventListener('change', (e) => {
+            this.filters.maxPrice = parseInt(e.target.value);
+            this.applyFilters();
+        });
 
-  isLoading = true;
+        // Sort
+        document.getElementById('sort-select')?.addEventListener('change', (e) => {
+            this.sortBy = e.target.value;
+            this.applyFilters();
+        });
 
-  try {
-    const productsRef = collection(productsDb, "products");
-    let q = query(productsRef, orderBy("createdAt", "desc"));
+        // Clear filters
+        document.getElementById('clear-filters')?.addEventListener('click', () => {
+            this.clearFilters();
+        });
 
-    const querySnapshot = await getDocs(q);
-    allProducts = [];
-    querySnapshot.forEach((doc) => {
-      allProducts.push({ id: doc.id, ...doc.data() });
-    });
+        // Search input
+        const searchInput = document.getElementById('search-input');
+        searchInput?.addEventListener('input', this.debounce(() => {
+            this.filters.search = searchInput.value;
+            this.applyFilters();
+        }, 300));
 
-    applyFilters();
-  } catch (error) {
-    console.error("Error loading products:", error);
-    grid.innerHTML =
-      '<p class="error">Failed to load products. Please refresh the page.</p>';
-  } finally {
-    isLoading = false;
-  }
-}
+        // Filter toggle for mobile
+        document.getElementById('filter-toggle')?.addEventListener('click', () => {
+            document.querySelector('.filters-sidebar')?.classList.toggle('active');
+        });
+    }
 
-// Apply all filters
-function applyFilters() {
-  let filtered = [...allProducts];
+    updateCategoryFilters() {
+        this.filters.categories = Array.from(
+            document.querySelectorAll('#category-filters input:checked')
+        ).map(cb => cb.value);
+    }
 
-  // Category filter
-  if (currentFilters.categories.length > 0) {
-    filtered = filtered.filter((p) =>
-      currentFilters.categories.includes(p.category),
-    );
-  }
+    async loadProducts() {
+        const grid = document.getElementById('catalog-products-grid');
+        if (!grid) return;
 
-  // Brand filter
-  if (currentFilters.brands.length > 0) {
-    filtered = filtered.filter((p) => currentFilters.brands.includes(p.brand));
-  }
+        skeletonLoader.createGridSkeleton(grid, 8);
 
-  // Price filter
-  if (currentFilters.minPrice !== null) {
-    const price = currentFilters.minPrice;
-    filtered = filtered.filter((p) => (p.salePrice || p.price) >= price);
-  }
-  if (currentFilters.maxPrice !== null) {
-    const price = currentFilters.maxPrice;
-    filtered = filtered.filter((p) => (p.salePrice || p.price) <= price);
-  }
+        try {
+            this.allProducts = await firebaseService.getProducts();
+            this.updateBrandFilters();
+            this.applyFilters();
+        } catch (error) {
+            console.error('Error loading products:', error);
+            skeletonLoader.removeSkeleton(grid);
+            grid.innerHTML = '<p class="error-message">Failed to load products. Please try again later.</p>';
+        }
+    }
 
-  // Rating filter
-  if (currentFilters.ratings.length > 0) {
-    filtered = filtered.filter((p) => {
-      const rating = p.averageRating || 0;
-      return currentFilters.ratings.some((r) => Math.floor(rating) >= r);
-    });
-  }
+    updateBrandFilters() {
+        const brands = [...new Set(this.allProducts.map(p => p.brand).filter(Boolean))];
+        const brandFiltersContainer = document.getElementById('brand-filters');
+        
+        if (brandFiltersContainer) {
+            brandFiltersContainer.innerHTML = brands.map(brand => `
+                <label class="filter-option">
+                    <input type="checkbox" value="${brand}" 
+                           ${this.filters.brands.includes(brand) ? 'checked' : ''}
+                           onchange="catalogPage.updateBrandFilters()">
+                    <span>${brand}</span>
+                </label>
+            `).join('');
+        }
+    }
 
-  // Sort
-  filtered = sortProducts(filtered);
+    updateBrandFilters() {
+        this.filters.brands = Array.from(
+            document.querySelectorAll('#brand-filters input:checked')
+        ).map(cb => cb.value);
+        this.applyFilters();
+    }
 
-  filteredProducts = filtered;
-  updateResultsCount();
-  renderProducts();
-}
+    applyFilters() {
+        let filtered = [...this.allProducts];
 
-// Sort products
-function sortProducts(products) {
-  const sorted = [...products];
+        // Category filter
+        if (this.filters.categories.length > 0) {
+            filtered = filtered.filter(p => this.filters.categories.includes(p.category));
+        }
 
-  switch (currentFilters.sortBy) {
-    case "price-low":
-      sorted.sort(
-        (a, b) => (a.salePrice || a.price) - (b.salePrice || b.price),
-      );
-      break;
-    case "price-high":
-      sorted.sort(
-        (a, b) => (b.salePrice || b.price) - (a.salePrice || a.price),
-      );
-      break;
-    case "newest":
-      sorted.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-      break;
-    case "rating":
-      sorted.sort((a, b) => (b.averageRating || 0) - (a.averageRating || 0));
-      break;
-    default:
-      // Featured - keep original order
-      break;
-  }
+        // Brand filter
+        if (this.filters.brands.length > 0) {
+            filtered = filtered.filter(p => this.filters.brands.includes(p.brand));
+        }
 
-  return sorted;
-}
+        // Price filter
+        if (this.filters.maxPrice) {
+            filtered = filtered.filter(p => {
+                const price = p.salePrice || p.originalPrice;
+                return price <= this.filters.maxPrice;
+            });
+        }
 
-// Update results count
-function updateResultsCount() {
-  const countEl = document.getElementById("resultsCount");
-  if (countEl) {
-    const start = (currentPage - 1) * itemsPerPage + 1;
-    const end = Math.min(currentPage * itemsPerPage, filteredProducts.length);
-    countEl.textContent = `Showing ${start}-${end} of ${filteredProducts.length} products`;
-  }
-}
+        // Search filter
+        if (this.filters.search) {
+            const searchTerm = this.filters.search.toLowerCase();
+            filtered = filtered.filter(p => 
+                p.name.toLowerCase().includes(searchTerm) ||
+                (p.brand && p.brand.toLowerCase().includes(searchTerm)) ||
+                (p.description && p.description.toLowerCase().includes(searchTerm))
+            );
+        }
 
-// Render products with pagination
-function renderProducts() {
-  const grid = document.getElementById("catalogGrid");
-  if (!grid) return;
+        // Sort
+        filtered = this.sortProducts(filtered);
 
-  const start = (currentPage - 1) * itemsPerPage;
-  const end = start + itemsPerPage;
-  const pageProducts = filteredProducts.slice(start, end);
+        // Update results count
+        const resultsCount = document.getElementById('results-count');
+        if (resultsCount) {
+            resultsCount.innerHTML = `Showing <span>${filtered.length}</span> products`;
+        }
 
-  if (pageProducts.length === 0) {
-    grid.innerHTML = `
-            <div class="no-results" style="grid-column: 1/-1;">
-                <h3>No products found</h3>
-                <p>Try adjusting your filters or search criteria</p>
-            </div>
-        `;
-    renderPagination();
-    return;
-  }
+        // Paginate and render
+        this.renderProducts(filtered);
+        this.updatePagination(filtered.length);
+    }
 
-  grid.innerHTML = pageProducts
-    .map((product) => {
-      const displayPrice = product.salePrice || product.price;
-      const originalPrice = product.salePrice ? product.price : null;
-      const discount = product.salePrice
-        ? Math.round(
-            ((product.price - product.salePrice) / product.price) * 100,
-          )
-        : 0;
+    sortProducts(products) {
+        const sorted = [...products];
+        
+        switch (this.sortBy) {
+            case 'price-low-high':
+                sorted.sort((a, b) => (a.salePrice || a.originalPrice) - (b.salePrice || b.originalPrice));
+                break;
+            case 'price-high-low':
+                sorted.sort((a, b) => (b.salePrice || b.originalPrice) - (a.salePrice || a.originalPrice));
+                break;
+            case 'newest':
+                sorted.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                break;
+            case 'alphabetical':
+                sorted.sort((a, b) => a.name.localeCompare(b.name));
+                break;
+            case 'best-selling':
+                // If you have a sales count field, sort by that
+                break;
+            default: // featured
+                break;
+        }
+        
+        return sorted;
+    }
 
-      return `
-            <div class="product-card" data-product-id="${product.id}">
-                ${discount > 0 ? `<div class="product-badge">-${discount}%</div>` : ""}
-                <div class="product-image">
-                    <img src="${product.images?.[0] || "https://via.placeholder.com/300"}" alt="${product.name}" loading="lazy">
-                    <div class="quick-add" data-id="${product.id}" data-name="${product.name}" data-price="${displayPrice}" data-image="${product.images?.[0]}">Quick Add</div>
+    renderProducts(products) {
+        const grid = document.getElementById('catalog-products-grid');
+        if (!grid) return;
+
+        skeletonLoader.removeSkeleton(grid);
+
+        if (products.length === 0) {
+            grid.innerHTML = `
+                <div class="no-products">
+                    <h3>No Products Found</h3>
+                    <p>Try adjusting your filters or search criteria.</p>
                 </div>
-                <div class="product-info">
-                    <h3 class="product-title">${product.name}</h3>
-                    <div class="product-price">
-                        <span class="current-price">Rs. ${displayPrice.toLocaleString()}</span>
-                        ${originalPrice ? `<span class="original-price">Rs. ${originalPrice.toLocaleString()}</span>` : ""}
-                    </div>
-                    <div class="product-rating">
-                        <div class="stars">${renderStars(product.averageRating || 0)}</div>
-                        <span>(${product.reviewCount || 0})</span>
+            `;
+            return;
+        }
+
+        const start = (this.currentPage - 1) * this.productsPerPage;
+        const end = start + this.productsPerPage;
+        const pageProducts = products.slice(start, end);
+
+        grid.innerHTML = pageProducts.map(product => {
+            const badge = discountCalculator.getDiscountBadge(product);
+            const currentPrice = product.salePrice || product.originalPrice;
+            
+            return `
+                <div class="product-card" data-aos="fade-up">
+                    <a href="product.html?id=${product.id}">
+                        <div class="product-card-image">
+                            <img src="${product.images?.[0] || '../assets/images/placeholder-product.jpg'}" 
+                                 alt="${product.name}" 
+                                 loading="lazy"
+                                 onerror="this.src='../assets/images/placeholder-product.jpg'">
+                            ${badge ? `<span class="product-card-badge">${badge.text}</span>` : ''}
+                        </div>
+                    </a>
+                    <div class="product-card-content">
+                        <div class="product-card-brand">${product.brand || ''}</div>
+                        <a href="product.html?id=${product.id}" class="product-card-title">
+                            ${product.name}
+                        </a>
+                        <div class="product-card-price">
+                            <span class="product-card-current-price">
+                                ${ENV.SITE.currencySymbol} ${currentPrice.toLocaleString()}
+                            </span>
+                            ${product.salePrice && product.salePrice < product.originalPrice ? `
+                                <span class="product-card-original-price">
+                                    ${ENV.SITE.currencySymbol} ${product.originalPrice.toLocaleString()}
+                                </span>
+                            ` : ''}
+                        </div>
+                        <button class="quick-add-btn" onclick="window.quickAddToCart('${product.id}')">
+                            Quick Add
+                        </button>
                     </div>
                 </div>
-            </div>
+            `;
+        }).join('');
+    }
+
+    updatePagination(totalProducts) {
+        const pagination = document.getElementById('pagination');
+        if (!pagination) return;
+
+        const totalPages = Math.ceil(totalProducts / this.productsPerPage);
+        
+        if (totalPages <= 1) {
+            pagination.innerHTML = '';
+            return;
+        }
+
+        let paginationHTML = `
+            <button ${this.currentPage === 1 ? 'disabled' : ''} onclick="catalogPage.changePage(${this.currentPage - 1})">
+                ‹
+            </button>
         `;
-    })
-    .join("");
 
-  // Add event listeners
-  document.querySelectorAll(".quick-add").forEach((btn) => {
-    btn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      const product = {
-        id: btn.dataset.id,
-        name: btn.dataset.name,
-        price: parseFloat(btn.dataset.price),
-        image: btn.dataset.image,
-      };
-      addToCart(product, 1);
-    });
-  });
+        for (let i = 1; i <= totalPages; i++) {
+            if (i === 1 || i === totalPages || (i >= this.currentPage - 1 && i <= this.currentPage + 1)) {
+                paginationHTML += `
+                    <button class="${i === this.currentPage ? 'active' : ''}" 
+                            onclick="catalogPage.changePage(${i})">
+                        ${i}
+                    </button>
+                `;
+            } else if (i === this.currentPage - 2 || i === this.currentPage + 2) {
+                paginationHTML += '<button disabled>...</button>';
+            }
+        }
 
-  document.querySelectorAll(".product-card").forEach((card) => {
-    card.addEventListener("click", (e) => {
-      if (e.target.classList.contains("quick-add")) return;
-      const productId = card.dataset.productId;
-      window.location.href = `/src/product.html?id=${productId}`;
-    });
-  });
+        paginationHTML += `
+            <button ${this.currentPage === totalPages ? 'disabled' : ''} 
+                    onclick="catalogPage.changePage(${this.currentPage + 1})">
+                ›
+            </button>
+        `;
 
-  renderPagination();
+        pagination.innerHTML = paginationHTML;
+    }
+
+    changePage(page) {
+        this.currentPage = page;
+        this.applyFilters();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    clearFilters() {
+        this.filters = {
+            categories: [],
+            brands: [],
+            maxPrice: null,
+            search: ''
+        };
+        
+        document.querySelectorAll('.filter-options input[type="checkbox"]').forEach(cb => {
+            cb.checked = false;
+        });
+        
+        const priceRange = document.getElementById('price-range');
+        if (priceRange) priceRange.value = 10000;
+        
+        document.getElementById('max-price-display').textContent = `${ENV.SITE.currencySymbol} 10,000`;
+        document.getElementById('sort-select').value = 'featured';
+        
+        this.currentPage = 1;
+        this.applyFilters();
+    }
+
+    setupSEO() {
+        seoManager.updatePageTitle('Product Catalog');
+        seoManager.updateMetaDescription(
+            `Browse our complete catalog of beauty, cosmetics, hair care, men's care, and organizer products at ${ENV.SITE.name}. Find your perfect products with easy filtering and sorting.`
+        );
+    }
+
+    debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
 }
 
-// Render pagination
-function renderPagination() {
-  const paginationContainer = document.getElementById("pagination");
-  if (!paginationContainer) return;
-
-  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
-
-  if (totalPages <= 1) {
-    paginationContainer.innerHTML = "";
-    return;
-  }
-
-  let pagesHTML = "";
-
-  // Previous button
-  pagesHTML += `<button class="page-btn prev-page" ${currentPage === 1 ? "disabled" : ""}>« Prev</button>`;
-
-  // Page numbers
-  const startPage = Math.max(1, currentPage - 2);
-  const endPage = Math.min(totalPages, currentPage + 2);
-
-  if (startPage > 1) {
-    pagesHTML += `<button class="page-btn" data-page="1">1</button>`;
-    if (startPage > 2) pagesHTML += `<span class="page-dots">...</span>`;
-  }
-
-  for (let i = startPage; i <= endPage; i++) {
-    pagesHTML += `<button class="page-btn ${i === currentPage ? "active" : ""}" data-page="${i}">${i}</button>`;
-  }
-
-  if (endPage < totalPages) {
-    if (endPage < totalPages - 1)
-      pagesHTML += `<span class="page-dots">...</span>`;
-    pagesHTML += `<button class="page-btn" data-page="${totalPages}">${totalPages}</button>`;
-  }
-
-  // Next button
-  pagesHTML += `<button class="page-btn next-page" ${currentPage === totalPages ? "disabled" : ""}>Next »</button>`;
-
-  paginationContainer.innerHTML = pagesHTML;
-
-  // Add event listeners
-  document.querySelectorAll(".page-btn").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      if (btn.disabled) return;
-      if (btn.classList.contains("prev-page")) {
-        if (currentPage > 1) currentPage--;
-      } else if (btn.classList.contains("next-page")) {
-        if (currentPage < totalPages) currentPage++;
-      } else {
-        currentPage = parseInt(btn.dataset.page);
-      }
-      renderProducts();
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    });
-  });
-}
-
-// Render stars
-function renderStars(rating) {
-  const fullStars = Math.floor(rating);
-  const halfStar = rating % 1 >= 0.5;
-  const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
-
-  let stars = "";
-  for (let i = 0; i < fullStars; i++) stars += "★";
-  if (halfStar) stars += "½";
-  for (let i = 0; i < emptyStars; i++) stars += "☆";
-
-  return stars;
-}
-
-// Initialize filters from URL parameters
-function initFilters() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const category = urlParams.get("category");
-  const search = urlParams.get("search");
-
-  if (category) {
-    currentFilters.categories = [category];
-    // Update category filter checkboxes if they exist
-    const categoryCheckbox = document.querySelector(
-      `.filter-options input[value="${category}"]`,
-    );
-    if (categoryCheckbox) categoryCheckbox.checked = true;
-  }
-
-  if (search) {
-    // Implement search filter
-    const searchInput = document.getElementById("searchProducts");
-    if (searchInput) searchInput.value = search;
-    filterBySearch(search);
-  }
-}
-
-// Filter by search
-function filterBySearch(searchTerm) {
-  if (!searchTerm) return;
-  const filtered = allProducts.filter(
-    (p) =>
-      p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      p.description.toLowerCase().includes(searchTerm.toLowerCase()),
-  );
-  filteredProducts = filtered;
-  currentPage = 1;
-  renderProducts();
-}
-
-// Initialize event listeners
-function initEventListeners() {
-  // Sort selector
-  const sortSelector = document.getElementById("sortSelector");
-  if (sortSelector) {
-    sortSelector.addEventListener("change", (e) => {
-      currentFilters.sortBy = e.target.value;
-      currentPage = 1;
-      applyFilters();
-    });
-  }
-
-  // Price filters
-  const applyPriceBtn = document.getElementById("applyPriceFilter");
-  const resetPriceBtn = document.getElementById("resetPriceFilter");
-  const minPriceInput = document.getElementById("minPrice");
-  const maxPriceInput = document.getElementById("maxPrice");
-
-  if (applyPriceBtn) {
-    applyPriceBtn.addEventListener("click", () => {
-      currentFilters.minPrice = minPriceInput?.value
-        ? parseFloat(minPriceInput.value)
-        : null;
-      currentFilters.maxPrice = maxPriceInput?.value
-        ? parseFloat(maxPriceInput.value)
-        : null;
-      currentPage = 1;
-      applyFilters();
-    });
-  }
-
-  if (resetPriceBtn) {
-    resetPriceBtn.addEventListener("click", () => {
-      if (minPriceInput) minPriceInput.value = "";
-      if (maxPriceInput) maxPriceInput.value = "";
-      currentFilters.minPrice = null;
-      currentFilters.maxPrice = null;
-      currentPage = 1;
-      applyFilters();
-    });
-  }
-
-  // Mobile filter toggle
-  const filterToggle = document.getElementById("filterToggle");
-  const filtersSidebar = document.getElementById("filtersSidebar");
-  if (filterToggle && filtersSidebar) {
-    filterToggle.addEventListener("click", () => {
-      filtersSidebar.classList.toggle("active");
-    });
-  }
-}
-
-// Export for use in other files
-export { loadProducts, applyFilters, renderProducts };
+// Initialize catalog page
+const catalogPage = new CatalogPage();
+window.catalogPage = catalogPage;
+export default catalogPage;

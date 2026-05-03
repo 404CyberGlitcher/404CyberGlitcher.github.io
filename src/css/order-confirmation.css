@@ -1,0 +1,108 @@
+/* ============================================
+   COLORMART - ORDER CONFIRMATION STYLES
+   ============================================ */
+
+.confirmation-section {
+    padding: var(--spacing-3xl) 0;
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+}
+
+.confirmation-card {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+    background: var(--color-white);
+    padding: var(--spacing-3xl);
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--color-gray-200);
+    box-shadow: var(--shadow-lg);
+}
+
+.success-icon {
+    font-size: 64px;
+    margin-bottom: var(--spacing-lg);
+    animation: bounceIn 0.5s ease;
+}
+
+.confirmation-card h1 {
+    font-size: var(--font-size-3xl);
+    font-weight: 700;
+    margin-bottom: var(--spacing-md);
+}
+
+.order-number {
+    font-size: var(--font-size-lg);
+    color: var(--color-text-light);
+    margin-bottom: var(--spacing-lg);
+    font-weight: 500;
+}
+
+.confirmation-message {
+    font-size: var(--font-size-base);
+    color: var(--color-text-light);
+    margin-bottom: var(--spacing-xl);
+    line-height: 1.6;
+}
+
+.order-details {
+    text-align: left;
+    background: var(--color-gray-50);
+    padding: var(--spacing-xl);
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--spacing-xl);
+}
+
+.order-detail-row {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--spacing-sm) 0;
+    font-size: var(--font-size-sm);
+}
+
+.order-detail-row.total {
+    font-weight: 700;
+    font-size: var(--font-size-base);
+    border-top: 1px solid var(--color-gray-200);
+    margin-top: var(--spacing-sm);
+    padding-top: var(--spacing-md);
+}
+
+.continue-shopping-btn {
+    display: inline-block;
+    padding: var(--spacing-md) var(--spacing-2xl);
+    background: var(--color-black);
+    color: var(--color-white);
+    font-weight: 600;
+    border-radius: var(--radius-full);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: all var(--transition-fast);
+}
+
+.continue-shopping-btn:hover {
+    background: var(--color-gray-800);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+@media (max-width: 768px) {
+    .confirmation-card {
+        padding: var(--spacing-2xl);
+    }
+    
+    .confirmation-card h1 {
+        font-size: var(--font-size-2xl);
+    }
+}
+
+@media (max-width: 480px) {
+    .confirmation-card {
+        padding: var(--spacing-xl);
+    }
+    
+    .success-icon {
+        font-size: 48px;
+    }
+}

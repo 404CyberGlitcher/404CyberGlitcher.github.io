@@ -1,156 +1,62 @@
-/* Admin Contacts Management */
-.contacts-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 2rem;
+/* ============================================
+   COLORMART - ADMIN CONTACTS STYLES
+   ============================================ */
+
+.contacts-content {
+    background: var(--color-white);
+    padding: var(--spacing-xl);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
 }
 
-.contacts-stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
-  margin-bottom: 2rem;
+.message-cell {
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
-.stat-card {
-  background-color: var(--color-white);
-  padding: 1rem;
-  border-radius: var(--border-radius-lg);
-  text-align: center;
-  box-shadow: var(--shadow-sm);
+.read-badge {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: var(--spacing-sm);
 }
 
-.stat-card .stat-value {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--color-red);
+.read-badge.unread {
+    background: var(--color-blue);
 }
 
-.contact-filters {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-  flex-wrap: wrap;
+.read-badge.read {
+    background: var(--color-gray-300);
 }
 
-.status-filter,
-.date-filter {
-  padding: 0.5rem 1rem;
-  border: 1px solid var(--color-gray-300);
-  border-radius: var(--border-radius-md);
-  font-family: var(--font-primary);
-}
-
-/* Contacts Table */
-.contacts-table-container {
-  background-color: var(--color-white);
-  border-radius: var(--border-radius-lg);
-  overflow-x: auto;
-  box-shadow: var(--shadow-sm);
-}
-
-.contacts-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.contacts-table th,
-.contacts-table td {
-  padding: 1rem;
-  text-align: left;
-  border-bottom: 1px solid var(--color-gray-200);
-}
-
-.contacts-table th {
-  background-color: var(--color-gray-100);
-  font-weight: 600;
-}
-
-.status-badge {
-  display: inline-block;
-  padding: 0.25rem 0.5rem;
-  border-radius: var(--border-radius-sm);
-  font-size: 0.75rem;
-  font-weight: 600;
-}
-
-.status-read {
-  background-color: #d1fae5;
-  color: #059669;
-}
-
-.status-unread {
-  background-color: #fee2e2;
-  color: #dc2626;
-}
-
-/* Contact Detail Modal */
-.contact-detail-content {
-  max-width: 600px;
-}
-
-.contact-info {
-  margin-bottom: 1.5rem;
-}
-
-.contact-field {
-  margin-bottom: 1rem;
-}
-
-.contact-field label {
-  font-weight: 600;
-  display: block;
-  margin-bottom: 0.25rem;
-  color: var(--color-gray-500);
-}
-
-.contact-field .field-value {
-  padding: 0.5rem;
-  background-color: var(--color-gray-100);
-  border-radius: var(--border-radius-sm);
-}
-
-.contact-message {
-  background-color: var(--color-gray-100);
-  padding: 1rem;
-  border-radius: var(--border-radius-md);
-  margin: 1rem 0;
-  line-height: 1.6;
-}
-
-.reply-section {
-  margin-top: 1.5rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--color-gray-200);
-}
-
-.reply-textarea {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid var(--color-gray-300);
-  border-radius: var(--border-radius-md);
-  font-family: var(--font-primary);
-  resize: vertical;
-  min-height: 100px;
-  margin-bottom: 1rem;
-}
-
-.send-reply-btn {
-  padding: 0.5rem 1rem;
-  background-color: var(--color-black);
-  color: white;
-  border: none;
-  border-radius: var(--border-radius-md);
-  cursor: pointer;
+.mark-read-btn,
+.delete-message-btn {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+    transition: all var(--transition-fast);
 }
 
 .mark-read-btn {
-  padding: 0.5rem 1rem;
-  background-color: #059669;
-  color: white;
-  border: none;
-  border-radius: var(--border-radius-md);
-  cursor: pointer;
-  margin-right: 0.5rem;
+    background: var(--color-blue-light);
+    color: var(--color-blue);
+}
+
+.mark-read-btn:hover {
+    background: var(--color-blue);
+    color: var(--color-white);
+}
+
+.delete-message-btn {
+    background: var(--color-red-light);
+    color: var(--color-red);
+}
+
+.delete-message-btn:hover {
+    background: var(--color-red);
+    color: var(--color-white);
 }

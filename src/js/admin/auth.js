@@ -1,128 +1,150 @@
-// Admin authentication using Firebase Main database
-import { initializeApp } from "firebase/app";
-import {
-  getAuth,
-  signInWithEmailAndPassword,
-  onAuthStateChanged,
-  signOut,
-} from "firebase/auth";
-import { MAIN_CONFIG } from "../config/firebase.js";
+// ============================================
+// COLORMART - ADMIN AUTHENTICATION
+// ============================================
 
-// Initialize Firebase Main app for authentication
-const mainApp = initializeApp(MAIN_CONFIG, "main");
-const auth = getAuth(mainApp);
+import firebaseService from '../config/firebase.js';
 
-// Admin emails from environment (will be checked)
-const ADMIN_EMAILS = (import.meta.env.VITE_ADMIN_EMAILS || "")
-  .split(",")
-  .map((email) => email.trim());
-
-// Check if user is admin
-function isAdminEmail(email) {
-  return ADMIN_EMAILS.includes(email);
-}
-
-// Login handler
-document.addEventListener("DOMContentLoaded", () => {
-  const loginForm = document.getElementById("loginForm");
-  const errorMessage = document.getElementById("errorMessage");
-
-  // Check if already logged in
-  onAuthStateChanged(auth, (user) => {
-    if (user && isAdminEmail(user.email)) {
-      // Already logged in, redirect to dashboard
-      window.location.href = "/src/admin/dashboard.html";
+class AdminAuth {
+    constructor() {
+        this.checkAuth();
+        this.setupLoginForm();
+        this.setupLogoutButton();
     }
-  });
 
-  if (loginForm) {
-    loginForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value;
-
-      // Validate email format
-      if (!email.includes("@")) {
-        showError("Please enter a valid email address with @ symbol");
-        return;
-      }
-
-      // Check if email is in admin list
-      if (!isAdminEmail(email)) {
-        showError("Unauthorized access. Admin credentials required.");
-        return;
-      }
-
-      // Show loading state
-      const submitBtn = loginForm.querySelector('button[type="submit"]');
-      const originalText = submitBtn.textContent;
-      submitBtn.textContent = "Logging in...";
-      submitBtn.disabled = true;
-
-      try {
-        // Sign in with Firebase
-        const userCredential = await signInWithEmailAndPassword(
-          auth,
-          email,
-          password,
-        );
-        const user = userCredential.user;
-
-        if (user && isAdminEmail(user.email)) {
-          // Store admin session
-          sessionStorage.setItem("adminLoggedIn", "true");
-          sessionStorage.setItem("adminEmail", user.email);
-
-          // Redirect to dashboard
-          window.location.href = "/src/admin/dashboard.html";
-        } else {
-          await signOut(auth);
-          showError("Unauthorized access");
+    async checkAuth() {
+        const user = await firebaseService.getCurrentUser();
+        
+        // Check if we're on the login page
+        const isLoginPage = window.location.pathname.includes('login.html');
+        
+        if (!user && !isLoginPage) {
+            // Redirect to login if not authenticated
+            window.location.href = 'login.html';
+            return;
         }
-      } catch (error) {
-        console.error("Login error:", error);
-        let errorMsg = "Login failed. ";
-
-        switch (error.code) {
-          case "auth/user-not-found":
-            errorMsg += "User not found.";
-            break;
-          case "auth/wrong-password":
-            errorMsg += "Incorrect password.";
-            break;
-          case "auth/invalid-email":
-            errorMsg += "Invalid email format.";
-            break;
-          case "auth/too-many-requests":
-            errorMsg += "Too many failed attempts. Try again later.";
-            break;
-          default:
-            errorMsg += "Please check your credentials.";
+        
+        if (user && isLoginPage) {
+            // Redirect to dashboard if already authenticated
+            window.location.href = 'dashboard.html';
+            return;
         }
 
-        showError(errorMsg);
-      } finally {
-        submitBtn.textContent = originalText;
-        submitBtn.disabled = false;
-      }
-    });
-  }
-});
+        if (user) {
+            this.displayUserEmail(user.email);
+        }
+    }
 
-// Show error message
-function showError(message) {
-  const errorMessage = document.getElementById("errorMessage");
-  if (errorMessage) {
-    errorMessage.textContent = message;
-    errorMessage.style.display = "block";
+    setupLoginForm() {
+        const loginForm = document.getElementById('admin-login-form');
+        if (!loginForm) return;
 
-    // Auto hide after 5 seconds
-    setTimeout(() => {
-      errorMessage.style.display = "none";
-    }, 5000);
-  }
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('admin-email').value.trim();
+            const password = document.getElementById('admin-password').value.trim();
+            
+            // Validate email
+            if (!this.validateEmail(email)) {
+                this.showError('email-error', 'Please enter a valid email address');
+                return;
+            }
+            
+            // Validate email domain
+            if (!email.endsWith('@colormart.store')) {
+                this.showError('email-error', 'Only @colormart.store emails are allowed');
+                return;
+            }
+            
+            // Validate password
+            if (!password || password.length < 6) {
+                this.showError('password-error', 'Password must be at least 6 characters');
+                return;
+            }
+            
+            await this.login(email, password);
+        });
+    }
+
+    setupLogoutButton() {
+        const logoutBtn = document.getElementById('logout-btn');
+        logoutBtn?.addEventListener('click', async () => {
+            await this.logout();
+        });
+    }
+
+    async login(email, password) {
+        const loginBtn = document.querySelector('.login-btn');
+        const loginStatus = document.getElementById('login-status');
+        
+        try {
+            loginBtn.disabled = true;
+            loginBtn.textContent = 'Signing in...';
+            
+            await firebaseService.loginAdmin(email, password);
+            
+            loginStatus.className = 'login-status success';
+            loginStatus.textContent = 'Login successful! Redirecting...';
+            
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 1000);
+            
+        } catch (error) {
+            console.error('Login error:', error);
+            loginStatus.className = 'login-status error';
+            
+            switch (error.code) {
+                case 'auth/user-not-found':
+                    loginStatus.textContent = 'No account found with this email';
+                    break;
+                case 'auth/wrong-password':
+                    loginStatus.textContent = 'Incorrect password';
+                    break;
+                case 'auth/invalid-email':
+                    loginStatus.textContent = 'Invalid email address';
+                    break;
+                case 'auth/too-many-requests':
+                    loginStatus.textContent = 'Too many attempts. Please try again later';
+                    break;
+                default:
+                    loginStatus.textContent = 'Login failed. Please try again';
+            }
+        } finally {
+            loginBtn.disabled = false;
+            loginBtn.textContent = 'Sign In';
+        }
+    }
+
+    async logout() {
+        try {
+            await firebaseService.logoutAdmin();
+            window.location.href = 'login.html';
+        } catch (error) {
+            console.error('Logout error:', error);
+        }
+    }
+
+    validateEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+
+    showError(elementId, message) {
+        const element = document.getElementById(elementId);
+        if (element) {
+            element.textContent = message;
+        }
+    }
+
+    displayUserEmail(email) {
+        const display = document.getElementById('admin-email-display');
+        if (display) {
+            display.textContent = email;
+        }
+    }
 }
 
-// Export auth for use in other admin pages
-export { auth, isAdminEmail, signOut };
+// Initialize admin auth
+const adminAuth = new AdminAuth();
+export default adminAuth;

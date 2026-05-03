@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Order confirmation - Thank you for shopping at ColorMart">
+    <meta name="robots" content="noindex, nofollow">
+    
+    <title>Order Confirmed - ColorMart</title>
+    
+    <link rel="icon" type="image/x-icon" href="../public/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/order-confirmation.css">
+</head>
+<body>
+    <div id="header-container"></div>
+
+    <main>
+        <section class="confirmation-section">
+            <div class="container">
+                <div class="confirmation-card">
+                    <div class="success-icon">✅</div>
+                    <h1>Order Confirmed!</h1>
+                    <p class="order-number">Order #<span id="order-number">Loading...</span></p>
+                    <p class="confirmation-message">
+                        Thank you for your purchase! A confirmation email has been sent to your email address.
+                    </p>
+                    <div class="order-details" id="order-details">
+                        <!-- Order details will be loaded -->
+                    </div>
+                    <div class="confirmation-actions">
+                        <a href="../index.html" class="continue-shopping-btn">Continue Shopping</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="footer-container"></div>
+
+    <script type="module" src="js/config/env.js"></script>
+    <script type="module" src="js/components/header.js"></script>
+    <script type="module" src="js/components/footer.js"></script>
+    <script type="module" src="js/order-confirmation.js"></script>
+</body>
+</html>

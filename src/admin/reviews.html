@@ -1,49 +1,84 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Reviews Management - ColorMart Admin</title>
-    <link rel="stylesheet" href="/src/css/style.css" />
-    <link rel="stylesheet" href="/src/css/admin/reviews.css" />
-  </head>
-  <body>
-    <div class="reviews-management">
-      <div class="reviews-header">
-        <h2>Customer Reviews</h2>
-        <div class="reviews-stats" id="reviewsStats"></div>
-      </div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ColorMart Admin - Manage Reviews">
+    <meta name="robots" content="noindex, nofollow">
+    
+    <title>Manage Reviews - ColorMart Admin</title>
+    
+    <link rel="icon" type="image/x-icon" href="../../public/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/admin/dashboard.css">
+    <link rel="stylesheet" href="../css/admin/reviews.css">
+</head>
+<body class="admin-body">
+    <div class="admin-container">
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <img src="../../assets/images/logo.svg" alt="ColorMart">
+                <h2>Admin Panel</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <span class="nav-icon">📊</span>
+                    <span>Dashboard</span>
+                </a>
+                <a href="products.html" class="nav-item">
+                    <span class="nav-icon">📦</span>
+                    <span>Products</span>
+                </a>
+                <a href="orders.html" class="nav-item">
+                    <span class="nav-icon">🛒</span>
+                    <span>Orders</span>
+                </a>
+                <a href="reviews.html" class="nav-item active">
+                    <span class="nav-icon">⭐</span>
+                    <span>Reviews</span>
+                </a>
+                <a href="contacts.html" class="nav-item">
+                    <span class="nav-icon">📧</span>
+                    <span>Contacts</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <button id="logout-btn" class="logout-btn">Logout</button>
+            </div>
+        </aside>
 
-      <div class="review-filters">
-        <select class="rating-filter" id="filterRating">
-          <option value="all">All Ratings</option>
-          <option value="5">5 Stars</option>
-          <option value="4">4 Stars</option>
-          <option value="3">3 Stars</option>
-          <option value="2">2 Stars</option>
-          <option value="1">1 Star</option>
-        </select>
-        <select class="sort-filter" id="sortReviews">
-          <option value="newest">Newest First</option>
-          <option value="oldest">Oldest First</option>
-          <option value="highest">Highest Rated</option>
-          <option value="lowest">Lowest Rated</option>
-        </select>
-        <select class="status-filter" id="filterReviewStatus">
-          <option value="all">All Status</option>
-          <option value="pending">Pending</option>
-          <option value="approved">Approved</option>
-          <option value="rejected">Rejected</option>
-        </select>
-      </div>
+        <main class="admin-main">
+            <header class="admin-header">
+                <h1>Manage Reviews</h1>
+            </header>
 
-      <div class="reviews-grid" id="reviewsGrid">
-        <div class="skeleton-loader" style="height: 150px"></div>
-        <div class="skeleton-loader" style="height: 150px"></div>
-        <div class="skeleton-loader" style="height: 150px"></div>
-      </div>
+            <div class="reviews-content">
+                <div class="table-container">
+                    <table class="admin-table" id="reviews-table">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Customer</th>
+                                <th>Rating</th>
+                                <th>Review</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reviews-table-body">
+                            <!-- Reviews will be loaded -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
     </div>
 
-    <script type="module" src="/src/js/admin/reviews.js"></script>
-  </body>
+    <script type="module" src="../js/config/env.js"></script>
+    <script type="module" src="../js/config/firebase.js"></script>
+    <script type="module" src="../js/admin/auth.js"></script>
+    <script type="module" src="../js/admin/reviews.js"></script>
+</body>
 </html>

@@ -1,63 +1,84 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Contact Messages - ColorMart Admin</title>
-    <link rel="stylesheet" href="/src/css/style.css" />
-    <link rel="stylesheet" href="/src/css/admin/contacts.css" />
-  </head>
-  <body>
-    <div class="contacts-management">
-      <div class="contacts-header">
-        <h2>Contact Messages</h2>
-      </div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ColorMart Admin - Manage Contact Messages">
+    <meta name="robots" content="noindex, nofollow">
+    
+    <title>Manage Contacts - ColorMart Admin</title>
+    
+    <link rel="icon" type="image/x-icon" href="../../public/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/admin/dashboard.css">
+    <link rel="stylesheet" href="../css/admin/contacts.css">
+</head>
+<body class="admin-body">
+    <div class="admin-container">
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <img src="../../assets/images/logo.svg" alt="ColorMart">
+                <h2>Admin Panel</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <span class="nav-icon">📊</span>
+                    <span>Dashboard</span>
+                </a>
+                <a href="products.html" class="nav-item">
+                    <span class="nav-icon">📦</span>
+                    <span>Products</span>
+                </a>
+                <a href="orders.html" class="nav-item">
+                    <span class="nav-icon">🛒</span>
+                    <span>Orders</span>
+                </a>
+                <a href="reviews.html" class="nav-item">
+                    <span class="nav-icon">⭐</span>
+                    <span>Reviews</span>
+                </a>
+                <a href="contacts.html" class="nav-item active">
+                    <span class="nav-icon">📧</span>
+                    <span>Contacts</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <button id="logout-btn" class="logout-btn">Logout</button>
+            </div>
+        </aside>
 
-      <div class="contacts-stats" id="contactsStats"></div>
+        <main class="admin-main">
+            <header class="admin-header">
+                <h1>Contact Messages</h1>
+            </header>
 
-      <div class="contact-filters">
-        <select class="status-filter" id="filterContactStatus">
-          <option value="all">All Messages</option>
-          <option value="unread">Unread</option>
-          <option value="read">Read</option>
-        </select>
-        <input type="date" class="date-filter" id="filterContactDate" />
-      </div>
-
-      <div class="contacts-table-container">
-        <table class="contacts-table">
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Subject</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="contactsTableBody">
-            <tr>
-              <td colspan="6">
-                <div class="skeleton-loader" style="height: 300px"></div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+            <div class="contacts-content">
+                <div class="table-container">
+                    <table class="admin-table" id="contacts-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Message</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="contacts-table-body">
+                            <!-- Contacts will be loaded -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
     </div>
 
-    <!-- Contact Detail Modal -->
-    <div class="modal" id="contactDetailModal">
-      <div class="modal-content contact-detail-content">
-        <div class="modal-header">
-          <h2>Message Details</h2>
-          <span class="close-modal">&times;</span>
-        </div>
-        <div class="modal-body" id="contactDetailBody"></div>
-      </div>
-    </div>
-
-    <script type="module" src="/src/js/admin/contacts.js"></script>
-  </body>
+    <script type="module" src="../js/config/env.js"></script>
+    <script type="module" src="../js/config/firebase.js"></script>
+    <script type="module" src="../js/admin/auth.js"></script>
+    <script type="module" src="../js/admin/contacts.js"></script>
+</body>
 </html>

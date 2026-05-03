@@ -1,345 +1,187 @@
-// Admin Contacts Management
-import { initializeApp } from "firebase/app";
-import {
-  getFirestore,
-  collection,
-  getDocs,
-  updateDoc,
-  doc,
-  query,
-  orderBy,
-  where,
-} from "firebase/firestore";
-import { CONTACTS_CONFIG } from "../config/firebase.js";
-import { showToast } from "../components/cart.js";
-import { sendContactAutoReply } from "../utils/emailjs.js";
+// ============================================
+// COLORMART - ADMIN CONTACTS MANAGEMENT
+// ============================================
 
-// Initialize Firebase
-const contactsApp = initializeApp(CONTACTS_CONFIG, "contacts");
-const contactsDb = getFirestore(contactsApp);
+import firebaseService from '../config/firebase.js';
 
-// State
-let allContacts = [];
+class AdminContacts {
+    constructor() {
+        this.contacts = [];
+        
+        this.init();
+    }
 
-// Initialize contacts management
-export async function initContactsManagement() {
-  await loadContacts();
-  initEventListeners();
-}
+    async init() {
+        await this.loadContacts();
+        this.setupEventListeners();
+    }
 
-// Load contacts from Firebase
-async function loadContacts() {
-  const tableBody = document.getElementById("contactsTableBody");
-  if (!tableBody) return;
+    setupEventListeners() {
+        // Refresh contacts every 30 seconds
+        setInterval(() => {
+            this.loadContacts();
+        }, 30000);
+    }
 
-  try {
-    const contactsRef = collection(contactsDb, "contacts");
-    const q = query(contactsRef, orderBy("createdAt", "desc"));
-    const querySnapshot = await getDocs(q);
-
-    allContacts = [];
-    querySnapshot.forEach((doc) => {
-      allContacts.push({ id: doc.id, ...doc.data() });
-    });
-
-    renderContactsTable();
-    updateStats();
-  } catch (error) {
-    console.error("Error loading contacts:", error);
-    tableBody.innerHTML =
-      '<tr><td colspan="6">Error loading contacts</td></tr>';
-  }
-}
-
-// Update statistics
-function updateStats() {
-  const statsContainer = document.getElementById("contactsStats");
-  if (!statsContainer) return;
-
-  const unread = allContacts.filter((c) => c.status === "unread").length;
-  const read = allContacts.filter((c) => c.status === "read").length;
-  const thisMonth = allContacts.filter((c) => {
-    if (!c.createdAt) return false;
-    const date = c.createdAt.toDate
-      ? c.createdAt.toDate()
-      : new Date(c.createdAt);
-    const now = new Date();
-    return (
-      date.getMonth() === now.getMonth() &&
-      date.getFullYear() === now.getFullYear()
-    );
-  }).length;
-
-  statsContainer.innerHTML = `
-        <div class="stat-card">
-            <div class="stat-value">${allContacts.length}</div>
-            <div>Total Messages</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-value">${unread}</div>
-            <div>Unread</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-value">${read}</div>
-            <div>Read</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-value">${thisMonth}</div>
-            <div>This Month</div>
-        </div>
-    `;
-}
-
-// Render contacts table
-function renderContactsTable() {
-  const tableBody = document.getElementById("contactsTableBody");
-  if (!tableBody) return;
-
-  if (allContacts.length === 0) {
-    tableBody.innerHTML = '<tr><td colspan="6">No messages found</td></tr>';
-    return;
-  }
-
-  tableBody.innerHTML = allContacts
-    .map((contact) => {
-      const date = contact.createdAt?.toDate
-        ? contact.createdAt.toDate()
-        : new Date(contact.createdAt);
-      return `
-            <tr data-contact-id="${contact.id}">
-                <td>${date.toLocaleDateString()}</td>
-                <td>${contact.name || "N/A"}</td>
-                <td>${contact.email || "N/A"}</td>
-                <td>${contact.subject || "No subject"}</td>
-                <td><span class="status-badge status-${contact.status || "unread"}">${contact.status || "unread"}</span></td>
-                <td><button class="view-btn" data-id="${contact.id}">View</button></td>
-            </tr>
-        `;
-    })
-    .join("");
-
-  // Add click handlers for view buttons
-  document.querySelectorAll(".view-btn").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const contactId = btn.dataset.id;
-      const contact = allContacts.find((c) => c.id === contactId);
-      if (contact) showContactDetail(contact);
-    });
-  });
-}
-
-// Show contact detail modal
-function showContactDetail(contact) {
-  const modal = document.getElementById("contactDetailModal");
-  const body = document.getElementById("contactDetailBody");
-
-  if (!modal || !body) return;
-
-  const date = contact.createdAt?.toDate
-    ? contact.createdAt.toDate()
-    : new Date(contact.createdAt);
-
-  body.innerHTML = `
-        <div class="contact-info">
-            <div class="contact-field">
-                <label>Name:</label>
-                <div class="field-value">${contact.name || "N/A"}</div>
-            </div>
-            <div class="contact-field">
-                <label>Email:</label>
-                <div class="field-value"><a href="mailto:${contact.email}">${contact.email}</a></div>
-            </div>
-            ${
-              contact.phone
-                ? `
-                <div class="contact-field">
-                    <label>Phone:</label>
-                    <div class="field-value">${contact.phone}</div>
-                </div>
-            `
-                : ""
-            }
-            <div class="contact-field">
-                <label>Subject:</label>
-                <div class="field-value">${contact.subject || "No subject"}</div>
-            </div>
-            <div class="contact-field">
-                <label>Date:</label>
-                <div class="field-value">${date.toLocaleString()}</div>
-            </div>
-            <div class="contact-field">
-                <label>Message:</label>
-                <div class="contact-message">${contact.message || "No message content"}</div>
-            </div>
-        </div>
-        <div class="reply-section">
-            <h4>Reply to Customer</h4>
-            <textarea class="reply-textarea" id="replyMessage" placeholder="Type your reply here..."></textarea>
-            <button class="send-reply-btn" data-id="${contact.id}" data-email="${contact.email}" data-name="${contact.name}">Send Reply</button>
-            <button class="mark-read-btn" data-id="${contact.id}">Mark as Read</button>
-        </div>
-    `;
-
-  modal.classList.add("active");
-
-  // Send reply button
-  const sendReplyBtn = body.querySelector(".send-reply-btn");
-  if (sendReplyBtn) {
-    sendReplyBtn.addEventListener("click", async () => {
-      const replyMessage = document.getElementById("replyMessage")?.value;
-      if (!replyMessage) {
-        showToast("Please enter a reply message", "error");
-        return;
-      }
-
-      await sendReply(
-        sendReplyBtn.dataset.email,
-        sendReplyBtn.dataset.name,
-        contact.subject,
-        replyMessage,
-      );
-
-      // Mark as read after replying
-      await markAsRead(sendReplyBtn.dataset.id);
-      modal.classList.remove("active");
-    });
-  }
-
-  // Mark as read button
-  const markReadBtn = body.querySelector(".mark-read-btn");
-  if (markReadBtn) {
-    markReadBtn.addEventListener("click", async () => {
-      await markAsRead(markReadBtn.dataset.id);
-      modal.classList.remove("active");
-    });
-  }
-
-  // Auto-mark as read when opened
-  if (contact.status !== "read") {
-    markAsRead(contact.id);
-  }
-}
-
-// Send reply to customer
-async function sendReply(email, name, subject, message) {
-  try {
-    // Use EmailJS to send reply
-    const { sendContactAutoReply } = await import("../utils/emailjs.js");
-
-    await sendContactAutoReply({
-      email: email,
-      name: name,
-      subject: `Re: ${subject}`,
-      message: message,
-    });
-
-    showToast(`Reply sent to ${email}`);
-  } catch (error) {
-    console.error("Error sending reply:", error);
-    showToast("Failed to send reply", "error");
-  }
-}
-
-// Mark contact as read
-async function markAsRead(contactId) {
-  try {
-    const contactRef = doc(contactsDb, "contacts", contactId);
-    await updateDoc(contactRef, { status: "read" });
-
-    // Update local state
-    const contact = allContacts.find((c) => c.id === contactId);
-    if (contact) contact.status = "read";
-
-    renderContactsTable();
-    updateStats();
-
-    showToast("Message marked as read");
-  } catch (error) {
-    console.error("Error marking as read:", error);
-  }
-}
-
-// Initialize event listeners for filters
-function initEventListeners() {
-  // Status filter
-  const statusFilter = document.getElementById("filterContactStatus");
-  if (statusFilter) {
-    statusFilter.addEventListener("change", (e) => {
-      const status = e.target.value;
-      if (status === "all") {
-        renderContactsTable();
-      } else {
-        const filtered = allContacts.filter((c) => c.status === status);
-        const tableBody = document.getElementById("contactsTableBody");
-        if (tableBody) {
-          if (filtered.length === 0) {
-            tableBody.innerHTML =
-              '<tr><td colspan="6">No messages found</td></tr>';
-          } else {
-            renderFilteredContacts(filtered);
-          }
+    async loadContacts() {
+        try {
+            this.contacts = await firebaseService.getContacts();
+            this.renderContactsTable();
+        } catch (error) {
+            console.error('Error loading contacts:', error);
+            this.showNotification('Failed to load contacts', 'error');
         }
-      }
-    });
-  }
+    }
 
-  // Date filter
-  const dateFilter = document.getElementById("filterContactDate");
-  if (dateFilter) {
-    dateFilter.addEventListener("change", (e) => {
-      const filterDate = new Date(e.target.value);
-      if (filterDate && e.target.value) {
-        const filtered = allContacts.filter((c) => {
-          if (!c.createdAt) return false;
-          const date = c.createdAt.toDate
-            ? c.createdAt.toDate()
-            : new Date(c.createdAt);
-          return date.toDateString() === filterDate.toDateString();
-        });
-        renderFilteredContacts(filtered);
-      } else {
-        renderContactsTable();
-      }
-    });
-  }
+    renderContactsTable() {
+        const tbody = document.getElementById('contacts-table-body');
+        if (!tbody) return;
 
-  // Modal close
-  const closeBtns = document.querySelectorAll(".close-modal");
-  closeBtns.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      document.getElementById("contactDetailModal")?.classList.remove("active");
-    });
-  });
-}
+        if (this.contacts.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6">No messages found</td></tr>';
+            return;
+        }
 
-// Render filtered contacts
-function renderFilteredContacts(contacts) {
-  const tableBody = document.getElementById("contactsTableBody");
-  if (!tableBody) return;
-
-  tableBody.innerHTML = contacts
-    .map((contact) => {
-      const date = contact.createdAt?.toDate
-        ? contact.createdAt.toDate()
-        : new Date(contact.createdAt);
-      return `
-            <tr data-contact-id="${contact.id}">
-                <td>${date.toLocaleDateString()}</td>
-                <td>${contact.name || "N/A"}</td>
-                <td>${contact.email || "N/A"}</td>
-                <td>${contact.subject || "No subject"}</td>
-                <td><span class="status-badge status-${contact.status || "unread"}">${contact.status || "unread"}</span></td>
-                <td><button class="view-btn" data-id="${contact.id}">View</button></td>
+        tbody.innerHTML = this.contacts.map(contact => `
+            <tr class="${!contact.read ? 'unread-row' : ''}">
+                <td>
+                    <span class="read-badge ${contact.read ? 'read' : 'unread'}"></span>
+                    <strong>${this.escapeHtml(contact.name)}</strong>
+                </td>
+                <td>
+                    <a href="mailto:${this.escapeHtml(contact.email)}">${this.escapeHtml(contact.email)}</a>
+                </td>
+                <td>${contact.phone ? this.escapeHtml(contact.phone) : 'N/A'}</td>
+                <td>
+                    <div class="message-cell" title="${this.escapeHtml(contact.message)}">
+                        ${this.escapeHtml(contact.message)}
+                    </div>
+                </td>
+                <td>${this.formatDate(contact.createdAt)}</td>
+                <td>
+                    <div class="action-buttons">
+                        ${!contact.read ? `
+                            <button class="mark-read-btn" onclick="adminContacts.markAsRead('${contact.id}')">
+                                Mark Read
+                            </button>
+                        ` : ''}
+                        <button class="view-message-btn" onclick="adminContacts.viewMessage('${contact.id}')">
+                            View
+                        </button>
+                        <button class="delete-message-btn" onclick="adminContacts.deleteContact('${contact.id}')">
+                            Delete
+                        </button>
+                    </div>
+                </td>
             </tr>
-        `;
-    })
-    .join("");
+        `).join('');
+    }
 
-  document.querySelectorAll(".view-btn").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const contactId = btn.dataset.id;
-      const contact = contacts.find((c) => c.id === contactId);
-      if (contact) showContactDetail(contact);
-    });
-  });
+    viewMessage(contactId) {
+        const contact = this.contacts.find(c => c.id === contactId);
+        if (!contact) return;
+
+        // Create a modal to display full message
+        const modal = document.createElement('div');
+        modal.className = 'modal active';
+        modal.innerHTML = `
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Message Details</h2>
+                    <button class="modal-close" onclick="this.closest('.modal').remove()">&times;</button>
+                </div>
+                <div class="order-detail-content" style="padding: 2rem;">
+                    <div class="order-info-group">
+                        <h3>Sender Information</h3>
+                        <p><strong>Name:</strong> ${this.escapeHtml(contact.name)}</p>
+                        <p><strong>Email:</strong> <a href="mailto:${this.escapeHtml(contact.email)}">${this.escapeHtml(contact.email)}</a></p>
+                        <p><strong>Phone:</strong> ${contact.phone ? this.escapeHtml(contact.phone) : 'N/A'}</p>
+                        <p><strong>Date:</strong> ${this.formatDate(contact.createdAt)}</p>
+                    </div>
+                    <div class="order-info-group">
+                        <h3>Message</h3>
+                        <p style="white-space: pre-wrap;">${this.escapeHtml(contact.message)}</p>
+                    </div>
+                    <div class="form-actions" style="margin-top: 2rem;">
+                        <button class="cancel-btn" onclick="this.closest('.modal').remove()">Close</button>
+                        <a href="mailto:${this.escapeHtml(contact.email)}" class="save-btn" style="text-decoration: none; display: inline-block;">
+                            Reply via Email
+                        </a>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(modal);
+
+        // Mark as read when viewing
+        if (!contact.read) {
+            this.markAsRead(contactId);
+        }
+    }
+
+    async markAsRead(contactId) {
+        try {
+            await firebaseService.markContactAsRead(contactId);
+            
+            // Update local data
+            const contact = this.contacts.find(c => c.id === contactId);
+            if (contact) {
+                contact.read = true;
+            }
+            
+            this.renderContactsTable();
+        } catch (error) {
+            console.error('Error marking contact as read:', error);
+            this.showNotification('Failed to mark as read', 'error');
+        }
+    }
+
+    async deleteContact(contactId) {
+        if (!confirm('Are you sure you want to delete this message?')) {
+            return;
+        }
+
+        try {
+            await firebaseService.deleteContact(contactId);
+            this.showNotification('Message deleted successfully', 'success');
+            await this.loadContacts();
+        } catch (error) {
+            console.error('Error deleting contact:', error);
+            this.showNotification('Failed to delete message', 'error');
+        }
+    }
+
+    formatDate(dateString) {
+        if (!dateString) return 'N/A';
+        return new Date(dateString).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    }
+
+    escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        notification.textContent = message;
+        document.body.appendChild(notification);
+
+        setTimeout(() => {
+            notification.remove();
+        }, 3000);
+    }
 }
+
+// Initialize admin contacts
+const adminContacts = new AdminContacts();
+window.adminContacts = adminContacts;
+export default adminContacts;

@@ -1,306 +1,239 @@
-// Main entry point for homepage
-import { loadHeader } from "./components/header.js";
-import { loadFooter } from "./components/footer.js";
-import { initCart, addToCart, showToast } from "./components/cart.js";
-import { updateMetaTags, addOrganizationStructuredData } from "./utils/seo.js";
-import { initializeApp } from "firebase/app";
-import {
-  getFirestore,
-  collection,
-  query,
-  where,
-  orderBy,
-  limit,
-  getDocs,
-} from "firebase/firestore";
-import { PRODUCTS_CONFIG } from "./config/firebase.js";
+// ============================================
+// COLORMART - MAIN PAGE SCRIPT
+// ============================================
 
-// Initialize AOS
-AOS.init({
-  duration: 800,
-  once: true,
-  offset: 100,
-});
+import firebaseService from './config/firebase.js';
+import skeletonLoader from './utils/skeletonLoader.js';
+import discountCalculator from './utils/discountCalculator.js';
+import seoManager from './utils/seo.js';
 
-// Initialize Firebase for products
-const productsApp = initializeApp(PRODUCTS_CONFIG, "products");
-const productsDb = getFirestore(productsApp);
-
-// Load components
-loadHeader();
-loadFooter();
-initCart();
-
-// Update SEO
-updateMetaTags({
-  title: "ColorMart - Premium Beauty & Cosmetics | Makeup, Hair Care & More",
-  description:
-    "Shop authentic makeup, cosmetics, and beauty products at ColorMart. Free shipping on orders over Rs.2500. Best prices in Pakistan.",
-});
-addOrganizationStructuredData();
-
-// Hero Slider
-function initHeroSlider() {
-  const slides = document.querySelectorAll(".slide");
-  const dotsContainer = document.querySelector(".slider-dots");
-  const prevBtn = document.querySelector(".prev");
-  const nextBtn = document.querySelector(".next");
-  let currentSlide = 0;
-  let slideInterval;
-
-  if (!slides.length) return;
-
-  // Create dots
-  slides.forEach((_, index) => {
-    const dot = document.createElement("div");
-    dot.classList.add("dot");
-    if (index === 0) dot.classList.add("active");
-    dot.addEventListener("click", () => goToSlide(index));
-    dotsContainer.appendChild(dot);
-  });
-
-  function goToSlide(index) {
-    slides[currentSlide].classList.remove("active");
-    document.querySelectorAll(".dot")[currentSlide].classList.remove("active");
-    currentSlide = (index + slides.length) % slides.length;
-    slides[currentSlide].classList.add("active");
-    document.querySelectorAll(".dot")[currentSlide].classList.add("active");
-  }
-
-  function nextSlide() {
-    goToSlide(currentSlide + 1);
-  }
-
-  function prevSlide() {
-    goToSlide(currentSlide - 1);
-  }
-
-  function startAutoSlide() {
-    slideInterval = setInterval(nextSlide, 5000);
-  }
-
-  function stopAutoSlide() {
-    clearInterval(slideInterval);
-  }
-
-  if (prevBtn)
-    prevBtn.addEventListener("click", () => {
-      prevSlide();
-      stopAutoSlide();
-      startAutoSlide();
-    });
-  if (nextBtn)
-    nextBtn.addEventListener("click", () => {
-      nextSlide();
-      stopAutoSlide();
-      startAutoSlide();
-    });
-
-  startAutoSlide();
-}
-
-// Load New Arrivals
-async function loadNewArrivals() {
-  const container = document.getElementById("new-arrivals-grid");
-  if (!container) return;
-
-  try {
-    const productsRef = collection(productsDb, "products");
-    const q = query(productsRef, orderBy("createdAt", "desc"), limit(4));
-    const querySnapshot = await getDocs(q);
-
-    if (querySnapshot.empty) {
-      container.innerHTML = '<p class="no-products">No products found</p>';
-      return;
+class MainPage {
+    constructor() {
+        this.init();
     }
 
-    const products = [];
-    querySnapshot.forEach((doc) => {
-      products.push({ id: doc.id, ...doc.data() });
-    });
+    async init() {
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: true,
+            offset: 100
+        });
 
-    renderProducts(container, products);
-  } catch (error) {
-    console.error("Error loading new arrivals:", error);
-    container.innerHTML = '<p class="error">Failed to load products</p>';
-  }
-}
+        // Initialize Swiper
+        this.initHeroSlider();
 
-// Load Best Sellers
-async function loadBestSellers() {
-  const container = document.getElementById("best-sellers-grid");
-  if (!container) return;
+        // Load content
+        await this.loadCategories();
+        await this.loadNewArrivals();
+        await this.loadBestSellers();
+        await this.loadReviews();
 
-  try {
-    const productsRef = collection(productsDb, "products");
-    const q = query(productsRef, orderBy("salesCount", "desc"), limit(4));
-    const querySnapshot = await getDocs(q);
-
-    if (querySnapshot.empty) {
-      container.innerHTML = '<p class="no-products">No products found</p>';
-      return;
+        // Setup SEO
+        this.setupSEO();
     }
 
-    const products = [];
-    querySnapshot.forEach((doc) => {
-      products.push({ id: doc.id, ...doc.data() });
-    });
+    setupSEO() {
+        seoManager.updatePageTitle('Premium Beauty, Cosmetics & Lifestyle Products');
+        seoManager.updateMetaDescription(
+            `${ENV.SITE.name} - Your premier destination for beauty, cosmetics, and lifestyle products. Shop makeup, hair care, men's care, and organizers with free shipping on orders over ${ENV.SITE.currencySymbol} ${ENV.SITE.freeShippingThreshold.toLocaleString()}.`
+        );
+    }
 
-    renderProducts(container, products);
-  } catch (error) {
-    console.error("Error loading best sellers:", error);
-    container.innerHTML = '<p class="error">Failed to load products</p>';
-  }
-}
+    initHeroSlider() {
+        new Swiper('.hero-slider', {
+            slidesPerView: 1,
+            loop: true,
+            autoplay: {
+                delay: 5000,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            effect: 'fade',
+            fadeEffect: {
+                crossFade: true
+            }
+        });
+    }
 
-// Render products in grid
-function renderProducts(container, products) {
-  container.innerHTML = products
-    .map((product) => {
-      const discount = product.salePrice
-        ? Math.round(
-            ((product.price - product.salePrice) / product.price) * 100,
-          )
-        : 0;
-      const displayPrice = product.salePrice || product.price;
-      const originalPrice = product.salePrice ? product.price : null;
+    async loadCategories() {
+        const categoryGrid = document.getElementById('category-grid');
+        if (!categoryGrid) return;
 
-      return `
-            <div class="product-card" data-product-id="${product.id}">
-                ${discount > 0 ? `<div class="product-badge">-${discount}%</div>` : ""}
-                <div class="product-image">
-                    <img src="${product.images?.[0] || "https://via.placeholder.com/300"}" alt="${product.name}" loading="lazy">
-                    <div class="quick-add" data-id="${product.id}" data-name="${product.name}" data-price="${displayPrice}" data-image="${product.images?.[0]}">Quick Add</div>
+        const categories = [
+            { name: 'Makeup', image: 'assets/images/category-makeup.jpg', slug: 'makeup' },
+            { name: 'Hair Care', image: 'assets/images/category-hair-care.jpg', slug: 'hair-care' },
+            { name: "Men's Care", image: 'assets/images/category-mens-care.jpg', slug: 'mens-care' },
+            { name: 'Organizers', image: 'assets/images/category-organizers.jpg', slug: 'organizers' },
+            { name: 'Essentials', image: 'assets/images/category-essentials.jpg', slug: 'essentials' }
+        ];
+
+        categoryGrid.innerHTML = categories.map(cat => `
+            <a href="src/catalog.html?category=${cat.slug}" class="category-card" data-aos="fade-up">
+                <img src="${cat.image}" alt="${cat.name}" onerror="this.src='assets/images/placeholder-product.jpg'">
+                <div class="category-card-overlay">
+                    <h3>${cat.name}</h3>
                 </div>
-                <div class="product-info">
-                    <h3 class="product-title">${product.name}</h3>
-                    <div class="product-price">
-                        <span class="current-price">Rs. ${displayPrice.toLocaleString()}</span>
-                        ${originalPrice ? `<span class="original-price">Rs. ${originalPrice.toLocaleString()}</span>` : ""}
-                    </div>
-                    <div class="product-rating">
-                        <div class="stars">${renderStars(product.averageRating || 0)}</div>
-                        <span>(${product.reviewCount || 0})</span>
+            </a>
+        `).join('');
+    }
+
+    async loadNewArrivals() {
+        const grid = document.getElementById('new-arrivals-grid');
+        if (!grid) return;
+
+        skeletonLoader.createGridSkeleton(grid, 4);
+
+        try {
+            const products = await firebaseService.getProducts({ 
+                limit: 8, 
+                orderBy: 'createdAt', 
+                order: 'desc' 
+            });
+            
+            skeletonLoader.removeSkeleton(grid);
+            this.renderProductGrid(grid, products);
+        } catch (error) {
+            console.error('Error loading new arrivals:', error);
+            skeletonLoader.removeSkeleton(grid);
+            grid.innerHTML = '<p class="error-message">Failed to load products. Please try again later.</p>';
+        }
+    }
+
+    async loadBestSellers() {
+        const grid = document.getElementById('best-sellers-grid');
+        if (!grid) return;
+
+        skeletonLoader.createGridSkeleton(grid, 4);
+
+        try {
+            const products = await firebaseService.getProducts({ 
+                limit: 8, 
+                featured: true 
+            });
+            
+            skeletonLoader.removeSkeleton(grid);
+            this.renderProductGrid(grid, products);
+        } catch (error) {
+            console.error('Error loading best sellers:', error);
+            skeletonLoader.removeSkeleton(grid);
+            grid.innerHTML = '<p class="error-message">Failed to load products. Please try again later.</p>';
+        }
+    }
+
+    renderProductGrid(container, products) {
+        if (!products.length) {
+            container.innerHTML = '<p class="no-products">No products found.</p>';
+            return;
+        }
+
+        container.innerHTML = products.map(product => {
+            const badge = discountCalculator.getDiscountBadge(product);
+            const currentPrice = product.salePrice || product.originalPrice;
+            
+            return `
+                <div class="product-card" data-aos="fade-up">
+                    <a href="src/product.html?id=${product.id}">
+                        <div class="product-card-image">
+                            <img src="${product.images?.[0] || 'assets/images/placeholder-product.jpg'}" 
+                                 alt="${product.name}" 
+                                 loading="lazy"
+                                 onerror="this.src='assets/images/placeholder-product.jpg'">
+                            ${badge ? `<span class="product-card-badge">${badge.text}</span>` : ''}
+                        </div>
+                    </a>
+                    <div class="product-card-content">
+                        <div class="product-card-brand">${product.brand || ''}</div>
+                        <a href="src/product.html?id=${product.id}" class="product-card-title">
+                            ${product.name}
+                        </a>
+                        <div class="product-card-price">
+                            <span class="product-card-current-price">
+                                ${ENV.SITE.currencySymbol} ${currentPrice.toLocaleString()}
+                            </span>
+                            ${product.salePrice && product.salePrice < product.originalPrice ? `
+                                <span class="product-card-original-price">
+                                    ${ENV.SITE.currencySymbol} ${product.originalPrice.toLocaleString()}
+                                </span>
+                                <span class="product-card-discount">
+                                    -${badge.percentage}%
+                                </span>
+                            ` : ''}
+                        </div>
+                        <button class="quick-add-btn" onclick="quickAddToCart('${product.id}')">
+                            Quick Add
+                        </button>
                     </div>
                 </div>
-            </div>
-        `;
-    })
-    .join("");
-
-  // Add event listeners for quick add
-  document.querySelectorAll(".quick-add").forEach((btn) => {
-    btn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      const product = {
-        id: btn.dataset.id,
-        name: btn.dataset.name,
-        price: parseFloat(btn.dataset.price),
-        image: btn.dataset.image,
-      };
-      addToCart(product, 1);
-    });
-  });
-
-  // Add click event for product detail navigation
-  document.querySelectorAll(".product-card").forEach((card) => {
-    card.addEventListener("click", (e) => {
-      if (e.target.classList.contains("quick-add")) return;
-      const productId = card.dataset.productId;
-      window.location.href = `/src/product.html?id=${productId}`;
-    });
-  });
-}
-
-// Render star rating
-function renderStars(rating) {
-  const fullStars = Math.floor(rating);
-  const halfStar = rating % 1 >= 0.5;
-  const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
-
-  let stars = "";
-  for (let i = 0; i < fullStars; i++) stars += "★";
-  if (halfStar) stars += "½";
-  for (let i = 0; i < emptyStars; i++) stars += "☆";
-
-  return stars;
-}
-
-// Load testimonials from reviews database
-async function loadTestimonials() {
-  const container = document.getElementById("testimonials-grid");
-  if (!container) return;
-
-  try {
-    // Import reviews Firebase dynamically
-    const { initializeApp: initReviewsApp } = await import("firebase/app");
-    const {
-      getFirestore: getReviewsDb,
-      collection: getReviewsCollection,
-      query: getReviewsQuery,
-      where: whereReview,
-      orderBy: orderByReview,
-      limit: limitReviews,
-      getDocs: getReviewDocs,
-    } = await import("firebase/firestore");
-    const { REVIEWS_CONFIG } = await import("./config/firebase.js");
-
-    const reviewsApp = initReviewsApp(REVIEWS_CONFIG, "reviews");
-    const reviewsDb = getReviewsDb(reviewsApp);
-    const reviewsRef = getReviewsCollection(reviewsDb, "reviews");
-    const q = getReviewsQuery(
-      reviewsRef,
-      whereReview("status", "==", "approved"),
-      orderByReview("createdAt", "desc"),
-      limitReviews(3),
-    );
-    const querySnapshot = await getReviewDocs(q);
-
-    if (querySnapshot.empty) {
-      container.innerHTML = '<p class="no-reviews">No reviews yet</p>';
-      return;
+            `;
+        }).join('');
     }
 
-    const reviews = [];
-    querySnapshot.forEach((doc) => {
-      reviews.push({ id: doc.id, ...doc.data() });
-    });
+    async loadReviews() {
+        const reviewsGrid = document.getElementById('reviews-grid');
+        if (!reviewsGrid) return;
 
-    container.innerHTML = reviews
-      .map(
-        (review) => `
-            <div class="testimonial-card">
-                <div class="testimonial-stars">${renderStars(review.rating)}</div>
-                <p class="testimonial-text">"${review.comment.substring(0, 150)}${review.comment.length > 150 ? "..." : ""}"</p>
-                <p class="testimonial-author">${review.userName}</p>
-                <p class="testimonial-product">${review.productName}</p>
-            </div>
-        `,
-      )
-      .join("");
-  } catch (error) {
-    console.error("Error loading testimonials:", error);
-    container.innerHTML = '<p class="error">Failed to load reviews</p>';
-  }
+        try {
+            const reviews = await firebaseService.getReviews();
+            
+            if (reviews.length === 0) {
+                reviewsGrid.innerHTML = '<p class="no-reviews">No reviews yet.</p>';
+                return;
+            }
+
+            const displayReviews = reviews.slice(0, 6);
+            
+            reviewsGrid.innerHTML = displayReviews.map(review => `
+                <div class="review-card" data-aos="fade-up">
+                    <div class="review-header">
+                        <div class="reviewer-avatar">
+                            ${review.name.charAt(0).toUpperCase()}
+                        </div>
+                        <div class="reviewer-info">
+                            <h4>${review.name}</h4>
+                            <div class="review-rating">
+                                ${'⭐'.repeat(review.rating)}
+                            </div>
+                        </div>
+                    </div>
+                    <p class="review-text">${review.text}</p>
+                    ${review.productName ? `<p class="review-product">On: ${review.productName}</p>` : ''}
+                </div>
+            `).join('');
+        } catch (error) {
+            console.error('Error loading reviews:', error);
+            reviewsGrid.innerHTML = '<p class="error-message">Failed to load reviews.</p>';
+        }
+    }
 }
 
-// Category card click handlers
-function initCategoryCards() {
-  document.querySelectorAll(".category-card").forEach((card) => {
-    card.addEventListener("click", (e) => {
-      const href = card.getAttribute("href");
-      if (href) {
-        window.location.href = href;
-      }
-    });
-  });
-}
+// Quick add to cart function
+window.quickAddToCart = async function(productId) {
+    try {
+        const product = await firebaseService.getProductById(productId);
+        if (product) {
+            window.addToCart({
+                id: product.id,
+                name: product.name,
+                price: product.salePrice || product.originalPrice,
+                originalPrice: product.originalPrice,
+                images: product.images
+            });
+        }
+    } catch (error) {
+        console.error('Error adding to cart:', error);
+    }
+};
 
-// Initialize everything
-document.addEventListener("DOMContentLoaded", () => {
-  initHeroSlider();
-  loadNewArrivals();
-  loadBestSellers();
-  loadTestimonials();
-  initCategoryCards();
+// Initialize main page
+document.addEventListener('DOMContentLoaded', () => {
+    new MainPage();
 });

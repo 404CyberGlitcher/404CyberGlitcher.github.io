@@ -1,188 +1,181 @@
-// Contact page functionality
-import { loadHeader } from "./components/header.js";
-import { loadFooter } from "./components/footer.js";
-import { initCart } from "./components/cart.js";
-import { updateMetaTags } from "./utils/seo.js";
-import { initializeApp } from "firebase/app";
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  serverTimestamp,
-} from "firebase/firestore";
-import { CONTACTS_CONFIG } from "./config/firebase.js";
-import {
-  sendContactAutoReply,
-  sendContactStaffNotification,
-} from "./utils/emailjs.js";
+// ============================================
+// COLORMART - CONTACT PAGE SCRIPT
+// ============================================
 
-// Initialize Firebase
-const contactsApp = initializeApp(CONTACTS_CONFIG, "contacts");
-const contactsDb = getFirestore(contactsApp);
+import firebaseService from './config/firebase.js';
+import emailService from './utils/emailService.js';
+import seoManager from './utils/seo.js';
 
-// Initialize page
-document.addEventListener("DOMContentLoaded", () => {
-  loadHeader();
-  loadFooter();
-  initCart();
-
-  updateMetaTags({
-    title: "Contact Us - ColorMart | Get in Touch with Our Beauty Experts",
-    description:
-      "Have questions about our products or need assistance? Contact ColorMart customer support. We're here to help you with makeup, skincare, and beauty product inquiries.",
-  });
-
-  AOS.init({ duration: 800, once: true });
-
-  initContactForm();
-  initFAQ();
-});
-
-// Initialize contact form
-function initContactForm() {
-  const form = document.getElementById("contactForm");
-  if (!form) return;
-
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const submitBtn = form.querySelector('button[type="submit"]');
-    const originalText = submitBtn.textContent;
-    submitBtn.textContent = "Sending...";
-    submitBtn.disabled = true;
-
-    // Get form data
-    const formData = {
-      name: document.getElementById("name")?.value,
-      email: document.getElementById("email")?.value,
-      phone: document.getElementById("phone")?.value,
-      subject: document.getElementById("subject")?.value,
-      message: document.getElementById("message")?.value,
-      createdAt: serverTimestamp(),
-      status: "unread",
-      ip: await getClientIP(),
-    };
-
-    // Validate
-    if (
-      !formData.name ||
-      !formData.email ||
-      !formData.subject ||
-      !formData.message
-    ) {
-      showMessage("Please fill in all required fields", "error");
-      submitBtn.textContent = originalText;
-      submitBtn.disabled = false;
-      return;
+class ContactPage {
+    constructor() {
+        this.init();
     }
 
-    if (!isValidEmail(formData.email)) {
-      showMessage("Please enter a valid email address", "error");
-      submitBtn.textContent = originalText;
-      submitBtn.disabled = false;
-      return;
+    init() {
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: true
+        });
+
+        this.setupFormValidation();
+        this.setupSEO();
     }
 
-    try {
-      // Save to Firebase
-      await addDoc(collection(contactsDb, "contacts"), formData);
-
-      // Send auto-reply to customer
-      await sendContactAutoReply({
-        name: formData.name,
-        email: formData.email,
-        subject: formData.subject,
-        message: formData.message,
-      });
-
-      // Send notification to staff
-      await sendContactStaffNotification({
-        name: formData.name,
-        email: formData.email,
-        phone: formData.phone,
-        subject: formData.subject,
-        message: formData.message,
-      });
-
-      // Show success message
-      showMessage(
-        "Thank you for your message! We'll get back to you within 24 hours.",
-        "success",
-      );
-      form.reset();
-    } catch (error) {
-      console.error("Error submitting contact form:", error);
-      showMessage(
-        "Failed to send message. Please try again or email us directly.",
-        "error",
-      );
-    } finally {
-      submitBtn.textContent = originalText;
-      submitBtn.disabled = false;
+    setupSEO() {
+        seoManager.updatePageTitle('Contact Us');
+        seoManager.updateMetaDescription(
+            `Contact ${ENV.SITE.name} - Get in touch with our beauty and cosmetics store. Reach out for inquiries, support, or feedback.`
+        );
     }
-  });
-}
 
-// Initialize FAQ accordion
-function initFAQ() {
-  const faqItems = document.querySelectorAll(".faq-item");
+    setupFormValidation() {
+        const form = document.getElementById('contact-form');
+        if (!form) return;
 
-  faqItems.forEach((item) => {
-    const question = item.querySelector("h3");
-    if (question) {
-      question.addEventListener("click", () => {
-        const isActive = item.classList.contains("active");
+        const nameInput = document.getElementById('contact-name');
+        const emailInput = document.getElementById('contact-email');
+        const phoneInput = document.getElementById('contact-phone');
+        const messageInput = document.getElementById('contact-message');
 
-        // Close all items
-        faqItems.forEach((faq) => faq.classList.remove("active"));
+        // Real-time validation
+        nameInput?.addEventListener('input', () => this.validateName(nameInput));
+        emailInput?.addEventListener('input', () => this.validateEmail(emailInput));
+        phoneInput?.addEventListener('input', () => this.validatePhone(phoneInput));
+        messageInput?.addEventListener('input', () => this.validateMessage(messageInput));
 
-        // Open clicked item if it wasn't active
-        if (!isActive) {
-          item.classList.add("active");
+        // Form submission
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (this.validateForm()) {
+                await this.submitForm();
+            }
+        });
+    }
+
+    validateName(input) {
+        const error = document.getElementById('name-error');
+        const value = input.value.trim();
+        
+        if (!value) {
+            error.textContent = 'Name is required';
+            return false;
         }
-      });
+        if (value.length < 2) {
+            error.textContent = 'Name must be at least 2 characters';
+            return false;
+        }
+        
+        error.textContent = '';
+        return true;
     }
-  });
+
+    validateEmail(input) {
+        const error = document.getElementById('email-error');
+        const value = input.value.trim();
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        
+        if (!value) {
+            error.textContent = 'Email is required';
+            return false;
+        }
+        if (!emailRegex.test(value)) {
+            error.textContent = 'Please enter a valid email address';
+            return false;
+        }
+        
+        error.textContent = '';
+        return true;
+    }
+
+    validatePhone(input) {
+        const value = input.value.trim();
+        if (value && !/^[\d\s\-\+\(\)]{10,}$/.test(value)) {
+            return false;
+        }
+        return true;
+    }
+
+    validateMessage(input) {
+        const error = document.getElementById('message-error');
+        const value = input.value.trim();
+        
+        if (!value) {
+            error.textContent = 'Message is required';
+            return false;
+        }
+        if (value.length < 10) {
+            error.textContent = 'Message must be at least 10 characters';
+            return false;
+        }
+        
+        error.textContent = '';
+        return true;
+    }
+
+    validateForm() {
+        const nameValid = this.validateName(document.getElementById('contact-name'));
+        const emailValid = this.validateEmail(document.getElementById('contact-email'));
+        const messageValid = this.validateMessage(document.getElementById('contact-message'));
+        
+        return nameValid && emailValid && messageValid;
+    }
+
+    async submitForm() {
+        const name = document.getElementById('contact-name').value.trim();
+        const email = document.getElementById('contact-email').value.trim();
+        const phone = document.getElementById('contact-phone').value.trim();
+        const message = document.getElementById('contact-message').value.trim();
+        
+        const submitBtn = document.querySelector('.submit-btn');
+        const formStatus = document.getElementById('form-status');
+        
+        try {
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending...';
+            
+            // Save to Firebase
+            await firebaseService.addContact({
+                name,
+                email,
+                phone,
+                message
+            });
+
+            // Send notification email
+            await emailService.sendContactFormNotification({
+                name,
+                email,
+                phone,
+                message
+            });
+            
+            // Show success
+            formStatus.className = 'form-status success';
+            formStatus.textContent = 'Message sent successfully! We will get back to you soon.';
+            
+            // Reset form
+            document.getElementById('contact-form').reset();
+            
+        } catch (error) {
+            console.error('Error submitting contact form:', error);
+            formStatus.className = 'form-status error';
+            formStatus.textContent = 'Failed to send message. Please try again later.';
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Send Message';
+            
+            // Hide status after 5 seconds
+            setTimeout(() => {
+                formStatus.className = 'form-status';
+                formStatus.textContent = '';
+            }, 5000);
+        }
+    }
 }
 
-// Show message to user
-function showMessage(message, type = "success") {
-  const container = document.querySelector(".contact-form-container");
-  if (!container) return;
-
-  // Remove existing message
-  const existingMessage = container.querySelector(
-    ".success-message, .error-message",
-  );
-  if (existingMessage) existingMessage.remove();
-
-  const messageDiv = document.createElement("div");
-  messageDiv.className =
-    type === "success" ? "success-message" : "error-message";
-  messageDiv.textContent = message;
-
-  container.insertBefore(messageDiv, container.firstChild);
-
-  // Auto remove after 5 seconds
-  setTimeout(() => {
-    messageDiv.remove();
-  }, 5000);
-}
-
-// Validate email
-function isValidEmail(email) {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
-}
-
-// Get client IP (for analytics)
-async function getClientIP() {
-  try {
-    const response = await fetch("https://api.ipify.org?format=json");
-    const data = await response.json();
-    return data.ip;
-  } catch (error) {
-    console.error("Error getting IP:", error);
-    return null;
-  }
-}
+// Initialize contact page
+document.addEventListener('DOMContentLoaded', () => {
+    new ContactPage();
+});

@@ -1,69 +1,109 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Orders Management - ColorMart Admin</title>
-    <link rel="stylesheet" href="/src/css/style.css" />
-    <link rel="stylesheet" href="/src/css/admin/orders.css" />
-  </head>
-  <body>
-    <div class="orders-management">
-      <div class="orders-header">
-        <h2>Orders Management</h2>
-        <div class="orders-stats" id="ordersStats"></div>
-      </div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ColorMart Admin - Manage Orders">
+    <meta name="robots" content="noindex, nofollow">
+    
+    <title>Manage Orders - ColorMart Admin</title>
+    
+    <link rel="icon" type="image/x-icon" href="../../public/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/admin/dashboard.css">
+    <link rel="stylesheet" href="../css/admin/orders.css">
+</head>
+<body class="admin-body">
+    <div class="admin-container">
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <img src="../../assets/images/logo.svg" alt="ColorMart">
+                <h2>Admin Panel</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <span class="nav-icon">📊</span>
+                    <span>Dashboard</span>
+                </a>
+                <a href="products.html" class="nav-item">
+                    <span class="nav-icon">📦</span>
+                    <span>Products</span>
+                </a>
+                <a href="orders.html" class="nav-item active">
+                    <span class="nav-icon">🛒</span>
+                    <span>Orders</span>
+                </a>
+                <a href="reviews.html" class="nav-item">
+                    <span class="nav-icon">⭐</span>
+                    <span>Reviews</span>
+                </a>
+                <a href="contacts.html" class="nav-item">
+                    <span class="nav-icon">📧</span>
+                    <span>Contacts</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <button id="logout-btn" class="logout-btn">Logout</button>
+            </div>
+        </aside>
 
-      <div class="order-filters">
-        <select class="status-filter" id="filterStatus">
-          <option value="all">All Orders</option>
-          <option value="pending">Pending</option>
-          <option value="processing">Processing</option>
-          <option value="shipped">Shipped</option>
-          <option value="delivered">Delivered</option>
-          <option value="cancelled">Cancelled</option>
-        </select>
-        <input type="date" class="date-filter" id="filterDate" />
-      </div>
+        <main class="admin-main">
+            <header class="admin-header">
+                <h1>Manage Orders</h1>
+                <div class="order-filters">
+                    <select id="order-status-filter">
+                        <option value="all">All Orders</option>
+                        <option value="pending">Pending</option>
+                        <option value="processing">Processing</option>
+                        <option value="shipped">Shipped</option>
+                        <option value="delivered">Delivered</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                </div>
+            </header>
 
-      <div class="orders-table-container">
-        <table class="orders-table">
-          <thead>
-            <tr>
-              <th>Order ID</th>
-              <th>Customer</th>
-              <th>Date</th>
-              <th>Total</th>
-              <th>Status</th>
-              <th>Payment</th>
-            </tr>
-          </thead>
-          <tbody id="ordersTableBody">
-            <tr>
-              <td colspan="6">
-                <div class="skeleton-loader" style="height: 300px"></div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+            <div class="orders-content">
+                <div class="table-container">
+                    <table class="admin-table" id="orders-table">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Email</th>
+                                <th>Items</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orders-table-body">
+                            <!-- Orders will be loaded -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Order Detail Modal -->
+            <div class="modal" id="order-modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2>Order Details</h2>
+                        <button class="modal-close" id="order-modal-close">&times;</button>
+                    </div>
+                    <div class="order-detail-content" id="order-detail-content">
+                        <!-- Order details will be loaded -->
+                    </div>
+                </div>
+            </div>
+        </main>
     </div>
 
-    <!-- Order Detail Modal -->
-    <div class="modal" id="orderDetailModal">
-      <div class="modal-content order-detail-content">
-        <div class="modal-header">
-          <h2>Order Details</h2>
-          <span class="close-modal">&times;</span>
-        </div>
-        <div class="modal-body" id="orderDetailBody"></div>
-        <div class="modal-footer">
-          <button class="print-btn" id="printOrderBtn">Print Order</button>
-          <button class="close-modal-btn cancel-btn">Close</button>
-        </div>
-      </div>
-    </div>
-
-    <script type="module" src="/src/js/admin/orders.js"></script>
-  </body>
+    <script type="module" src="../js/config/env.js"></script>
+    <script type="module" src="../js/config/firebase.js"></script>
+    <script type="module" src="../js/admin/auth.js"></script>
+    <script type="module" src="../js/admin/orders.js"></script>
+</body>
 </html>

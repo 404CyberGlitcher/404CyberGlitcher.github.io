@@ -1,175 +1,149 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="ColorMart - Pakistan's premier destination for premium makeup, cosmetics, hair care, and beauty products. Shop authentic brands at best prices with free shipping over Rs.2500."
-    />
-    <meta
-      name="keywords"
-      content="ColorMart, Color Mart, makeup, beauty, cosmetics, hair care, skincare, Pakistan, online makeup store, Roseberry, BioAqua, Miss Rose"
-    />
-    <meta name="author" content="ColorMart" />
-    <meta name="robots" content="index, follow" />
-    <meta
-      property="og:title"
-      content="ColorMart - Premium Beauty & Cosmetics Store"
-    />
-    <meta
-      property="og:description"
-      content="Shop authentic makeup, cosmetics, and beauty products. Free shipping on orders over Rs.2500."
-    />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://colormart.store" />
-    <meta
-      property="og:image"
-      content="https://colormart.store/images/og-image.jpg"
-    />
-    <meta name="twitter:card" content="summary_large_image" />
-    <link rel="canonical" href="https://colormart.store" />
-    <link rel="icon" type="image/x-icon" href="/public/favicon.ico" />
-    <title>
-      ColorMart - Premium Beauty & Cosmetics | Makeup, Hair Care & More
-    </title>
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
-    <link rel="stylesheet" href="/src/css/style.css" />
-  </head>
-  <body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ColorMart - Your premier destination for beauty, cosmetics, and lifestyle products. Shop makeup, hair care, men's care, and organizers with free shipping on orders over Rs. 2500.">
+    <meta name="keywords" content="ColorMart, Color Mart, makeup, beauty, cosmetics, hair care, men's care, organizers, Pakistan, beauty store">
+    <meta name="author" content="ColorMart">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="ColorMart - Beauty & Cosmetics Store">
+    <meta property="og:description" content="Shop premium beauty, cosmetics, and lifestyle products at ColorMart. Free shipping on orders over Rs. 2500.">
+    <meta property="og:image" content="https://colormart.store/assets/images/og-image.jpg">
+    <meta property="og:url" content="https://colormart.store">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="ColorMart">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="ColorMart - Beauty & Cosmetics Store">
+    <meta name="twitter:description" content="Shop premium beauty, cosmetics, and lifestyle products at ColorMart.">
+    <meta name="twitter:image" content="https://colormart.store/assets/images/og-image.jpg">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://colormart.store/">
+    
+    <title>ColorMart - Premium Beauty, Cosmetics & Lifestyle Products | Free Shipping</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="public/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/images/apple-touch-icon.png">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="src/css/style.css">
+</head>
+<body>
+    <!-- Announcement Bar -->
+    <div class="announcement-bar" data-aos="fade-down">
+        <div class="container">
+            <p>🎁 Free Gift with every Order | Free Shipping on orders over Rs. 2,500</p>
+        </div>
+    </div>
+
+    <!-- Header Component will be injected here -->
     <div id="header-container"></div>
+
+    <!-- Main Content -->
     <main>
-      <!-- Announcement Bar -->
-      <div class="announcement-bar" data-aos="fade-down">
-        <p>
-          🎁 Free Gift with every Order | Free Shipping on orders over Rs. 2500
-          🚚
-        </p>
-      </div>
-
-      <!-- Hero Slider -->
-      <section class="hero-slider" data-aos="fade-up">
-        <div class="slider-container">
-          <div class="slide active">
-            <div class="slide-content">
-              <h1>Premium Makeup Collection</h1>
-              <p>Discover the latest trends in beauty</p>
-              <a href="/src/catalog.html?category=makeup" class="btn-primary"
-                >Shop Now</a
-              >
+        <!-- Hero Slider Section -->
+        <section class="hero-section" data-aos="fade-up">
+            <div class="container">
+                <div class="swiper hero-slider">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <div class="hero-content">
+                                <img src="assets/images/hero-banner-1.jpg" alt="Roseberry Cosmetics Collection" loading="eager">
+                                <div class="hero-text">
+                                    <h2>Premium Roseberry Collection</h2>
+                                    <p>Discover our exclusive range of beauty products</p>
+                                    <a href="src/catalog.html?brand=Roseberry" class="cta-button">Shop Now</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="hero-content">
+                                <img src="assets/images/hero-banner-2.jpg" alt="Sadoer Beauty Products" loading="lazy">
+                                <div class="hero-text">
+                                    <h2>Sadoer Skincare Essentials</h2>
+                                    <p>Transform your skincare routine with Sadoer</p>
+                                    <a href="src/catalog.html?brand=Sadoer" class="cta-button">Explore More</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                </div>
             </div>
-          </div>
-          <div class="slide">
-            <div class="slide-content">
-              <h1>Luxury Hair Care</h1>
-              <p>Nourish your hair with premium products</p>
-              <a href="/src/catalog.html?category=hair-care" class="btn-primary"
-                >Explore</a
-              >
+        </section>
+
+        <!-- Category Grid Section -->
+        <section class="category-section" data-aos="fade-up">
+            <div class="container">
+                <h2 class="section-title">Shop by Category</h2>
+                <div class="category-grid" id="category-grid">
+                    <!-- Categories will be loaded dynamically -->
+                </div>
             </div>
-          </div>
-          <div class="slide">
-            <div class="slide-content">
-              <h1>Men's Grooming</h1>
-              <p>Complete grooming solutions for modern men</p>
-              <a href="/src/catalog.html?category=mens-care" class="btn-primary"
-                >Shop Men's Care</a
-              >
+        </section>
+
+        <!-- Featured Products Section -->
+        <section class="featured-section" data-aos="fade-up">
+            <div class="container">
+                <h2 class="section-title">New Arrivals</h2>
+                <div class="product-grid skeleton-grid" id="new-arrivals-grid">
+                    <!-- Products will be loaded dynamically -->
+                </div>
             </div>
-          </div>
-          <button class="slider-btn prev" aria-label="Previous slide">❮</button>
-          <button class="slider-btn next" aria-label="Next slide">❯</button>
-        </div>
-        <div class="slider-dots"></div>
-      </section>
+        </section>
 
-      <!-- Category Grid -->
-      <section class="category-grid section-padding" data-aos="fade-up">
-        <div class="container">
-          <h2 class="section-title">Shop by Category</h2>
-          <div class="category-wrapper">
-            <a href="/src/catalog.html?category=makeup" class="category-card">
-              <div class="category-icon">💄</div>
-              <h3>Makeup</h3>
-              <p>Foundation, Lipsticks, Eyeshadows & more</p>
-            </a>
-            <a
-              href="/src/catalog.html?category=hair-care"
-              class="category-card"
-            >
-              <div class="category-icon">💇‍♀️</div>
-              <h3>Hair Care</h3>
-              <p>Shampoos, Oils, Treatments</p>
-            </a>
-            <a
-              href="/src/catalog.html?category=mens-care"
-              class="category-card"
-            >
-              <div class="category-icon">🧔</div>
-              <h3>Men's Care</h3>
-              <p>Beard, Skin & Hair Solutions</p>
-            </a>
-            <a
-              href="/src/catalog.html?category=organizers"
-              class="category-card"
-            >
-              <div class="category-icon">📦</div>
-              <h3>Organizers</h3>
-              <p>Acrylic & Travel Cases</p>
-            </a>
-            <a
-              href="/src/catalog.html?category=essentials"
-              class="category-card"
-            >
-              <div class="category-icon">✨</div>
-              <h3>Essentials</h3>
-              <p>Daily Ritual Products</p>
-            </a>
-          </div>
-        </div>
-      </section>
+        <!-- Best Sellers Section -->
+        <section class="bestsellers-section" data-aos="fade-up">
+            <div class="container">
+                <h2 class="section-title">Best Sellers</h2>
+                <div class="product-grid skeleton-grid" id="best-sellers-grid">
+                    <!-- Products will be loaded dynamically -->
+                </div>
+            </div>
+        </section>
 
-      <!-- New Arrivals -->
-      <section class="featured-products section-padding" data-aos="fade-up">
-        <div class="container">
-          <h2 class="section-title">New Arrivals</h2>
-          <div class="products-grid" id="new-arrivals-grid">
-            <div class="skeleton-loader"></div>
-            <div class="skeleton-loader"></div>
-            <div class="skeleton-loader"></div>
-            <div class="skeleton-loader"></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Best Sellers -->
-      <section class="featured-products section-padding" data-aos="fade-up">
-        <div class="container">
-          <h2 class="section-title">Best Sellers</h2>
-          <div class="products-grid" id="best-sellers-grid">
-            <div class="skeleton-loader"></div>
-            <div class="skeleton-loader"></div>
-            <div class="skeleton-loader"></div>
-            <div class="skeleton-loader"></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Customer Reviews -->
-      <section class="testimonials section-padding" data-aos="fade-up">
-        <div class="container">
-          <h2 class="section-title">What Our Customers Say</h2>
-          <div class="testimonials-grid" id="testimonials-grid">
-            <div class="skeleton-loader"></div>
-            <div class="skeleton-loader"></div>
-            <div class="skeleton-loader"></div>
-          </div>
-        </div>
-      </section>
+        <!-- Customer Reviews Section -->
+        <section class="reviews-section" data-aos="fade-up">
+            <div class="container">
+                <h2 class="section-title">Customer Reviews</h2>
+                <div class="reviews-grid" id="reviews-grid">
+                    <!-- Reviews will be loaded from Firebase -->
+                </div>
+            </div>
+        </section>
     </main>
+
+    <!-- Footer Component will be injected here -->
     <div id="footer-container"></div>
 
+    <!-- Scripts -->
+    <script type="module" src="src/js/config/env.js"></script>
+    <script type="module" src="src/js/config/firebase.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script type="module" src="/src/js/main.js"></script>
-  </body>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script type="module" src="src/js/components/header.js"></script>
+    <script type="module" src="src/js/components/footer.js"></script>
+    <script type="module" src="src/js/components/cart.js"></script>
+    <script type="module" src="src/js/utils/skeletonLoader.js"></script>
+    <script type="module" src="src/js/main.js"></script>
+</body>
 </html>
