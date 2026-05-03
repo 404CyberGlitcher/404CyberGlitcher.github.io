@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ColorMart Admin Panel - Manage your beauty and cosmetics store">
+    <meta name="robots" content="noindex, nofollow">
+    
+    <title>Admin Panel - ColorMart</title>
+    
+    <link rel="icon" type="image/x-icon" href="../public/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Base Styles -->
+    <link rel="stylesheet" href="css/style.css">
+    
+    <!-- Admin Styles -->
+    <link rel="stylesheet" href="css/admin/login.css">
+    <link rel="stylesheet" href="css/admin/dashboard.css">
+    <link rel="stylesheet" href="css/admin/products.css">
+    <link rel="stylesheet" href="css/admin/orders.css">
+    <link rel="stylesheet" href="css/admin/reviews.css">
+    <link rel="stylesheet" href="css/admin/contacts.css">
+</head>
+<body class="admin-body">
+    <!-- Login Screen -->
+    <div class="admin-login-container" id="login-screen">
+        <div class="login-card">
+            <div class="login-header">
+                <img src="../assets/images/logo.svg" alt="ColorMart Logo" class="login-logo">
+                <h1>Admin Panel</h1>
+                <p>Sign in to manage your store</p>
+            </div>
+            
+            <form id="admin-login-form">
+                <div class="form-group">
+                    <label for="admin-email">Email Address</label>
+                    <input type="email" id="admin-email" required placeholder="admin@colormart.store" autocomplete="email">
+                    <span class="error-message" id="email-error"></span>
+                </div>
+                <div class="form-group">
+                    <label for="admin-password">Password</label>
+                    <input type="password" id="admin-password" required placeholder="Enter your password" autocomplete="current-password">
+                    <span class="error-message" id="password-error"></span>
+                </div>
+                <button type="submit" class="login-btn">Sign In</button>
+            </form>
+            
+            <div class="login-status" id="login-status"></div>
+            
+            <div class="login-footer">
+                <p>&copy; 2024 ColorMart. All rights reserved.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard Screen -->
+    <div class="admin-container" id="admin-screen" style="display: none;">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <img src="../assets/images/logo.svg" alt="ColorMart">
+                <h2>Admin Panel</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-view="dashboard">
+                    <span class="nav-icon">📊</span>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item" data-view="products">
+                    <span class="nav-icon">📦</span>
+                    <span>Products</span>
+                </a>
+                <a href="#" class="nav-item" data-view="orders">
+                    <span class="nav-icon">🛒</span>
+                    <span>Orders</span>
+                </a>
+                <a href="#" class="nav-item" data-view="reviews">
+                    <span class="nav-icon">⭐</span>
+                    <span>Reviews</span>
+                </a>
+                <a href="#" class="nav-item" data-view="contacts">
+                    <span class="nav-icon">📧</span>
+                    <span>Contacts</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <button id="logout-btn" class="logout-btn">Logout</button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="admin-main">
+            <!-- Dynamic Header -->
+            <header class="admin-header" id="admin-header">
+                <h1 id="view-title">Dashboard</h1>
+                <div class="admin-user">
+                    <span id="admin-email-display">admin@colormart.store</span>
+                </div>
+            </header>
+
+            <!-- Dashboard View -->
+            <div class="view-content active" id="dashboard-view">
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">📦</div>
+                        <div class="stat-info">
+                            <h3>Total Products</h3>
+                            <p id="total-products">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🛒</div>
+                        <div class="stat-info">
+                            <h3>Total Orders</h3>
+                            <p id="total-orders">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">⭐</div>
+                        <div class="stat-info">
+                            <h3>Total Reviews</h3>
+                            <p id="total-reviews">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📧</div>
+                        <div class="stat-info">
+                            <h3>Messages</h3>
+                            <p id="total-contacts">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Orders -->
+                <div class="dashboard-section">
+                    <h2>Recent Orders</h2>
+                    <div class="table-container">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Customer</th>
+                                    <th>Total</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recent-orders-body">
+                                <tr><td colspan="5">Loading...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Recent Reviews -->
+                <div class="dashboard-section">
+                    <h2>Recent Reviews</h2>
+                    <div class="reviews-list-mini" id="recent-reviews">
+                        <p>Loading...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Products View -->
+            <div class="view-content" id="products-view">
+                <div class="products-content">
+                    <!-- Products Header -->
+                    <div class="products-header-actions">
+                        <div class="products-search">
+                            <input type="text" id="product-search" placeholder="Search products...">
+                        </div>
+                        <button class="add-product-btn" id="add-product-btn">+ Add New Product</button>
+                    </div>
+
+                    <!-- Products Table -->
+                    <div class="table-container">
+                        <table class="admin-table" id="products-table">
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Product Name</th>
+                                    <th>Category</th>
+                                    <th>Price</th>
+                                    <th>Sale Price</th>
+                                    <th>Stock</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="products-table-body">
+                                <tr><td colspan="7">Loading...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Product Form Modal -->
+                <div class="modal" id="product-modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2 id="modal-title">Add New Product</h2>
+                            <button class="modal-close" id="modal-close">&times;</button>
+                        </div>
+                        <form id="product-form">
+                            <input type="hidden" id="product-id">
+                            
+                            <div class="form-group">
+                                <label for="product-name">Product Name *</label>
+                                <input type="text" id="product-name" required>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="product-category">Category *</label>
+                                    <select id="product-category" required>
+                                        <option value="">Select Category</option>
+                                        <option value="makeup">Makeup</option>
+                                        <option value="hair-care">Hair Care</option>
+                                        <option value="mens-care">Men's Care</option>
+                                        <option value="organizers">Organizers</option>
+                                        <option value="essentials">Essentials</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="product-brand">Brand</label>
+                                    <input type="text" id="product-brand" placeholder="e.g., RoseBerry">
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="product-original-price">Original Price (Rs.) *</label>
+                                    <input type="number" id="product-original-price" required min="0" step="0.01">
+                                </div>
+                                <div class="form-group">
+                                    <label for="product-sale-price">Sale Price (Rs.)</label>
+                                    <input type="number" id="product-sale-price" min="0" step="0.01">
+                                    <small>Leave empty if not on sale. Discount auto-calculated.</small>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="product-stock">Stock Quantity *</label>
+                                <input type="number" id="product-stock" required min="0" value="10">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="product-description">Description *</label>
+                                <textarea id="product-description" rows="4" required></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="product-images">Product Images *</label>
+                                <input type="file" id="product-images" accept="image/*" multiple>
+                                <small>Images auto-compressed to under 500KB</small>
+                                <div class="images-preview" id="images-preview"></div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <div class="compression-info" id="compression-info">
+                                    <span>Image compression: <strong>Enabled</strong> (max 500KB per image)</span>
+                                </div>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button type="button" class="cancel-btn" id="cancel-btn">Cancel</button>
+                                <button type="submit" class="save-btn" id="save-btn">Save Product</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Orders View -->
+            <div class="view-content" id="orders-view">
+                <div class="orders-content">
+                    <!-- Order Filters -->
+                    <div class="orders-header-actions">
+                        <div class="order-filters">
+                            <select id="order-status-filter">
+                                <option value="all">All Orders</option>
+                                <option value="pending">Pending</option>
+                                <option value="processing">Processing</option>
+                                <option value="shipped">Shipped</option>
+                                <option value="delivered">Delivered</option>
+                                <option value="cancelled">Cancelled</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Orders Table -->
+                    <div class="table-container">
+                        <table class="admin-table" id="orders-table">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Customer</th>
+                                    <th>Email</th>
+                                    <th>Items</th>
+                                    <th>Total</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="orders-table-body">
+                                <tr><td colspan="8">Loading...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Order Detail Modal -->
+                <div class="modal" id="order-modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2>Order Details</h2>
+                            <button class="modal-close" id="order-modal-close">&times;</button>
+                        </div>
+                        <div class="order-detail-content" id="order-detail-content">
+                            <p>Loading order details...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reviews View -->
+            <div class="view-content" id="reviews-view">
+                <div class="reviews-content">
+                    <div class="table-container">
+                        <table class="admin-table" id="reviews-table">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Customer</th>
+                                    <th>Rating</th>
+                                    <th>Review</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="reviews-table-body">
+                                <tr><td colspan="6">Loading...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contacts View -->
+            <div class="view-content" id="contacts-view">
+                <div class="contacts-content">
+                    <div class="table-container">
+                        <table class="admin-table" id="contacts-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Message</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="contacts-table-body">
+                                <tr><td colspan="6">Loading...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Contact Message Modal -->
+                <div class="modal" id="contact-modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2>Message Details</h2>
+                            <button class="modal-close" id="contact-modal-close">&times;</button>
+                        </div>
+                        <div class="order-detail-content" id="contact-detail-content">
+                            <p>Loading message...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module" src="js/config/env.js"></script>
+    <script type="module" src="js/config/firebase.js"></script>
+    <script type="module" src="js/utils/imageCompressor.js"></script>
+    <script type="module" src="js/utils/discountCalculator.js"></script>
+    <script type="module" src="js/admin/admin.js"></script>
+</body>
+</html>
