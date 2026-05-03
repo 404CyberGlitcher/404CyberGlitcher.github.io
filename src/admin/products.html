@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Products Management - ColorMart Admin</title>
+    <link rel="stylesheet" href="/src/css/style.css" />
+    <link rel="stylesheet" href="/src/css/admin/products.css" />
+  </head>
+  <body>
+    <div class="products-management">
+      <div class="products-header">
+        <h2>Products Management</h2>
+        <button class="add-product-btn" id="addProductBtn">
+          + Add New Product
+        </button>
+      </div>
+
+      <div class="products-filters">
+        <input
+          type="text"
+          class="search-box"
+          id="searchProducts"
+          placeholder="Search products..."
+        />
+        <select class="category-filter" id="filterCategory">
+          <option value="all">All Categories</option>
+          <option value="makeup">Makeup</option>
+          <option value="hair-care">Hair Care</option>
+          <option value="mens-care">Men's Care</option>
+          <option value="organizers">Organizers</option>
+          <option value="essentials">Essentials</option>
+        </select>
+      </div>
+
+      <div class="products-table-container">
+        <table class="products-table">
+          <thead>
+            <tr>
+              <th>Image</th>
+              <th>Product Name</th>
+              <th>Category</th>
+              <th>Price</th>
+              <th>Stock</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="productsTableBody">
+            <tr>
+              <td colspan="7">
+                <div class="skeleton-loader" style="height: 300px"></div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Add/Edit Product Modal -->
+    <div class="modal" id="productModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="modalTitle">Add New Product</h2>
+          <span class="close-modal">&times;</span>
+        </div>
+        <div class="modal-body">
+          <form id="productForm">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="productName">Product Name *</label>
+                <input type="text" id="productName" required />
+              </div>
+              <div class="form-group">
+                <label for="productCategory">Category *</label>
+                <select id="productCategory" required>
+                  <option value="makeup">Makeup</option>
+                  <option value="hair-care">Hair Care</option>
+                  <option value="mens-care">Men's Care</option>
+                  <option value="organizers">Organizers</option>
+                  <option value="essentials">Essentials</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="productBrand">Brand</label>
+                <input
+                  type="text"
+                  id="productBrand"
+                  placeholder="e.g., Roseberry, BioAqua"
+                />
+              </div>
+              <div class="form-group">
+                <label for="productStock">Stock Quantity</label>
+                <input type="number" id="productStock" value="100" />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="productPrice">Regular Price (Rs.) *</label>
+                <input type="number" id="productPrice" required />
+              </div>
+              <div class="form-group">
+                <label for="productSalePrice">Sale Price (Rs.)</label>
+                <input type="number" id="productSalePrice" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="productDescription">Description *</label>
+              <textarea id="productDescription" rows="4" required></textarea>
+            </div>
+
+            <div class="form-group">
+              <label>Product Images *</label>
+              <div class="image-upload-area" id="imageUploadArea">
+                <p>Click or drag images here to upload</p>
+                <input
+                  type="file"
+                  id="imageInput"
+                  multiple
+                  accept="image/*"
+                  style="display: none"
+                />
+              </div>
+              <div class="image-preview" id="imagePreview"></div>
+              <div class="compression-info">
+                Images will be automatically compressed to under 500KB
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button class="cancel-btn" id="cancelModalBtn">Cancel</button>
+          <button class="save-btn" id="saveProductBtn">Save Product</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal" id="deleteModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Delete Product</h2>
+          <span class="close-modal">&times;</span>
+        </div>
+        <div class="modal-body">
+          <p>
+            Are you sure you want to delete this product? This action cannot be
+            undone.
+          </p>
+          <p id="deleteProductName"></p>
+        </div>
+        <div class="modal-footer">
+          <button class="cancel-btn" id="cancelDeleteBtn">Cancel</button>
+          <button class="delete-btn" id="confirmDeleteBtn">Delete</button>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="/src/js/admin/products.js"></script>
+  </body>
+</html>

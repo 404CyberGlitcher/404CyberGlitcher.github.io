@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Detailed product information for premium beauty and cosmetic products at ColorMart. Read reviews, check prices, and buy online."
+    />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://colormart.store/src/product.html" />
+    <title>Product Details - ColorMart | Premium Beauty & Cosmetics</title>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/src/css/style.css" />
+    <link rel="stylesheet" href="/src/css/product.css" />
+  </head>
+  <body>
+    <div id="header-container"></div>
+
+    <main>
+      <section class="product-detail">
+        <div class="container">
+          <div class="product-detail-layout" id="productDetailContainer">
+            <!-- Product Gallery -->
+            <div
+              class="product-gallery"
+              data-aos="fade-right"
+              id="productGallery"
+            >
+              <div class="skeleton-loader" style="height: 500px"></div>
+            </div>
+
+            <!-- Product Info -->
+            <div class="product-info" data-aos="fade-left" id="productInfo">
+              <div class="skeleton-loader" style="height: 600px"></div>
+            </div>
+          </div>
+
+          <!-- Product Tabs -->
+          <div
+            class="product-tabs"
+            data-aos="fade-up"
+            id="productTabs"
+            style="display: none"
+          >
+            <div class="tab-headers">
+              <button class="tab-btn active" data-tab="description">
+                Description
+              </button>
+              <button class="tab-btn" data-tab="specifications">
+                Specifications
+              </button>
+              <button class="tab-btn" data-tab="reviews">
+                Reviews (<span id="reviewCount">0</span>)
+              </button>
+              <button class="tab-btn" data-tab="shipping">
+                Shipping & Returns
+              </button>
+            </div>
+            <div class="tab-content">
+              <div class="tab-pane active" id="descriptionTab">
+                <div id="productDescription"></div>
+              </div>
+              <div class="tab-pane" id="specificationsTab">
+                <div id="productSpecifications"></div>
+              </div>
+              <div class="tab-pane" id="reviewsTab">
+                <div class="reviews-section" id="reviewsSection"></div>
+              </div>
+              <div class="tab-pane" id="shippingTab">
+                <h4>Shipping Information</h4>
+                <p>
+                  Free shipping on all orders over Rs. 2500. Standard delivery
+                  takes 3-5 business days.
+                </p>
+                <h4>Returns Policy</h4>
+                <p>
+                  30-day return policy. Products must be unused and in original
+                  packaging.
+                </p>
+                <h4>Exchange Policy</h4>
+                <p>
+                  Free exchange within 7 days of delivery for defective or wrong
+                  products.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Related Products -->
+          <div
+            class="related-products"
+            data-aos="fade-up"
+            id="relatedProducts"
+            style="display: none"
+          >
+            <h3>You May Also Like</h3>
+            <div class="products-grid" id="relatedProductsGrid"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div id="footer-container"></div>
+
+    <!-- Image Modal -->
+    <div class="modal" id="imageModal">
+      <span class="close-modal">&times;</span>
+      <img id="modalImage" alt="Product image zoom" />
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script type="module" src="/src/js/product.js"></script>
+  </body>
+</html>

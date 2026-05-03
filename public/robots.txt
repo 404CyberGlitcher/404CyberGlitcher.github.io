@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Sitemap: https://colormart.store/sitemap.xml
+
+# Disallow admin pages
+Disallow: /admin/
+Disallow: /src/admin/
+
+# Disallow cart and checkout
+Disallow: /cart
+Disallow: /checkout

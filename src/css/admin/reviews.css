@@ -1,0 +1,159 @@
+/* Admin Reviews Management */
+.reviews-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.reviews-stats {
+  display: flex;
+  gap: 1rem;
+}
+
+.average-rating-card {
+  padding: 1rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: var(--border-radius-lg);
+  color: white;
+  text-align: center;
+}
+
+.average-rating-card .big-rating {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.review-filters {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.rating-filter,
+.sort-filter {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--color-gray-300);
+  border-radius: var(--border-radius-md);
+  font-family: var(--font-primary);
+}
+
+/* Reviews Grid */
+.reviews-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.review-card {
+  background-color: var(--color-white);
+  border-radius: var(--border-radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+
+.review-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.review-product-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.review-product-image {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: var(--border-radius-sm);
+}
+
+.review-product-name {
+  font-weight: 600;
+}
+
+.review-status {
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--border-radius-sm);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.status-approved {
+  background-color: #d1fae5;
+  color: #059669;
+}
+
+.status-pending {
+  background-color: #fef3c7;
+  color: #d97706;
+}
+
+.status-rejected {
+  background-color: #fee2e2;
+  color: #dc2626;
+}
+
+.review-rating {
+  margin-bottom: 0.5rem;
+}
+
+.review-title {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.review-text {
+  color: var(--color-gray-600);
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.review-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.875rem;
+  color: var(--color-gray-500);
+}
+
+.review-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.approve-btn,
+.reject-btn,
+.delete-review-btn {
+  padding: 0.25rem 0.75rem;
+  border: none;
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.approve-btn {
+  background-color: #059669;
+  color: white;
+}
+
+.reject-btn {
+  background-color: #d97706;
+  color: white;
+}
+
+.delete-review-btn {
+  background-color: #dc2626;
+  color: white;
+}

@@ -1,0 +1,166 @@
+/* Admin Orders Management */
+.orders-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.orders-stats {
+  display: flex;
+  gap: 1rem;
+}
+
+.stat-badge {
+  padding: 0.5rem 1rem;
+  background-color: var(--color-gray-100);
+  border-radius: var(--border-radius-md);
+  font-size: 0.875rem;
+}
+
+.stat-badge strong {
+  color: var(--color-red);
+}
+
+.order-filters {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.status-filter,
+.date-filter {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--color-gray-300);
+  border-radius: var(--border-radius-md);
+  font-family: var(--font-primary);
+}
+
+/* Orders Table */
+.orders-table-container {
+  background-color: var(--color-white);
+  border-radius: var(--border-radius-lg);
+  overflow-x: auto;
+  box-shadow: var(--shadow-sm);
+}
+
+.orders-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.orders-table th,
+.orders-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--color-gray-200);
+}
+
+.orders-table th {
+  background-color: var(--color-gray-100);
+  font-weight: 600;
+}
+
+.orders-table tr {
+  cursor: pointer;
+}
+
+.orders-table tr:hover {
+  background-color: var(--color-gray-50);
+}
+
+/* Order Detail Modal */
+.order-detail-content {
+  max-width: 800px;
+}
+
+.order-info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.order-info-card {
+  background-color: var(--color-gray-100);
+  padding: 1rem;
+  border-radius: var(--border-radius-md);
+}
+
+.order-info-card h4 {
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--color-gray-500);
+}
+
+.order-items-list {
+  margin: 1.5rem 0;
+}
+
+.order-item {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  border-bottom: 1px solid var(--color-gray-200);
+}
+
+.order-item-image {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: var(--border-radius-sm);
+}
+
+.order-item-details {
+  flex: 1;
+}
+
+.order-item-title {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.order-item-price {
+  color: var(--color-red);
+}
+
+.order-total {
+  text-align: right;
+  padding: 1rem;
+  background-color: var(--color-gray-100);
+  border-radius: var(--border-radius-md);
+  font-weight: 600;
+}
+
+.order-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.status-select {
+  padding: 0.5rem;
+  border: 1px solid var(--color-gray-300);
+  border-radius: var(--border-radius-md);
+  font-family: var(--font-primary);
+}
+
+.update-status-btn {
+  padding: 0.5rem 1rem;
+  background-color: var(--color-black);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+}
+
+.print-btn {
+  padding: 0.5rem 1rem;
+  background-color: var(--color-gray-200);
+  border: none;
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+}

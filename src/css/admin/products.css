@@ -1,0 +1,336 @@
+/* Admin Products Management */
+.products-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.add-product-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background-color: var(--color-black);
+  color: var(--color-white);
+  border: none;
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.add-product-btn:hover {
+  background-color: var(--color-red);
+}
+
+.products-filters {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.search-box {
+  flex: 1;
+  max-width: 300px;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--color-gray-300);
+  border-radius: var(--border-radius-md);
+  font-family: var(--font-primary);
+}
+
+.category-filter {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--color-gray-300);
+  border-radius: var(--border-radius-md);
+  font-family: var(--font-primary);
+}
+
+/* Products Table */
+.products-table-container {
+  background-color: var(--color-white);
+  border-radius: var(--border-radius-lg);
+  overflow-x: auto;
+  box-shadow: var(--shadow-sm);
+}
+
+.products-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.products-table th,
+.products-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--color-gray-200);
+}
+
+.products-table th {
+  background-color: var(--color-gray-100);
+  font-weight: 600;
+}
+
+.products-table tr:hover {
+  background-color: var(--color-gray-50);
+}
+
+.product-thumbnail {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: var(--border-radius-sm);
+}
+
+.table-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.edit-btn,
+.delete-btn {
+  padding: 0.25rem 0.75rem;
+  border: none;
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.edit-btn {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.edit-btn:hover {
+  background-color: #2563eb;
+}
+
+.delete-btn {
+  background-color: var(--color-error);
+  color: white;
+}
+
+.delete-btn:hover {
+  background-color: #dc2626;
+}
+
+/* Modal Styles */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 2000;
+  overflow-y: auto;
+}
+
+.modal.active {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background-color: var(--color-white);
+  border-radius: var(--border-radius-lg);
+  max-width: 600px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--color-gray-200);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h2 {
+  margin: 0;
+}
+
+.close-modal {
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.close-modal:hover {
+  color: var(--color-red);
+}
+
+.modal-body {
+  padding: 1.5rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--color-gray-300);
+  border-radius: var(--border-radius-md);
+  font-family: var(--font-primary);
+  transition: var(--transition);
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--color-red);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Image Upload */
+.image-upload-area {
+  border: 2px dashed var(--color-gray-300);
+  border-radius: var(--border-radius-md);
+  padding: 1rem;
+  text-align: center;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.image-upload-area:hover {
+  border-color: var(--color-red);
+}
+
+.image-preview {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.preview-image {
+  position: relative;
+  aspect-ratio: 1;
+}
+
+.preview-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--border-radius-sm);
+}
+
+.remove-image {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 20px;
+  height: 20px;
+  background-color: var(--color-error);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.compression-info {
+  font-size: 0.75rem;
+  color: var(--color-gray-500);
+  margin-top: 0.5rem;
+}
+
+.modal-footer {
+  padding: 1.5rem;
+  border-top: 1px solid var(--color-gray-200);
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.cancel-btn {
+  padding: 0.5rem 1rem;
+  background-color: var(--color-gray-200);
+  border: none;
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+}
+
+.save-btn {
+  padding: 0.5rem 1.5rem;
+  background-color: var(--color-black);
+  color: var(--color-white);
+  border: none;
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+}
+
+.save-btn:hover {
+  background-color: var(--color-red);
+}
+
+/* Loading State */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.9);
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 3px solid var(--color-gray-200);
+  border-top-color: var(--color-red);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact Messages - ColorMart Admin</title>
+    <link rel="stylesheet" href="/src/css/style.css" />
+    <link rel="stylesheet" href="/src/css/admin/contacts.css" />
+  </head>
+  <body>
+    <div class="contacts-management">
+      <div class="contacts-header">
+        <h2>Contact Messages</h2>
+      </div>
+
+      <div class="contacts-stats" id="contactsStats"></div>
+
+      <div class="contact-filters">
+        <select class="status-filter" id="filterContactStatus">
+          <option value="all">All Messages</option>
+          <option value="unread">Unread</option>
+          <option value="read">Read</option>
+        </select>
+        <input type="date" class="date-filter" id="filterContactDate" />
+      </div>
+
+      <div class="contacts-table-container">
+        <table class="contacts-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Subject</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="contactsTableBody">
+            <tr>
+              <td colspan="6">
+                <div class="skeleton-loader" style="height: 300px"></div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Contact Detail Modal -->
+    <div class="modal" id="contactDetailModal">
+      <div class="modal-content contact-detail-content">
+        <div class="modal-header">
+          <h2>Message Details</h2>
+          <span class="close-modal">&times;</span>
+        </div>
+        <div class="modal-body" id="contactDetailBody"></div>
+      </div>
+    </div>
+
+    <script type="module" src="/src/js/admin/contacts.js"></script>
+  </body>
+</html>

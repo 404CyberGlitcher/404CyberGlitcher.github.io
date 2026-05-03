@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Shop premium makeup, cosmetics, hair care and beauty products at ColorMart. Best prices in Pakistan with free shipping over Rs.2500."
+    />
+    <meta
+      name="keywords"
+      content="buy makeup online, cosmetics Pakistan, beauty products, ColorMart catalog"
+    />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://colormart.store/src/catalog.html" />
+    <title>Shop All Products - ColorMart | Premium Beauty & Cosmetics</title>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/src/css/style.css" />
+    <link rel="stylesheet" href="/src/css/catalog.css" />
+  </head>
+  <body>
+    <div id="header-container"></div>
+
+    <main>
+      <section class="catalog-hero" data-aos="fade-up">
+        <div class="container">
+          <h1>Shop All Products</h1>
+          <p>
+            Discover our complete collection of premium beauty and cosmetic
+            products
+          </p>
+        </div>
+      </section>
+
+      <section class="catalog-main">
+        <div class="container">
+          <button class="filter-toggle" id="filterToggle">
+            ☰ Show Filters
+          </button>
+
+          <div class="catalog-layout">
+            <!-- Filters Sidebar -->
+            <aside
+              class="filters-sidebar"
+              id="filtersSidebar"
+              data-aos="fade-right"
+            >
+              <div class="filter-section">
+                <h3>Categories</h3>
+                <div class="filter-options" id="categoryFilters"></div>
+              </div>
+
+              <div class="filter-section">
+                <h3>Price Range</h3>
+                <div class="price-range">
+                  <input
+                    type="number"
+                    id="minPrice"
+                    placeholder="Min"
+                    min="0"
+                  />
+                  <input type="number" id="maxPrice" placeholder="Max" />
+                </div>
+                <div class="filter-buttons">
+                  <button class="apply-filters" id="applyPriceFilter">
+                    Apply
+                  </button>
+                  <button class="reset-filters" id="resetPriceFilter">
+                    Reset
+                  </button>
+                </div>
+              </div>
+
+              <div class="filter-section">
+                <h3>Brands</h3>
+                <div class="filter-options" id="brandFilters"></div>
+              </div>
+
+              <div class="filter-section">
+                <h3>Rating</h3>
+                <div class="filter-options" id="ratingFilters"></div>
+              </div>
+            </aside>
+
+            <!-- Products Section -->
+            <div class="catalog-products" data-aos="fade-left">
+              <div class="catalog-header">
+                <div class="results-count" id="resultsCount">
+                  Showing 0 products
+                </div>
+                <select class="sort-selector" id="sortSelector">
+                  <option value="default">Sort by: Featured</option>
+                  <option value="price-low">Price: Low to High</option>
+                  <option value="price-high">Price: High to Low</option>
+                  <option value="newest">Newest First</option>
+                  <option value="rating">Highest Rated</option>
+                </select>
+              </div>
+
+              <div class="catalog-grid" id="catalogGrid">
+                <div class="skeleton-loader"></div>
+                <div class="skeleton-loader"></div>
+                <div class="skeleton-loader"></div>
+                <div class="skeleton-loader"></div>
+                <div class="skeleton-loader"></div>
+                <div class="skeleton-loader"></div>
+              </div>
+
+              <div class="pagination" id="pagination"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div id="footer-container"></div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script type="module" src="/src/js/catalog.js"></script>
+  </body>
+</html>
